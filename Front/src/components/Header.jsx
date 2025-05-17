@@ -13,7 +13,7 @@ export default function Header(){
                 {/*light/dark mode*/}
                 <div className="cursor-pointer"
                   onClick={() => setDarkMode(!darkMode)}>
-                  <img className="duration-200 ease-in-out hover:opacity-50" width="30px" src={darkMode ? moon : sun} alt={darkMode ? "Dark" : "Light"} />
+                  <img className="duration-200 ease-in-out hover:opacity-30" width="30px" src={darkMode ? moon : sun} alt={darkMode ? "Dark" : "Light"} />
                     <img width="30px" src={guest_user} alt="UserPic" />
                 </div>
             </div>
