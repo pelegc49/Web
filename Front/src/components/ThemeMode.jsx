@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import sun from '../assets/sun.svg';
-import moon from '../assets/moon.svg';
-
+import {sun,moon} from '../assets/svgs.jsx';
 export const ThemeMode = () => ({handleChange, isChecked}) => {
     return(
         <button className="cursor-pointer">

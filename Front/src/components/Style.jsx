@@ -5,3 +5,6 @@ export const attributeText = "text-sm text-gray-700";
 export const methodsContainer = "mt-2 pt-2 border-t border-gray-200";
 export const methodItem = "py-1 px-2 hover:bg-gray-100 rounded";
 export const methodText = "text-sm text-gray-700";
+export const headerContainer = dark => "p-4 flex justify-between text-white duration-200 ease-in-out " + (dark ? "bg-gray-500" : "bg-gray-300");
+export const logo = "cursor-pointer text-black font-bold text-2xl duration-300 ease-in-out hover:opacity-30";
+export const icon = "cursor-pointer duration-300 ease-in-out hover:opacity-30";
