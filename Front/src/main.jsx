@@ -8,6 +8,7 @@ import App from './App.jsx'
 import HomePage from './components/HomePage.jsx'
 import UserProfile from './components/UserProfile.jsx'
 import Help from './components/Help.jsx'
+import SignUpHelp from './components/SignUpHelp.jsx'
 
 const router = createBrowserRouter([{
   path: '/',
@@ -15,7 +16,13 @@ const router = createBrowserRouter([{
   children: [
       { path: '/home', element: <HomePage /> },
       { path: '/user', element: <UserProfile /> },
-      { path: '/help', element: <Help /> }
+      { path: '/help', element: <Help />, children: [
+        {
+          path: 'sign-up',
+          element: <SignUpHelp />,
+        }
+        ]
+      }
   ],
 },])
 
