@@ -1,7 +1,7 @@
 import React from 'react';
 import * as styles from "./Style";
 
-const SignUpHelp = () => {
+export default function SignUpHelp(){
   return (
     <div className={styles.signUpHelpContainer}>
       <h1 className={styles.signUpHelpTitle}>How to Sign Up</h1>
@@ -63,5 +63,3 @@ const SignUpHelp = () => {
     </div>
   );
 };
-
-export default SignUpHelp;
