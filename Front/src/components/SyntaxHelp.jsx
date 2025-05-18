@@ -1,7 +1,8 @@
 import React from "react";
 import * as styles from "./Style";
-
+import {darkModeContext} from "../App.jsx"
 export default function SyntaxHelp() {
+    const {darkMode} = React.useContext(darkModeContext);
     return (
         <div className={styles.helpTextContainer}>
             <h2 className={styles.helpTextTitle}>Syntax Guide</h2>
@@ -9,7 +10,7 @@ export default function SyntaxHelp() {
             <div className={styles.helpTextSection}>
                 <h3 className={styles.helpTextSubtitle}>Defining Classes</h3>
                 <p className={styles.helpTextContent}>
-                    To define a class, use the following syntax:
+                    To define a class, use the following syntax:  
                 </p>
                 <pre className={styles.codeBlock}>
                     a &lt;className&gt; is a class.<br/>

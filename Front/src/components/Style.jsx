@@ -17,7 +17,7 @@ export const textAreaContainer = "w-full my-2.5 flex justify-center";
 export const textArea = "w-full p-3 rounded-lg border border-gray-300 text-base font-sans min-h-[150px] resize-vertical focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400";
 export const headerContainer = dark => "p-4 flex justify-between text-white duration-200 ease-in-out " + (dark ? "bg-gray-500" : "bg-gray-300");
 export const logo = "cursor-pointer text-black font-bold text-2xl duration-300 ease-in-out hover:opacity-30";
-export const icon = "cursor-pointer duration-300 ease-in-out hover:opacity-30";
+export const icon = "cursor-pointer mx-1 duration-300 ease-in-out hover:opacity-30";
 
 // HelpText component styles
 export const helpTextContainer = "w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md";

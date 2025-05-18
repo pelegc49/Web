@@ -1,16 +1,18 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect, useContext} from 'react';
 import {sun, moon, guest_user, help} from "../assets/svgs.jsx"
 import "../index.css"
 import { Link , useLocation} from 'react-router-dom';
 import {headerContainer, logo, icon} from "./Style.jsx"
-
+import {darkModeContext} from "../App.jsx"
 export default function Header(){
     const location = useLocation();
-    const isdarkMode = localStorage.getItem("darkMode") === "true";
-    const [darkMode, setDarkMode] = useState(isdarkMode);
-    useEffect(() => {
-        localStorage.setItem("darkMode", darkMode);
-    },[darkMode]);
+    const {darkMode, toggleDarkMode} = useContext(darkModeContext);
+
+    // const isdarkMode = localStorage.getItem("darkMode") === "true";
+    // const [darkMode, setDarkMode] = useState(isdarkMode);
+    // useEffect(() => {
+    //     localStorage.setItem("darkMode", darkMode);
+    // },[darkMode]);
     return(
         <header className={headerContainer(darkMode)}>
             <Link to="/home">
@@ -19,12 +21,12 @@ export default function Header(){
                 </div>
             </Link>
             <div>
-                <div className="flex items-center gap-1 pr-2">
+                <div className="flex items-center">
                     
-                    <Link to={location.pathname.startsWith("/help")?"#":"/help"} >
+                    <Link className={icon} to={location.pathname.startsWith("/help")?"#":"/help"} >
                         <img width="30px" src={help} alt="help"/>
                     </Link>
-                    <img onClick={_=>setDarkMode(d=>!d)}
+                    <img onClick={_=>toggleDarkMode(d=>!d)}
                          className={icon}
                          width="30px" src={darkMode ? moon : sun}
                          alt={darkMode ? "Dark" : "Light"} />
