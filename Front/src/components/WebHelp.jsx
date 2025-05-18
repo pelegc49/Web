@@ -39,7 +39,7 @@ export default function WebHelp() {
             <h3 className={styles.webHelpStepTitle}>Define Your Classes</h3>
             <p className={styles.webHelpStepDescription}>
               Use our intuitive syntax to define classes, attributes, and relationships. 
-              Need help with formatting? Click on "Syntax Help" to view a comprehensive guide with examples.
+              Need help with formatting? Click on "<a href="/help/syntax">Syntax Help</a>" to view a comprehensive guide with examples.
             </p>
           </div>
         </div>

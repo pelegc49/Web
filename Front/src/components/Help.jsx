@@ -1,4 +1,4 @@
-import React from 'react';
+import {React,useEffect} from 'react';
 import SyntaxHelp from "./SyntaxHelp.jsx"
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { toolbarContainer, toolbarNav, toolbarLink, toolbarDivider } from './Style.jsx';
@@ -6,7 +6,7 @@ import { toolbarContainer, toolbarNav, toolbarLink, toolbarDivider } from './Sty
 export default function Help() {
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Redirect to web-help by default
     navigate('web-help');
   }, []);

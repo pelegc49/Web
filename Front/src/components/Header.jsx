@@ -1,10 +1,11 @@
-import React, {useState,useEffect, use} from 'react';
-import {sun, moon, guest_user} from "../assets/svgs.jsx"
+import React, {useState,useEffect} from 'react';
+import {sun, moon, guest_user, help} from "../assets/svgs.jsx"
 import "../index.css"
-import { Link } from 'react-router-dom';
+import { Link , useLocation} from 'react-router-dom';
 import {headerContainer, logo, icon} from "./Style.jsx"
 
 export default function Header(){
+    const location = useLocation();
     const isdarkMode = localStorage.getItem("darkMode") === "true";
     const [darkMode, setDarkMode] = useState(isdarkMode);
     useEffect(() => {
@@ -19,6 +20,10 @@ export default function Header(){
             </Link>
             <div>
                 <div className="flex items-center gap-1 pr-2">
+                    
+                    <Link to={location.pathname.startsWith("/help")?"#":"/help"} >
+                        <img width="30px" src={help} alt="help"/>
+                    </Link>
                     <img onClick={_=>setDarkMode(d=>!d)}
                          className={icon}
                          width="30px" src={darkMode ? moon : sun}
