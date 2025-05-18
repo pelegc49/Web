@@ -1,3 +1,9 @@
+// Toolbar styles
+export const toolbarContainer = "w-full bg-gray-100 shadow-sm flex justify-center items-center py-3 border-b border-gray-200";
+export const toolbarNav = "flex items-center space-x-6";
+export const toolbarLink = "text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200";
+export const toolbarDivider = "text-gray-300";
+
 export const classNodeContainer = "bg-white rounded-lg shadow-md border border-gray-300 p-4 m-2 hover:shadow-lg transition-shadow";
 export const classNodeTitle = "font-bold text-lg border-b border-gray-200 pb-2 mb-2 text-blue-700 text-center";
 export const attributeItem = "py-1 px-2 hover:bg-gray-100 rounded";

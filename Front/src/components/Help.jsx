@@ -1,14 +1,28 @@
 import React from 'react';
 import SyntaxHelp from "./SyntaxHelp.jsx"
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { toolbarContainer, toolbarNav, toolbarLink, toolbarDivider } from './Style.jsx';
 
 export default function Help() {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    // Redirect to web-help by default
+    navigate('web-help');
+  }, []);
+
   return (
-      <>
-      <button><Link to="sign-up">Sign Up Help</Link></button>
-      <button><Link to="syntax">Syntax Help</Link></button>
-      <button><Link to="web-help">Web Help</Link> </button>
-       <Outlet />
-      </>
-  )
+    <div>
+      <nav className={toolbarContainer}>
+        <div className={toolbarNav}>
+          <Link to="web-help" className={toolbarLink}>Web Help</Link>
+          <span className={toolbarDivider}>|</span>
+          <Link to="sign-up" className={toolbarLink}>Sign Up Help</Link>
+          <span className={toolbarDivider}>|</span>
+          <Link to="syntax" className={toolbarLink}>Syntax Help</Link>
+        </div>
+      </nav>
+      <Outlet />
+    </div>
+  );
 }
