@@ -1,7 +1,6 @@
-
-
-
-function objectify(data) {
+import { MarkerType} from '@xyflow/react';
+import ClassNode from '../components/ClassNode.jsx';
+export function objectify(data) {
     const definedClasses = new Set();
     let status = 'SUCCESS';
     let message = '';
@@ -19,14 +18,20 @@ function objectify(data) {
                 return { status, message, nodes, edges };
             }
             definedClasses.add(className);
+            const data ={ className, attributes, methods }
             nodes.push({
                 id: className,
-                data: { className, attributes, methods },
+                data:{
+                    ...data,
+                    label: <ClassNode JsonData={data} />
+                    },
                 position: { x: 0, y: 0 },
                 width: 100,
                 height: 150,
             });
         } else if (sentence.type === 'INHER') {
+            const attributes = [];
+            const methods = [];
             const childClass = sentence.children[1].value;
             const parentClass = sentence.children[3].value;
             if (definedClasses.has(childClass)) {
@@ -39,10 +44,35 @@ function objectify(data) {
                 message = `Parent class ${parentClass} is not defined`;
                 break;
             }
+            const data ={childClass, attributes, methods }
             definedClasses.add(childClass);
-            edges.push({ source: childClass, target: parentClass });
+            nodes.push({
+                id: childClass,
+                data:{
+                    ...data,
+                    label: <ClassNode JsonData={data} />
+                    },
+                position: { x: 0, y: 0 },
+                type: 'input',
+                width: 100,
+                height: 150,
+            });
+            edges.push({
+                id: `${childClass}-${parentClass}`,
+                source: childClass,
+                target: parentClass,
+                type: 'bezier',
+                markerEnd: {
+                    type: MarkerType.ArrowClosed,
+                    width: 20,
+                    height: 20,
+                    color: '#000000',
+                }   
+            });
         
         
+
+        /// NOT REVIEWED:
         } else if (sentence.type === 'ATR') {
             const className = sentence.children[0].value;
             if (!definedClasses.has(className)) {
@@ -66,6 +96,7 @@ function objectify(data) {
     }
 
 }
+
 /*
 a Person is a class.
 Person has name, age, height, weight.
