@@ -1,5 +1,6 @@
 const tokenSpecs = [
-    { regex: /^[\r\t\n ]+/, type: null }, // skip whitespace
+    { regex: /^\n/, type: 'LINE' }, // skip whitespace
+    { regex: /^[\r\t ]+/, type: null }, // skip whitespace
     { regex: /^#.*(\n|$)/, type: null }, // skip comments
     { regex: /^(a|an)\b/, type: 'A' },
     { regex: /^,/, type: 'COMMA' },
@@ -13,13 +14,15 @@ const tokenSpecs = [
     { regex: /^with\b/, type: 'WITH' },
     { regex: /^(one|many)\b/, type: 'MULT' },
     { regex: /^[a-zA-Z_][a-zA-Z0-9_]*/, type: 'ID' },
-
 ];
+
 
 export function lexer(input) {
     const tokens = [];
     let pos = 0;
-
+    let line = 1;
+    let status = 'SUCCESS';
+    let message = '';
     while (pos < input.length) {
         let match = null;
         let matchedType = null;
@@ -34,16 +37,25 @@ export function lexer(input) {
             }
         }
 
-        if (!match) break; // No match found, stop lexing
-
+        if (!match){
+            status = 'ERROR';
+            message = `Unexpected token at line ${line}: "${input.slice(pos)}"`;
+            return {status, message, pos, data: tokens};
+        } 
         if (matchedType) {
-            tokens.push({ type: matchedType, value: match });
+            if (matchedType === 'LINE'){ 
+                line++;
+            } else {
+                tokens.push({ type: matchedType, value: match });
+            }
         }
+
         pos += maxLen;
     }
 
-    return tokens;
+    return {status,data:tokens};
 }
+
 /*
 example
 input: """
@@ -55,7 +67,10 @@ Person can run.
 """
 lexer(input)
 output:
-[
+{
+    status: 'SUCCESS',
+    message: 'Lexing completed successfully',
+    data: [
 	{"type": "A", "value": "a"},
 	{"type": "ID", "value": "Person"},
 	{"type": "IS", "value": "is"},

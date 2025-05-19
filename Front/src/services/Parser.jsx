@@ -5,14 +5,15 @@ const prodRules = {
     'DEF':['A ID IS A CLASS'],
     'LIST': ['ID COMMA LIST','ID'],
     'ATR': ['ID HAS LIST'],
-    'MET': ['ID CAN ID WITH LIST','ID CAN LIST'],
+    'MET': ['ID CAN ID WITH LIST','ID CAN ID'],
     'INHER':['A ID IS A ID'],
     'REL':['MULT ID IS RELATED TO MULT ID'],
 }
 
 export function parse(tokens) {
     let pos = 0;
-
+    let status = 'SUCCESS';
+    let message = '';
     function peek() {
         return tokens[pos];
     }
@@ -21,7 +22,9 @@ export function parse(tokens) {
         if (peek() && peek().type === expectedType) {
             return tokens[pos++];
         }
-        throw new Error(`Expected ${expectedType}, got ${peek()?.type || 'EOF'}`);
+        status = 'ERROR';
+        message = `Expected ${expectedType}, got ${peek()?.type || 'EOF'}`;
+        throw new Error(message);
     }
 
     function tryMatch(expectedType) {
@@ -54,12 +57,16 @@ export function parse(tokens) {
             } else if (tokens[pos + 1]?.type === "CAN") {
                 node = parseMET();
             } else {
-                throw new Error(`Invalid SENT at token: ${JSON.stringify(lookahead)}`);
+                status = 'ERROR';
+                message = `Invalid SENT at token: ${JSON.stringify(lookahead)}`;
+                throw new Error(message);
             }
         } else if (lookahead?.type === "MULT") {
             node = parseREL();
         } else {
-            throw new Error(`Invalid SENT start: ${JSON.stringify(lookahead)}`);
+            status = 'ERROR';
+            message = `Invalid SENT at token: ${JSON.stringify(lookahead)}`;
+            throw new Error(message);
         }
         node.children.push(match("DOT"));
         return node;
@@ -138,8 +145,11 @@ export function parse(tokens) {
         }
         return { type: "LIST", children };
     }
-
-    return parseSTART();
+    try{
+        return {status,message,data:parseSTART()};
+    } catch(e){
+        return {status,message,pos,data:null};
+    }
 }
 
 
