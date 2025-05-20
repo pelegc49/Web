@@ -6,10 +6,10 @@ const sampleJsonData = {
   data: {
     className: "User",
     attributes: [
-      "id: number",
-      "name: string",
-      "email: string",
-      "createdAt: Date"
+      "id",
+      "name",
+      "email",
+      "createdAt"
     ],
     methods: {
       "login": ["email", "password"],

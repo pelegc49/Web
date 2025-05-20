@@ -3,6 +3,7 @@ import Header from "./components/Header.jsx"
 import { Outlet, useNavigate } from 'react-router-dom'
 import SyntaxHelp from "./components/SyntaxHelp.jsx"
  import { createContext, useContext, useEffect,useState } from 'react'
+import ClassNodeTest from './components/ClassNodeTest.jsx'
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
 
@@ -26,7 +27,7 @@ function App() {
       <darkModeContext.Provider value={{darkMode: isDark, toggleDarkMode}}>
           <div className="App">
               <Header />
-              <div className={isDark?'bg-gray-900':'bg-gray-100'}>
+              <div className={isDark?'bg-gray-900 text-white':'bg-gray-100 text-black'}>
                 <Outlet />
               </div>
           </div>

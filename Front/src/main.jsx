@@ -10,6 +10,7 @@ import Help from './components/Help.jsx'
 import SignUpHelp from './components/SignUpHelp.jsx'
 import SyntaxHelp from './components/SyntaxHelp.jsx'
 import WebHelp from './components/WebHelp.jsx'
+import Application from './components/Application.jsx'
 
 const router = createBrowserRouter([{
   path: '/',
@@ -17,6 +18,7 @@ const router = createBrowserRouter([{
   children: [
       { path: '/home', element: <HomePage /> },
       { path: '/user', element: <UserProfile /> },
+      { path: '/app', element: <Application /> },
       { path: '/help', element: <Help />, children: [
         {
           path: 'sign-up',

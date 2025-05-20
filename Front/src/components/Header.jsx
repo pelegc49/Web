@@ -1,5 +1,5 @@
 import React, {useState,useEffect, useContext} from 'react';
-import {sun, moon, guest_user, help} from "../assets/svgs.jsx"
+import {sun, moon, guest_user, help,createNew} from "../assets/svgs.jsx"
 import "../index.css"
 import { Link , useLocation} from 'react-router-dom';
 import {headerContainer, logo, icon} from "./Style.jsx"
@@ -30,6 +30,9 @@ export default function Header(){
                          className={icon}
                          width="30px" src={darkMode ? moon : sun}
                          alt={darkMode ? "Dark" : "Light"} />
+                    <Link className={icon} to={"/app"} >
+                        <img width="30px" src={createNew} alt="app"/>
+                    </Link>
                     <img className={icon} 
                          width="30px" src={guest_user} alt="UserPic" />
                 </div>
