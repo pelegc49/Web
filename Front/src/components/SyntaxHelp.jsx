@@ -1,8 +1,6 @@
 import React from "react";
 import * as styles from "./Style";
-import {darkModeContext} from "../App.jsx"
 export default function SyntaxHelp() {
-    const {darkMode} = React.useContext(darkModeContext);
     return (
         <div className={styles.helpTextContainer}>
             <h2 className={styles.helpTextTitle}>Syntax Guide</h2>
