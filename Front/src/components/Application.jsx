@@ -9,11 +9,11 @@ export default function Application() {
         
     }
   return (
-    <div className='flex'>
-        <div className='w-[25%]'>
+    <div className='w-full flex'>
+        <div className='w-1/3'>
             <TextArea onContentChange={handleChange}/>
         </div>
-        <div className='w-[75%]'>
+        <div className='w-2/3'>
             <ReactFlow nodes={nodes} edges={edges}>
                 <Background/>
             </ReactFlow>
