@@ -15,3 +15,5 @@ app.listen(PORT,()=>{
 app.get('/',(req,res)=>{
     res.send('Server is responding');
 });
+
+app.use('/api',require('./routes/api'))
