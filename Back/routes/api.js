@@ -10,4 +10,8 @@ Router.get('/',(req,res)=>{
     })
 });
 
+Router.use('/users',require('./users.js'));
+
 module.exports = Router;
+
+
