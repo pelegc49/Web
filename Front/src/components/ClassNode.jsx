@@ -8,7 +8,7 @@ export default function ClassNode({ JsonData }) {
   return (
     <div className={styles.classNodeContainer}>
       <h2 className={styles.classNodeTitle}>{className}</h2>
-      
+      <hr/>
       <div className="mb-2">
         {attributes.map((attr, index) => (
           <div key={index} className={styles.attributeItem}>
@@ -16,7 +16,7 @@ export default function ClassNode({ JsonData }) {
           </div>
         ))}
       </div>
-      
+      <hr/>
       <div className={styles.methodsContainer}>
         {Object.entries(methods).map(([methodName, params], index) => (
           <div key={index} className={styles.methodItem}>
