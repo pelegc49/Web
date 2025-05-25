@@ -1,7 +1,8 @@
 import { MarkerType} from '@xyflow/react';
 import ClassNode from '../components/ClassNode.jsx';
 export function objectify(data) {
-    const definedClasses = new Set();
+    const definedClasses = new Map();
+    let index = 0;
     let status = 'SUCCESS';
     let message = '';
     const nodes = [];
@@ -17,23 +18,23 @@ export function objectify(data) {
                 message = `Class ${className} is already defined`;
                 return { status, message, nodes, edges };
             }
-            definedClasses.add(className);
+            definedClasses.set(className, index++);
             const data ={ className, attributes, methods }
             nodes.push({
                 id: className,
                 data:{
                     ...data,
-                    label: <ClassNode JsonData={data} />
+                    label: <ClassNode className={className} attributes={attributes} methods={methods} />
                     },
                 position: { x: 0, y: 0 },
-                width: 100,
-                height: 150,
+                width: 200,
+                height: 250,
             });
         } else if (sentence.type === 'INHER') {
             const attributes = [];
             const methods = [];
             const childClass = sentence.children[1].value;
-            const parentClass = sentence.children[3].value;
+            const parentClass = sentence.children[4].value;
             if (definedClasses.has(childClass)) {
                 status = 'ERROR';
                 message = `Class ${childClass} is already defined`;
@@ -44,18 +45,18 @@ export function objectify(data) {
                 message = `Parent class ${parentClass} is not defined`;
                 break;
             }
-            const data ={childClass, attributes, methods }
-            definedClasses.add(childClass);
+            const data ={ childClass, attributes, methods }
+            definedClasses.set(childClass, index++);
             nodes.push({
                 id: childClass,
                 data:{
                     ...data,
-                    label: <ClassNode JsonData={data} />
+                    label: <ClassNode className={childClass} attributes={attributes} methods={methods} />
                     },
                 position: { x: 0, y: 0 },
                 type: 'input',
-                width: 100,
-                height: 150,
+                width: 200,
+                height: 250,
             });
             edges.push({
                 id: `${childClass}-${parentClass}`,
@@ -70,9 +71,6 @@ export function objectify(data) {
                 }   
             });
         
-        
-
-        /// NOT REVIEWED:
         } else if (sentence.type === 'ATR') {
             const className = sentence.children[0].value;
             if (!definedClasses.has(className)) {
@@ -80,8 +78,11 @@ export function objectify(data) {
                 message = `Class ${className} is not defined`;
                 break;
             }
-            const attributes = sentence.children[2].children.map(attr => attr.value);
-            nodes.find(node => node.id === className).data.attributes.push(...attributes);
+            const currIndex = definedClasses.get(className);
+            
+            for (const child of sentence.children[2].children) {
+                nodes[currIndex].data.attributes.push(child.value);
+            }
         } else if (sentence.type === 'MET') {
             const className = sentence.children[0].value;
             if (!definedClasses.has(className)) {
@@ -89,12 +90,25 @@ export function objectify(data) {
                 message = `Class ${className} is not defined`;
                 break;
             }
+            /// NOT REVIEWED:
             const methodName = sentence.children[2].value;
-            const params = sentence.children[4].children.map(param => param.value);
-            nodes.find(node => node.id === className).data.methods.push({ [methodName]: params });
+            const currIndex = definedClasses.get(className);
+            if(sentence.children[3].type === 'WITH') {
+                const params = []
+                for (const child of sentence.children[4].children) {
+                    params.push(child.value);
+                }
+                const method = { [methodName]: params };
+                nodes[currIndex].data.methods.push(method);
+            }
+            else{
+                const params = []
+                const method = { [methodName]: params };
+                nodes[currIndex].data.methods.push(method);
+            }
         }
     }
-
+    return { status, message, nodes, edges };
 }
 
 /*
@@ -208,12 +222,16 @@ nodes:[
         className: 'Person',
 	    attributes: ['name', 'age', 'height', 'weight'],
 	    methods:[
-            jump:
-                ['howFar', 'howHigh'],
-		    speak:
-                ['sentence'],
-            run: []
-            ]
+            {
+                jump:['howFar', 'howHigh']
+            },
+            {
+                speak:['sentence']
+            },
+            {
+                run: []
+            }
+        ]
     },
     position: {
       x: 0,

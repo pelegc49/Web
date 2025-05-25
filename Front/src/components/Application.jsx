@@ -1,21 +1,76 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextArea from './TextArea.jsx'
-import {ReactFlow, Background, useEdgesState, useNodesState} from '@xyflow/react'
+import {ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls} from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
+import { useEffect } from 'react';
+import { objectify } from '../services/Objectifier.jsx';
+import { parse } from '../services/Parser.jsx';
+import { lexer } from '../services/Tokenizer.jsx';
 export default function Application() {
+
+    const [time, setTime] = useState(null);
+    const [text, setText] = useState('');
+    const [error, setError] = useState(null);
+
+
+    
+    useEffect(() => {
+        if (time) {
+            clearTimeout(time);
+        }
+        const newTime = setTimeout(() => {
+            if (text.trim() === '') return;
+            const tokens = lexer(text);
+            if (tokens.status === 'ERROR') {
+                setError(tokens.message);
+                return;
+            }
+            else{
+                setError(null);
+            }
+            const parsed = parse(tokens.data);
+            if (parsed.status === 'ERROR') {
+                setError(parsed.message);
+                return;
+            }
+            else{
+                setError(null);
+            }
+            const objectified = objectify(parsed.data);
+            if (objectified.status === 'ERROR') {
+                setError(objectified.message);
+                return;
+            }
+            else{
+                setError(null);
+            }
+            setNodes(objectified.nodes);
+            setEdges(objectified.edges);
+            
+        }, 1000);
+        setTime(newTime);
+    }, [text]);
+    
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    function handleChange(){
-        
+    
+    useEffect(() => {console.log(nodes)}, [nodes]);
+    
+    function handleChange(newContent){
+        setText(newContent)
     }
+
   return (
     <div className='w-full flex'>
         <div className='w-1/3'>
             <TextArea onContentChange={handleChange}/>
+            {error && <div className='text-red-500'>{error}</div>}
         </div>
         <div className='w-2/3'>
-            <ReactFlow nodes={nodes} edges={edges}>
-                <Background/>
+            <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} fitView>
+                <MiniMap />
+                <Controls />
+                <Background />
             </ReactFlow>
         </div>
     </div>
