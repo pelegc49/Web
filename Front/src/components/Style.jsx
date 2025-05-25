@@ -1,5 +1,5 @@
 // Toolbar styles
-export const toolbarContainer = "w-full bg-gray-100 shadow-sm flex justify-center items-center py-3 border-b border-gray-200";
+export const toolbarContainer = dark => "w-full shadow-sm flex justify-center items-center py-3 border-b border-gray-200 " + (dark ? "bg-gray-500" : "bg-gray-100");
 export const toolbarNav = "flex items-center space-x-6";
 export const toolbarLink = "text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200";
 export const toolbarDivider = "text-gray-300";
