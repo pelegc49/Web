@@ -5,13 +5,13 @@ export const toolbarLink = dark => "font-medium transform transition-all duratio
     (dark ? "text-gray-300 hover:text-white hover:bg-gray-600 hover:shadow-lg" : "text-gray-600 hover:text-blue-600 hover:bg-gray-200 hover:shadow-md");
 export const toolbarDivider = dark => dark ? "text-gray-600" : "text-gray-300";
 
-export const classNodeContainer = "bg-white rounded-lg shadow-md border border-gray-300 p-4 m-2 hover:shadow-lg transition-shadow";
-export const classNodeTitle = "font-bold text-lg border-b border-gray-200 pb-2 mb-2 text-blue-700 text-center";
-export const attributeItem = "py-1 px-2 hover:bg-gray-100 rounded";
-export const attributeText = "text-sm text-gray-700";
-export const methodsContainer = "mt-2 pt-2 border-t border-gray-200";
-export const methodItem = "py-1 px-2 hover:bg-gray-100 rounded";
-export const methodText = "text-sm text-gray-700";
+export const classNodeContainer = dark => `rounded-lg shadow-md border p-4 m-2 hover:shadow-lg transition-shadow ${dark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"}`;
+export const classNodeTitle = dark => `font-bold text-lg border-b pb-2 mb-2 text-center ${dark ? "text-gray-100 border-gray-600" : "text-blue-700 border-gray-200"}`;
+export const attributeItem = dark => `py-1 px-2 rounded ${dark ? "hover:bg-gray-600" : "hover:bg-gray-100"}`;
+export const attributeText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`;
+export const methodsContainer = dark => `mt-2 pt-2 border-t ${dark ? "border-gray-600" : "border-gray-200"}`;
+export const methodItem = dark => `py-1 px-2 rounded ${dark ? "hover:bg-gray-600" : "hover:bg-gray-100"}`;
+export const methodText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`;
 // TextArea component styles
 export const textAreaContainer = "w-full my-2.5 flex justify-center";
 
