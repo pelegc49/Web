@@ -1,6 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// const cors = require('cors');
+import express from 'express' 
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import { Router as apiRouter } from './routes/api.js';
 
 const app = express();
 const PORT = 5000;
@@ -16,4 +20,4 @@ app.get('/',(req,res)=>{
     res.send('Server is responding');
 });
 
-app.use('/api',require('./routes/api'))
+app.use('/api',apiRouter)

@@ -9,77 +9,84 @@ export default function SignUp({ open, onClose, onSuccess }) {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    
+    const [user, setUser] = useState(null);
+
     // For demonstration, a simple static captcha
     const captchaText = "5gT9b";
 
     const handleSignUp = async (e) => {
+        
         e.preventDefault();
         setError('');
         setSuccess('');
-
         // Validation
         if (password !== confirm) {
             setError("Passwords do not match");
             return;
         }
-
         if (captcha !== captchaText) {
             setError("Invalid captcha");
             return;
         }
-
+        
         if (username.length < 3) {
             setError("Username must be at least 3 characters long");
             return;
         }
-
+        
         if (password.length < 6) {
             setError("Password must be at least 6 characters long");
             return;
         }
-
+        
         setIsLoading(true);
-
+        
         try {
-            //const userCredential = await createUserWithEmailAndPassword(auth, username, password);
-            // Call backend API to add client
-            await axios.post("/api/users/clients", {
-                name: username,
-                email: userCredential.user.email,
+            let email = 'pelegc49@gmail.com';
+            axios.post("/api/users/signup", { email, password }).then((response) => {
+                setUser(response.data.user);
+            }).catch((error) => {
+                console.error("Signup error:", error);
+                setError(error.response?.data?.message || 'Signup failed. Please check your connection.');
             });
-            setSuccess('Signup successful! You can now log in.');
-            
-            // Clear form
+            //const userCredential = await createUserWithEmailAndPassword(auth, username, password);צריכה להיות בבאק 
+            // Call backend API to add client
+            //await axios.post("/api/users/clients", {
+                //     name: username,
+                //     email: userCredential.user.email,
+                // });
+                setSuccess('Signup successful! You can now log in.');
+                
+                // Clear form
+                setUsername('');
+                setPassword('');
+                setConfirm('');
+                setCaptcha('');
+                setError('');
+                
+                // Call success callback with user data
+                if (onSuccess) {
+                    onSuccess(user);
+                }
+                
+                // Close modal after a short delay to show success message
+                setTimeout(() => {
+                    onClose();
+                }, 1500);
+            } catch (err) {
+                console.error('Signup error:', err);
+                setError(err.response?.data?.message || 'Signup failed. Please check your connection.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        const handleClose = () => {
+            // Clear form when closing
             setUsername('');
             setPassword('');
             setConfirm('');
             setCaptcha('');
-            setError('');
-            
-            // Call success callback with user data
-            if (onSuccess) {
-                onSuccess(userCredential.user);
-            }
-            
-            // Close modal after a short delay to show success message
-            setTimeout(() => {
-                onClose();
-            }, 1500);
-        } catch (err) {
-            console.error('Signup error:', err);
-            setError(err.response?.data?.message || 'Signup failed. Please check your connection.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleClose = () => {
-        // Clear form when closing
-        setUsername('');
-        setPassword('');
-        setConfirm('');
-        setCaptcha('');
         setError('');
         setSuccess('');
         onClose();

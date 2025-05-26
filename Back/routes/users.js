@@ -1,21 +1,22 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const { addClient } = require('../services/firebase'); // Import your Firestore function
-
-const Router = express.Router()
+import express from 'express' 
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import { addClient } from '../services/firebase.js'; // Import your Firestore function
+import {auth} from '../services/firebase.js'; // Import Firebase auth functions
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+export const Router = express.Router()
 
 // Dummy in-memory users
 const users = []
 
-Router.post('/signup', (req, res) => {
-    const { username, password } = req.body
-    if (users.find(u => u.username === username)) {
-        return res.json({ success: false, message: 'User already exists' })
-    }
-    users.push({ username, password })
-    res.json({ success: true, user: { username } })
-})
+// Router.post('/signup', (req, res) => {
+//     const { username, password } = req.body
+//     if (users.find(u => u.username === username)) {
+//         return res.json({ success: false, message: 'User already exists' })
+//     }
+//     users.push({ username, password })
+//     res.json({ success: true, user: { username } })
+// })
 
 Router.post('/login', (req, res) => {
     const { username, password } = req.body
@@ -40,4 +41,19 @@ Router.post('/clients', async (req, res) => {
     }
 });
 
-module.exports = Router
+
+Router.post('/signup', async (req, res) => {
+    const { email,password } = req.body;
+    createUserWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            
+            res.status(201).json({ success: true, user: user });
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            res.status(400).json({ success: false, message: errorMessage });
+        });
+
+});
