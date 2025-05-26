@@ -17,10 +17,15 @@ import {
 export default function HistoryList() {
   const { darkMode } = useContext(darkModeContext);
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // Simple list of project names
-    const fakeProjects = ['proj1', 'proj2', 'proj3', 'proj4', 'proj5'];
+  const [loading, setLoading] = useState(true);  useEffect(() => {
+    // Project data with name and text
+    const fakeProjects = [
+      { name: 'proj1', text: 'a person is a class.' },
+      { name: 'proj2', text: 'a student is a class.' },
+    //   { name: 'proj3', text: 'A teacher has students.' },
+    //   { name: 'proj4', text: 'An employee works at a company.' },
+    //   { name: 'proj5', text: 'A manager manages employees.' }
+    ];
     // const fakeProjects = [];
     // Simulate fetching data
     setTimeout(() => {
@@ -49,7 +54,6 @@ export default function HistoryList() {
       </div>
     );
   }
-
   return (
     <div className={historyListContainer}>
       {projects.map((project, index) => (
@@ -58,10 +62,9 @@ export default function HistoryList() {
           className={historyItemContainer(darkMode)}
         >
           <span className={historyItemText(darkMode)}>
-            {project}
-          </span>
-          <div className={historyButtonsContainer}>
-            <Link to="/app">
+            {project.name}
+          </span>          <div className={historyButtonsContainer}>
+            <Link to="/app" state={{ projectText: project.text }}>
               <button className={historyOpenButton(darkMode)}>
                 Open
               </button>

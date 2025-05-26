@@ -3,18 +3,20 @@ import TextArea from './TextArea.jsx'
 import {ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls} from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { objectify } from '../services/Objectifier.jsx';
 import { parse } from '../services/Parser.jsx';
 import { lexer } from '../services/Tokenizer.jsx';
 export default function Application() {
-
+    const location = useLocation();
+    const projectText = location.state?.projectText || '';
+    
     const [time, setTime] = useState(null);
-    const [text, setText] = useState('');
+    const [text, setText] = useState(projectText);
     const [error, setError] = useState(null);
 
 
-    
-    useEffect(() => {
+      useEffect(() => {
         if (time) {
             clearTimeout(time);
         }
@@ -51,6 +53,24 @@ export default function Application() {
         setTime(newTime);
     }, [text]);
     
+    // Process initial project text when component loads
+    useEffect(() => {
+        if (projectText) {
+            // Trigger the text processing immediately for the initial text
+            const tokens = lexer(projectText);
+            if (!tokens.status || tokens.status !== 'ERROR') {
+                const parsed = parse(tokens.data);
+                if (!parsed.status || parsed.status !== 'ERROR') {
+                    const objectified = objectify(parsed.data);
+                    if (!objectified.status || objectified.status !== 'ERROR') {
+                        setNodes(objectified.nodes);
+                        setEdges(objectified.edges);
+                    }
+                }
+            }
+        }
+    }, [projectText]);
+    
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     
@@ -59,11 +79,10 @@ export default function Application() {
     function handleChange(newContent){
         setText(newContent)
     }
-
   return (
     <div className='w-full flex'>
         <div className='w-1/3'>
-            <TextArea onContentChange={handleChange}/>
+            <TextArea onContentChange={handleChange} initialValue={projectText}/>
             {error && <div className='text-red-500'>{error}</div>}
         </div>
         <div className='w-2/3'>
