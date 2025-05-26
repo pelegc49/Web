@@ -78,3 +78,46 @@ export const signUpHelpList = dark => `ml-6 my-3 space-y-2 list-disc ${dark ? "t
 export const signUpHelpNote = dark => `text-sm italic mt-3 p-3 rounded ${dark ? "text-gray-300 bg-gray-600 border-l-4 border-blue-500" : "text-gray-600 bg-blue-50 border-l-4 border-blue-400"}`;
 
 export const signUpHelpFooter = dark => `mt-10 p-4 rounded-lg border ${dark ? "bg-gray-700 border-gray-600 text-blue-400" : "bg-blue-50 border-blue-100 text-blue-700"}`;
+
+// History component styles
+export const historyContainer = dark => `p-8 ${dark ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} min-h-screen`;
+
+export const historyContent = dark => `mx-auto max-w-2xl p-6 rounded-lg shadow-md ${dark ? 'bg-gray-800' : 'bg-white'}`;
+
+export const historyHeader = "flex justify-between items-center mb-6 pb-2 border-b border-gray-200 dark:border-gray-600";
+
+export const historyTitle = dark => `text-2xl font-bold ${dark ? '' : ''}`;
+
+export const historyAddLink = "hover:opacity-80 transition-opacity";
+
+export const historyAddIcon = dark => `${dark ? 'filter-white' : ''}`;
+
+// HistoryList component styles
+export const historyListContainer = "space-y-2";
+
+export const historyItemContainer = dark => `p-3 rounded-lg border ${dark ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"} flex justify-between items-center`;
+
+export const historyItemText = dark => dark ? "text-gray-200" : "text-gray-700";
+
+export const historyButtonsContainer = "flex space-x-2";
+
+export const historyOpenButton = dark => `px-2 py-1 text-xs rounded-md ${dark ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800"}`;
+
+export const historyDeleteButton = dark => `px-2 py-1 text-xs rounded-md ${dark ? "bg-red-600 text-white" : "bg-red-100 text-red-800"}`;
+
+export const historyLoadingContainer = "flex justify-center items-center py-5";
+
+export const historyLoadingSpinner = "animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500";
+
+export const historyEmptyContainer = dark => `text-center py-6 ${dark ? "text-gray-400" : "text-gray-500"}`;
+
+export const historyCreateButton = dark => `mt-3 px-3 py-1 rounded-md ${dark ? 'bg-blue-600' : 'bg-blue-500'} text-white`;
+
+// Tooltip styles
+export const tooltipContainer = () => 
+  "relative group";
+
+export const tooltip = (darkMode) => 
+  `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-300 -left-14 top-10 ${
+    darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-200"
+  } text-xs rounded py-1 px-2 whitespace-nowrap z-10 shadow-md`;
