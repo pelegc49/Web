@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import TextArea from './TextArea.jsx'
 import {ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls} from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { objectify } from '../services/Objectifier.jsx';
 import { parse } from '../services/Parser.jsx';
 import { lexer } from '../services/Tokenizer.jsx';
+import { darkModeContext } from '../App.jsx';
+import LabelledEdge from './LabelledEdge.jsx';
 export default function Application() {
-
+    const {darkMode,toggleDarkMode} = useContext(darkModeContext);
     const [time, setTime] = useState(null);
     const [text, setText] = useState('');
     const [error, setError] = useState(null);
 
-
+    const edgeTypes = {
+        labelled: LabelledEdge
+    };
     
     useEffect(() => {
         if (time) {
@@ -67,10 +71,17 @@ export default function Application() {
             {error && <div className='text-red-500'>{error}</div>}
         </div>
         <div className='w-2/3'>
-            <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} fitView>
+            <ReactFlow 
+                nodes={nodes}
+                edges={edges} 
+                onNodesChange={onNodesChange} 
+                fitView 
+                edgeTypes={edgeTypes}
+                colorMode={darkMode?"dark":"light"}>
                 <MiniMap />
                 <Controls />
-                <Background />
+                <Background  />
+                
             </ReactFlow>
         </div>
     </div>

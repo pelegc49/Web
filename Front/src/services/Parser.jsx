@@ -271,6 +271,19 @@ output:
         },
         { "type": "DOT", "value": "." }
     ]
+    },
+    {
+    "type":"REL",
+    "children": [
+        {"type":"MULT","value":"one"},
+        {"type":"ID","value":"Person"},
+        {"type":"IS","value":"is"},
+        {"type":"RELATED","value":"related"},
+        {"type":"TO","value":"to"},
+        {"type":"MULT","value":"many"},
+        {"type":"ID","value":"House"},
+        {"type":"DOT","value":"."}
+    ]
     }
 ]
 }

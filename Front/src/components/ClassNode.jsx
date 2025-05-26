@@ -3,8 +3,9 @@ import * as styles from "./Style";
 import { darkModeContext } from "../App.jsx";
 
 export default function ClassNode({ className, attributes, methods }) {
-  const { darkMode } = useContext(darkModeContext);
+  const { darkMode, toggleDarkMode } = useContext(darkModeContext);
   console.log("Rendering ClassNode with methods:", methods);
+  console.log("Rendering ClassNode with darkMode:", darkMode);
   
   return (
     <div className={styles.classNodeContainer(darkMode)}>

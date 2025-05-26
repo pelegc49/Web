@@ -1,4 +1,4 @@
-import { MarkerType} from '@xyflow/react';
+import { MarkerType } from '@xyflow/react';
 import ClassNode from '../components/ClassNode.jsx';
 export function objectify(data) {
     const definedClasses = new Map();
@@ -27,8 +27,8 @@ export function objectify(data) {
                     label: <ClassNode className={className} attributes={attributes} methods={methods} />
                     },
                 position: { x: 0, y: 0 },
-                width: 200,
-                height: 250,
+                width: 300,
+                height: 400,
             });
         } else if (sentence.type === 'INHER') {
             const attributes = [];
@@ -55,14 +55,14 @@ export function objectify(data) {
                     },
                 position: { x: 0, y: 0 },
                 type: 'input',
-                width: 200,
-                height: 250,
+                width: 300,
+                height: 400,
             });
             edges.push({
                 id: `${childClass}-${parentClass}`,
                 source: childClass,
                 target: parentClass,
-                type: 'bezier',
+                type: "step",
                 markerEnd: {
                     type: MarkerType.ArrowClosed,
                     width: 20,
@@ -90,7 +90,6 @@ export function objectify(data) {
                 message = `Class ${className} is not defined`;
                 break;
             }
-            /// NOT REVIEWED:
             const methodName = sentence.children[2].value;
             const currIndex = definedClasses.get(className);
             if(sentence.children[3].type === 'WITH') {
@@ -106,7 +105,39 @@ export function objectify(data) {
                 const method = { [methodName]: params };
                 nodes[currIndex].data.methods.push(method);
             }
+        }else if (sentence.type === 'REL') {
+            const sourceClass = sentence.children[1].value;
+            const targetClass = sentence.children[6].value;
+            const multSource = sentence.children[0].value === 'one' ? '1' : '*';
+            const multTarget = sentence.children[5].value === 'one' ? '1' : '*';
+            if (!definedClasses.has(sourceClass)) {
+                status = 'ERROR';
+                message = `Source class ${sourceClass} is not defined`;
+                break;
+            }
+            if (!definedClasses.has(targetClass)) {
+                status = 'ERROR';
+                message = `Target class ${targetClass} is not defined`;
+                break;
+            }
+            // NOT REVIEWED
+            edges.push({
+                id: `${sourceClass}-${targetClass}`,
+                source: sourceClass,
+                target: targetClass,
+                type: "labelled",
+                markerEnd: {
+                    width: 20,
+                    height: 20,
+                    color: '#000000',
+                },
+                data: {
+                    startLabel: multSource,
+                    endLabel: multTarget,
+                }
+            });
         }
+
     }
     return { status, message, nodes, edges };
 }
@@ -114,8 +145,8 @@ export function objectify(data) {
 /*
 a Person is a class.
 Person has name, age, height, weight.
-Car can drive.
 a Student is a Person.
+
 */
 
 
@@ -206,6 +237,19 @@ input:
         { "type": "CAN", "value": "can" },
         { "type": "ID", "value": "run" },
         { "type": "DOT", "value": "." }
+    ]
+    },
+    {
+    "type":"REL",
+    "children": [
+        {"type":"MULT","value":"one"},
+        {"type":"ID","value":"Person"},
+        {"type":"IS","value":"is"},
+        {"type":"RELATED","value":"related"},
+        {"type":"TO","value":"to"},
+        {"type":"MULT","value":"many"},
+        {"type":"ID","value":"House"},
+        {"type":"DOT","value":"."}
     ]
     }
 ]

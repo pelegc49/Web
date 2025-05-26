@@ -8,7 +8,7 @@ const tokenSpecs = [
     { regex: /^class\b/, type: 'CLASS' },
     { regex: /^has\b/, type: 'HAS' },
     { regex: /^can\b/, type: 'CAN' },
-    { regex: /^is\b/, type: 'IS' },
+    { regex: /^(is|are)\b/, type: 'IS' },
     { regex: /^related\b/, type: 'RELATED' },
     { regex: /^to\b/, type: 'TO' },
     { regex: /^with\b/, type: 'WITH' },
