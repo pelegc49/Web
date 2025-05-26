@@ -17,7 +17,7 @@ const users = []
 //     users.push({ username, password })
 //     res.json({ success: true, user: { username } })
 // })
-
+//nw
 Router.post('/login', (req, res) => {
     const { username, password } = req.body
     const user = users.find(u => u.username === username && u.password === password)
