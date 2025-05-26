@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { sun, moon, guest_user, help, createNew } from "../assets/svgs.jsx";
+import { sun, moon, guest_user, help, createNew, history } from "../assets/svgs.jsx";
 import "../index.css";
 import { Link, useLocation } from 'react-router-dom';
 import { headerContainer, logo, icon } from "./Style.jsx";
@@ -27,6 +27,9 @@ export default function Header({ onLoginClick }) {
                         alt={darkMode ? "Dark" : "Light"} />
                     <Link className={icon} to={"/app"} >
                         <img width="30px" src={createNew} alt="app" />
+                    </Link>
+                    <Link className={icon} to={"/history"} >
+                        <img width="30px" src={history} alt="history" />
                     </Link>
                     {/* <img className={icon}
                         width="30px" src={guest_user} alt="UserPic"

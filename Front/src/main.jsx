@@ -11,6 +11,7 @@ import SignUpHelp from './components/SignUpHelp.jsx'
 import SyntaxHelp from './components/SyntaxHelp.jsx'
 import WebHelp from './components/WebHelp.jsx'
 import Application from './components/Application.jsx'
+import History from './components/History.jsx'
 
 const router = createBrowserRouter([{
   path: '/',
@@ -33,7 +34,8 @@ const router = createBrowserRouter([{
           element: <WebHelp />,
         }
         ]
-      }
+      },
+      {path: '/history', element: <History />}
   ],
 },])
 
