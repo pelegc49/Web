@@ -3,7 +3,6 @@ import TextArea from './TextArea.jsx'
 import {ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls} from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
 import { useEffect, useContext } from 'react';
-import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { objectify } from '../services/Objectifier.jsx';
 import { parse } from '../services/Parser.jsx';
@@ -89,8 +88,10 @@ export default function Application() {
   return (
     <div className='w-full flex'>
         <div className='w-1/3'>
-            <TextArea onContentChange={handleChange} initialValue={projectText}/>
-            {error && <div className='text-red-500'>{error}</div>}
+            <TextArea onContentChange={handleChange} initialValue={projectText}>
+                {error && <div className='text-red-500 absolute justify-between'>{error}</div>}
+            </TextArea>
+            
         </div>
         <div className='w-2/3'>
             <ReactFlow 

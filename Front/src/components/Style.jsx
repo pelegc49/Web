@@ -15,7 +15,7 @@ export const methodText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray
 // TextArea component styles
 export const textAreaContainer = "w-full h-full flex justify-center";
 
-export const textArea = "w-full p-3 rounded-lg border border-gray-300 text-base font-sans h-[85vh] resize-none focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400 max-w-[95vw] mx-auto";
+export const textArea = "flex-col w-full p-3 rounded-lg border border-gray-300 text-base font-sans h-[85vh] resize-none focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400 max-w-[95vw] mx-auto";
 export const headerContainer = dark => "p-4 flex justify-between text-white duration-200 ease-in-out " + (dark ? "bg-gray-500" : "bg-gray-300");
 export const logo = "cursor-pointer text-black font-bold text-2xl duration-300 ease-in-out hover:opacity-30";
 export const icon = "cursor-pointer mx-1 duration-300 ease-in-out hover:opacity-30";
