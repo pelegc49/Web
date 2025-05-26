@@ -1,92 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 export default function SignUp({ open, onClose, onSuccess }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
-    const [captcha, setCaptcha] = useState('');
+    const [captchaInput, setCaptchaInput] = useState('');
+    const [captchaText, setCaptchaText] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState(null);
+    const [email, setEmail] = useState('');
 
-    // For demonstration, a simple static captcha
-    const captchaText = "5gT9b";
+    const canvasRef = useRef(null);
+
+    const generateCaptchaText = () => {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let text = '';
+        for (let i = 0; i < 5; i++) {
+            text += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return text;
+    };
+
+    const drawCaptcha = (text) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = 'bold 24px Arial';
+        ctx.fillStyle = '#333';
+        ctx.fillText(text, 10, 30);
+    };
+
+    const refreshCaptcha = () => {
+        const newCaptcha = generateCaptchaText();
+        setCaptchaText(newCaptcha);
+        drawCaptcha(newCaptcha);
+    };
+
+    useEffect(() => {
+        if (open) {
+            refreshCaptcha();
+        }
+    }, [open]);
 
     const handleSignUp = async (e) => {
-        
         e.preventDefault();
         setError('');
         setSuccess('');
-        // Validation
+
         if (password !== confirm) {
             setError("Passwords do not match");
             return;
         }
-        if (captcha !== captchaText) {
+
+        if (captchaInput.trim().toUpperCase() !== captchaText.toUpperCase()) {
             setError("Invalid captcha");
+            refreshCaptcha();
             return;
         }
-        
+
         if (username.length < 3) {
             setError("Username must be at least 3 characters long");
             return;
         }
-        
+
         if (password.length < 6) {
             setError("Password must be at least 6 characters long");
             return;
         }
-        
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email address");
+            return;
+        }
+
         setIsLoading(true);
-        
         try {
-            let email = 'pelegc49@gmail.com';
-            axios.post("/api/users/signup", { email, password }).then((response) => {
-                setUser(response.data.user);
-            }).catch((error) => {
-                console.error("Signup error:", error);
-                setError(error.response?.data?.message || 'Signup failed. Please check your connection.');
+            const response = await axios.post("/api/users/signup", {
+                email,
+                password,
             });
-            //const userCredential = await createUserWithEmailAndPassword(auth, username, password);צריכה להיות בבאק 
-            // Call backend API to add client
-            //await axios.post("/api/users/clients", {
-                //     name: username,
-                //     email: userCredential.user.email,
-                // });
-                setSuccess('Signup successful! You can now log in.');
-                
-                // Clear form
-                setUsername('');
-                setPassword('');
-                setConfirm('');
-                setCaptcha('');
-                setError('');
-                
-                // Call success callback with user data
-                if (onSuccess) {
-                    onSuccess(user);
-                }
-                
-                // Close modal after a short delay to show success message
-                setTimeout(() => {
-                    onClose();
-                }, 1500);
-            } catch (err) {
-                console.error('Signup error:', err);
-                setError(err.response?.data?.message || 'Signup failed. Please check your connection.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        
-        const handleClose = () => {
-            // Clear form when closing
+
+            setSuccess("Signup successful!");
             setUsername('');
             setPassword('');
             setConfirm('');
-            setCaptcha('');
+            setCaptchaInput('');
+            setEmail('');
+            setError('');
+            refreshCaptcha();
+
+            if (onSuccess) onSuccess(response.data.user);
+
+            setTimeout(() => {
+                onClose();
+            }, 1500);
+        } catch (err) {
+            setError(err.response?.data?.message || "Signup failed.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleClose = () => {
+        setUsername('');
+        setPassword('');
+        setConfirm('');
+        setCaptchaInput('');
+        setEmail('');
         setError('');
         setSuccess('');
         onClose();
@@ -95,200 +118,88 @@ export default function SignUp({ open, onClose, onSuccess }) {
     if (!open) return null;
 
     return (
-        <div style={{
-            position: "fixed",
-            top: "60px",
-            right: "30px",
-            background: "rgba(0,0,0,0.0)",
-            zIndex: 1000,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end"
-        }}>
-            <form style={{
-                background: "#fff",
-                padding: "1.5rem",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                minWidth: "260px",
-                color: "#222"
-            }} onSubmit={handleSignUp}>
-                <h2 style={{ color: "#222", marginBottom: "1rem" }}>Sign Up</h2>
-                
-                <div style={{ marginBottom: "1rem" }}>
-                    <label style={{ 
-                        display: "block", 
-                        marginBottom: "0.3rem", 
-                        color: "#222", 
-                        fontWeight: 500 
-                    }}>
-                        Username:
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Your Username"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "0.5rem",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            background: "#f9f9f9",
-                            color: "#222"
-                        }}
-                        required
-                        disabled={isLoading}
-                        minLength={3}
-                    />
-                </div>
-                
-                <div style={{ marginBottom: "1rem" }}>
-                    <label style={{ 
-                        display: "block", 
-                        marginBottom: "0.3rem", 
-                        color: "#222", 
-                        fontWeight: 500 
-                    }}>
-                        Password:
-                    </label>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "0.5rem",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            background: "#f9f9f9",
-                            color: "#222"
-                        }}
-                        required
-                        disabled={isLoading}
-                        minLength={6}
-                    />
-                </div>
-                
-                <div style={{ marginBottom: "1rem" }}>
-                    <label style={{ 
-                        display: "block", 
-                        marginBottom: "0.3rem", 
-                        color: "#222", 
-                        fontWeight: 500 
-                    }}>
-                        Confirm Password:
-                    </label>
-                    <input
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirm}
-                        onChange={e => setConfirm(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "0.5rem",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            background: "#f9f9f9",
-                            color: "#222"
-                        }}
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
-                
-                <div style={{ marginBottom: "1rem" }}>
-                    <label style={{ 
-                        display: "block", 
-                        marginBottom: "0.3rem", 
-                        color: "#222", 
-                        fontWeight: 500 
-                    }}>
-                        Captcha:
-                    </label>
-                    <div style={{ 
-                        marginBottom: "0.3rem", 
-                        fontWeight: "bold", 
-                        letterSpacing: "2px", 
-                        background: "#eee", 
-                        padding: "0.5rem", 
-                        borderRadius: "4px", 
-                        width: "fit-content" 
-                    }}>
-                        {captchaText}
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Enter captcha"
-                        value={captcha}
-                        onChange={e => setCaptcha(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "0.5rem",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            background: "#f9f9f9",
-                            color: "#222"
-                        }}
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
-                
-                {error && (
-                    <div style={{ 
-                        color: 'red', 
-                        marginBottom: '1rem',
-                        fontSize: '0.9rem'
-                    }}>
-                        {error}
-                    </div>
-                )}
-                
-                {success && (
-                    <div style={{ 
-                        color: 'green', 
-                        marginBottom: '1rem',
-                        fontSize: '0.9rem'
-                    }}>
-                        {success}
-                    </div>
-                )}
-                
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button 
-                        type="submit" 
-                        disabled={isLoading}
-                        style={{
-                            padding: '0.5rem 1rem',
-                            backgroundColor: isLoading ? '#ccc' : '#28a745',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: isLoading ? 'not-allowed' : 'pointer'
-                        }}
-                    >
-                        {isLoading ? 'Signing up...' : 'Sign Up'}
-                    </button>
-                    
-                    <button 
-                        type="button" 
-                        onClick={handleClose}
-                        disabled={isLoading}
-                        style={{
-                            padding: '0.5rem 1rem',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: isLoading ? 'not-allowed' : 'pointer'
-                        }}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
+        <div className="fixed top-[60px] right-0 h-[calc(100vh-60px)] z-50 bg-white shadow-xl w-full sm:w-80 md:w-80 p-4 overflow-y-auto transition-all duration-300 border-l border-gray-200">
+    <h2 className="text-xl font-semibold text-gray-800 mb-4">Sign Up</h2>
+    <form onSubmit={handleSignUp} className="space-y-3 text-sm">
+        <div>
+            <label className="block font-medium text-gray-700">Username</label>
+            <input
+                type="text"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required
+                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
         </div>
+        <div>
+            <label className="block font-medium text-gray-700">Email</label>
+            <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+        <div>
+            <label className="block font-medium text-gray-700">Password</label>
+            <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+        <div>
+            <label className="block font-medium text-gray-700">Confirm Password</label>
+            <input
+                type="password"
+                value={confirm}
+                onChange={e => setConfirm(e.target.value)}
+                required
+                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+        <div>
+            <label className="block font-medium text-gray-700">Captcha</label>
+            <canvas
+                ref={canvasRef}
+                width={100}
+                height={36}
+                className="border border-gray-300 rounded cursor-pointer my-1"
+                onClick={refreshCaptcha}
+            />
+            <input
+                type="text"
+                value={captchaInput}
+                onChange={e => setCaptchaInput(e.target.value)}
+                required
+                placeholder="Enter captcha"
+                className="w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+        {error && <div className="text-red-500">{error}</div>}
+        {success && <div className="text-green-600">{success}</div>}
+
+        <div className="flex justify-between mt-2 space-x-2">
+            <button
+                type="submit"
+                disabled={isLoading}
+                className="flex-1 bg-blue-600 text-white rounded py-1.5 font-medium hover:bg-blue-700 transition disabled:opacity-50"
+            >
+                {isLoading ? 'Signing up...' : 'Sign Up'}
+            </button>
+            <button
+                type="button"
+                onClick={handleClose}
+                className="flex-1 bg-gray-200 text-gray-800 rounded py-1.5 font-medium hover:bg-gray-300 transition"
+            >
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
     );
 }

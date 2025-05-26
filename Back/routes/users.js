@@ -4,6 +4,7 @@ import cors from 'cors'
 import { addClient } from '../services/firebase.js'; // Import your Firestore function
 import {auth} from '../services/firebase.js'; // Import Firebase auth functions
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 export const Router = express.Router()
 
 // Dummy in-memory users
@@ -19,12 +20,15 @@ const users = []
 // })
 //nw
 Router.post('/login', (req, res) => {
-    const { username, password } = req.body
-    const user = users.find(u => u.username === username && u.password === password)
-    if (!user) {
-        return res.json({ success: false, message: 'Invalid credentials' })
-    }
-    res.json({ success: true, user: { username } })
+    const { email, password } = req.body
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            res.json({ success: true, user: { email: user.email, uid: user.uid } });
+        })
+        .catch((error) => {
+            res.status(400).json({ success: false, message: error.message });
+        });
 })
 
 Router.post('/clients', async (req, res) => {

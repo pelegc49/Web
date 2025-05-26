@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
-    const [loginName, setLoginName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -13,30 +13,23 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         setIsLoading(true);
         
         try {
-            const res = await axios.post('/api/users/login', { 
-                username: loginName, 
-                password 
-            });
-            
+            const res = await axios.post('/api/users/login', { email, password }); // <-- add await
+
             if (res.data && res.data.success) {
-                // Clear form
-                setLoginName('');
+                setEmail('');
                 setPassword('');
                 setError('');
-                
-                // Call success callback with user data
                 if (onSuccess) {
                     onSuccess(res.data.user);
                 }
-                
-                // Close modal
                 onClose();
             } else {
                 setError(res.data.message || 'Login failed');
             }
         } catch (err) {
-            console.error('Login error:', err);
-            setError(err.response?.data?.message || 'Login failed. Please check your connection.');
+            setError(
+                err.response?.data?.message || "Login failed."
+            ); // <-- fix error property
         } finally {
             setIsLoading(false);
         }
@@ -44,7 +37,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
 
     const handleClose = () => {
         // Clear form when closing
-        setLoginName('');
+        setEmail('');
         setPassword('');
         setError('');
         onClose();
@@ -52,7 +45,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
 
     const handleSignUpClick = () => {
         // Clear form when switching to signup
-        setLoginName('');
+        setEmail('');
         setPassword('');
         setError('');
         onSignUpClick();
@@ -88,13 +81,13 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                         color: "#222", 
                         fontWeight: 500 
                     }}>
-                        Login name:
+                        Email:
                     </label>
                     <input
                         type="text"
-                        placeholder="Login Name"
-                        value={loginName}
-                        onChange={e => setLoginName(e.target.value)}
+                        placeholder="Email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                         style={{
                             width: "100%",
                             padding: "0.5rem",
