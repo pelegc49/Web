@@ -5,6 +5,7 @@ import { addClient } from '../services/firebase.js'; // Import your Firestore fu
 import {auth} from '../services/firebase.js'; // Import Firebase auth functions
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 export const Router = express.Router()
 
 // Dummy in-memory users
@@ -60,4 +61,14 @@ Router.post('/signup', async (req, res) => {
             res.status(400).json({ success: false, message: errorMessage });
         });
 
+});
+
+Router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    try {
+        await sendPasswordResetEmail(auth, email);
+        res.json({ success: true, message: "Password reset email sent." });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
 });
