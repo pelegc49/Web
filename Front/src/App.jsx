@@ -6,7 +6,7 @@ import Login from "./components/Login.jsx"
 import SignUp from "./components/SignUp.jsx"
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
-
+//HGFDS
 function App() {
     const currentDarkMode = localStorage.getItem('darkMode') === 'true' ? true : false;
     const [isDark, setDark] = useState(currentDarkMode);
