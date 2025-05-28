@@ -78,3 +78,26 @@ export const signUpHelpList = dark => `ml-6 my-3 space-y-2 list-disc ${dark ? "t
 export const signUpHelpNote = dark => `text-sm italic mt-3 p-3 rounded ${dark ? "text-gray-300 bg-gray-600 border-l-4 border-blue-500" : "text-gray-600 bg-blue-50 border-l-4 border-blue-400"}`;
 
 export const signUpHelpFooter = dark => `mt-10 p-4 rounded-lg border ${dark ? "bg-gray-700 border-gray-600 text-blue-400" : "bg-blue-50 border-blue-100 text-blue-700"}`;
+
+// styles.js
+export const container = "fixed top-[60px] right-0 h-[calc(100vh-60px)] z-50 bg-white shadow-lg w-full sm:w-96 md:w-96 p-6 overflow-y-auto transition-all duration-300";
+
+export const heading = "text-2xl font-semibold text-gray-800 mb-6";
+
+export const form = "space-y-4";
+
+export const label = "block text-sm font-medium text-gray-700";
+
+export const input = "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
+
+export const captchaCanvas = "border border-gray-300 rounded cursor-pointer my-2";
+
+export const errorMsg = "text-red-500 text-sm";
+
+export const successMsg = "text-green-600 text-sm";
+
+export const buttonsWrapper = "flex justify-between mt-4 space-x-2";
+
+export const submitButton = "flex-1 bg-blue-600 text-white rounded-md py-2 font-semibold hover:bg-blue-700 transition duration-200 disabled:opacity-50";
+
+export const cancelButton = "flex-1 bg-gray-300 text-gray-800 rounded-md py-2 font-semibold hover:bg-gray-400 transition duration-200";

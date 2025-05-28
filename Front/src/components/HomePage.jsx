@@ -1,85 +1,68 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useContext } from 'react';
+import { darkModeContext } from '../App.jsx';
 
 export default function HomePage() {
   const { onLoginClick, onSignUpClick } = useOutletContext();
+  const { darkMode } = useContext(darkModeContext);
 
   return (
-    <div style={styles.pageContainer}>
-      <div style={styles.contentContainer}>
-        <h1 style={styles.title}>Welcome to Class Diagram to Text!</h1>
-        <p style={styles.paragraph}>
+    <div className="flex flex-col justify-center items-center min-h-screen p-5">
+      {/* Existing content */}
+      <div className="max-w-xl text-center bg-white dark:bg-gray-900 p-10 rounded-xl shadow-lg">
+        <h1 className="mb-6 text-3xl font-semibold text-gray-800 dark:text-white">
+          Welcome to Class Diagram to Text!
+        </h1>
+        <p className="mb-4 text-base text-gray-600 dark:text-gray-300">
           Our tool lets you easily and quickly convert your Class Diagrams into clear, structured text. Simply upload or input your diagram, and get a detailed description of the classes, attributes, and their relationships.
         </p>
-        <p style={styles.paragraph}>
+        <p className="mb-4 text-base text-gray-600 dark:text-gray-300">
           Perfect for developers and students who want to understand and document their data model in a simple and convenient way.
         </p>
-        <p style={styles.paragraph}>
+        <p className="mb-4 text-base text-gray-600 dark:text-gray-300">
           Get started now — convert your diagram to text and use it directly in your project!
         </p>
-        <div style={styles.buttonGroup}>
-          <button style={styles.loginButton} onClick={onLoginClick}>
+        <div className="mt-6 flex justify-center gap-4 flex-wrap">
+          <button
+            onClick={onLoginClick}
+            className="px-6 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-base transition"
+          >
             Login
           </button>
-          <button style={styles.signUpButton} onClick={onSignUpClick}>
+          <button
+            onClick={onSignUpClick}
+            className="px-6 py-3 text-white bg-green-600 hover:bg-green-700 rounded-lg text-base transition"
+          >
             Sign Up
           </button>
         </div>
       </div>
+
+      {/* Professional About Us Card */}
+      <section
+        className={`mt-14 w-full max-w-4xl p-8 rounded-3xl shadow-lg border ${
+          darkMode
+            ? 'bg-gradient-to-br from-gray-800 via-gray-900 to-black border-gray-700 text-white'
+            : 'bg-white border-gray-200 text-gray-900'
+        }`}
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center tracking-wide">
+          About Us
+        </h2>
+        <p className="mb-5 text-lg leading-relaxed">
+          We are third-year Software Engineering students at Braude College of Engineering in Karmiel.  
+          This project is our semester capstone, where we developed a tool that converts textual descriptions into UML Class Diagrams.
+        </p>
+        <p className="mb-5 text-lg leading-relaxed">
+          Our aim is to facilitate software design and documentation by automating the transformation of natural language descriptions into structured class models.  
+          This enhances clarity, reduces manual effort, and helps both students and professionals visualize complex data structures.
+        </p>
+        <p className="text-lg leading-relaxed italic text-gray-400 dark:text-gray-500">
+          Built with dedication, clean code, and a focus on usability and accuracy.
+        </p>
+      </section>
+
     </div>
   );
 }
-
-const styles = {
-  pageContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    padding: '20px',
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    maxWidth: '600px',
-    textAlign: 'center',
-    backgroundColor: '#ffffff',
-    padding: '40px',
-    borderRadius: '12px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-  },
-  title: {
-    marginBottom: '20px',
-    fontSize: '28px',
-    color: '#333',
-  },
-  paragraph: {
-    marginBottom: '16px',
-    fontSize: '16px',
-    color: '#555',
-  },
-  buttonGroup: {
-    marginTop: '24px',
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '16px',
-    flexWrap: 'wrap',
-  },
-  loginButton: {
-    padding: '12px 24px',
-    fontSize: '16px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-  },
-  signUpButton: {
-    padding: '12px 24px',
-    fontSize: '16px',
-    backgroundColor: '#28a745',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-  },
-};
