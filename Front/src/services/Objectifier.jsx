@@ -85,8 +85,7 @@ export function objectify(data) {
                     ...data,
                     label: <ClassNode className={childClass} attributes={attributes} methods={methods} />
                     },
-                position: { x: 0, y: 0 },
-                type: 'input',
+                position: { x: 0, y: 0 },           
                 width: 300,
                 height: 400,
             });
@@ -97,9 +96,9 @@ export function objectify(data) {
                 type: "step",
                 markerEnd: {
                     type: MarkerType.ArrowClosed,
-                    width: 20,
-                    height: 20,
-                    color: '#000000',
+                    width: 60,
+                    height: 60,
+                    color: '#c53030',
                 }   
             });
         
@@ -176,7 +175,6 @@ export function objectify(data) {
                 }
                 break;
             }
-            // NOT REVIEWED
             edges.push({
                 id: `${sourceClass}-${targetClass}`,
                 source: sourceClass,
