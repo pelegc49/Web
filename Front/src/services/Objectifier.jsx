@@ -1,7 +1,33 @@
 import { MarkerType } from '@xyflow/react';
 import ClassNode from '../components/ClassNode.jsx';
+
+function levinshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    return Math.min(
+        levinshteinDistance(a.slice(1), b) + 1,
+        levinshteinDistance(a, b.slice(1)) + 1,
+        levinshteinDistance(a.slice(1), b.slice(1)) + (a[0] === b[0] ? 0 : 1),
+        levinshteinDistance(a.slice(2), b.slice(2)) + ((a[0] === b[1])&&(a[1] === b[0]) ? 1 : 2)
+    );
+}
+
+function getMinDistance(input, map) {
+    let minDistance = Infinity;
+    let closestWord = '';
+    map.forEach((_,word) => {
+        const distance = levinshteinDistance(input, word);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestWord = word;
+        }
+    });
+    return { minDistance, closestWord };
+}
+
 export function objectify(data) {
     const definedClasses = new Map();
+
     let index = 0;
     let status = 'SUCCESS';
     let message = '';
@@ -41,8 +67,14 @@ export function objectify(data) {
                 return { status, message, nodes, edges };
             }
             if (!definedClasses.has(parentClass)) {
-                status = 'ERROR';
-                message = `Parent class ${parentClass} is not defined`;
+                const {minDistance, closestWord} = getMinDistance(parentClass, definedClasses);
+                if (minDistance < 3) {
+                    status = 'ERROR';
+                    message = `Parent class ${parentClass} is not defined, did you mean ${closestWord}?`;
+                } else {
+                    status = 'ERROR';
+                    message = `Parent class ${parentClass} is not defined.`;
+                }
                 break;
             }
             const data ={ childClass, attributes, methods }
@@ -74,8 +106,14 @@ export function objectify(data) {
         } else if (sentence.type === 'ATR') {
             const className = sentence.children[0].value;
             if (!definedClasses.has(className)) {
-                status = 'ERROR';
-                message = `Class ${className} is not defined`;
+                const {minDistance, closestWord} = getMinDistance(className, definedClasses);
+                if (minDistance < 3) {
+                    status = 'ERROR';
+                    message = `Class ${className} is not defined, did you mean ${closestWord}?`;
+                } else {
+                    status = 'ERROR';
+                    message = `Class ${className} is not defined.`;
+                }
                 break;
             }
             const currIndex = definedClasses.get(className);
@@ -86,8 +124,14 @@ export function objectify(data) {
         } else if (sentence.type === 'MET') {
             const className = sentence.children[0].value;
             if (!definedClasses.has(className)) {
-                status = 'ERROR';
-                message = `Class ${className} is not defined`;
+                const {minDistance, closestWord} = getMinDistance(className, definedClasses);
+                if (minDistance < 3) {
+                    status = 'ERROR';
+                    message = `Class ${className} is not defined, did you mean ${closestWord}?`;
+                } else {
+                    status = 'ERROR';
+                    message = `Class ${className} is not defined.`;
+                }
                 break;
             }
             const methodName = sentence.children[2].value;
@@ -111,13 +155,25 @@ export function objectify(data) {
             const multSource = sentence.children[0].value === 'one' ? '1' : '*';
             const multTarget = sentence.children[5].value === 'one' ? '1' : '*';
             if (!definedClasses.has(sourceClass)) {
-                status = 'ERROR';
-                message = `Source class ${sourceClass} is not defined`;
+                const {minDistance, closestWord} = getMinDistance(sourceClass, definedClasses);
+                if (minDistance < 3) {
+                    status = 'ERROR';
+                    message = `Source class ${sourceClass} is not defined, did you mean ${closestWord}?`;
+                } else {
+                    status = 'ERROR';
+                    message = `Source class ${sourceClass} is not defined.`;
+                }
                 break;
             }
             if (!definedClasses.has(targetClass)) {
-                status = 'ERROR';
-                message = `Target class ${targetClass} is not defined`;
+                const {minDistance, closestWord} = getMinDistance(targetClass, definedClasses);
+                if (minDistance < 3) {
+                    status = 'ERROR';
+                    message = `Target class ${targetClass} is not defined, did you mean ${closestWord}?`;
+                } else {
+                    status = 'ERROR';
+                    message = `Target class ${targetClass} is not defined.`;
+                }
                 break;
             }
             // NOT REVIEWED

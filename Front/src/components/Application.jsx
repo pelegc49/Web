@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import TextArea from './TextArea.jsx'
-import {ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls} from '@xyflow/react'
+import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls } from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
 import { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -10,20 +10,20 @@ import { lexer } from '../services/Tokenizer.jsx';
 import { darkModeContext } from '../App.jsx';
 import LabelledEdge from './LabelledEdge.jsx';
 export default function Application() {
-    const {darkMode,toggleDarkMode} = useContext(darkModeContext);
+    const { darkMode, toggleDarkMode } = useContext(darkModeContext);
     const location = useLocation();
     const projectText = location.state?.projectText || '';
-    
+
     const [inputTime, setInputTime] = useState(null);
     const [eventTime, setEventTime] = useState(null);
     const [text, setText] = useState(projectText);
     const [error, setError] = useState(null);
-    const [knownPositions,setKnownPositions] = useState({});
+    const [knownPositions, setKnownPositions] = useState({});
 
     const edgeTypes = {
         labelled: LabelledEdge
     };
-    
+
     useEffect(() => {
         if (inputTime) {
             clearTimeout(inputTime);
@@ -37,7 +37,7 @@ export default function Application() {
                 setError(tokens.message);
                 return;
             }
-            else{
+            else {
                 setError(null);
             }
             const parsed = parse(tokens.data);
@@ -45,7 +45,7 @@ export default function Application() {
                 setError(parsed.message);
                 return;
             }
-            else{
+            else {
                 setError(null);
             }
             const objectified = objectify(parsed.data);
@@ -53,7 +53,7 @@ export default function Application() {
                 setError(objectified.message);
                 return;
             }
-            else{
+            else {
                 setError(null);
             }
             setNodes(objectified.nodes.map((n) => ({
@@ -70,7 +70,7 @@ export default function Application() {
         }, 1000);
         setInputTime(newTime);
     }, [text]);
-    
+
     // Process initial project text when component loads
     useEffect(() => {
         if (projectText) {
@@ -88,46 +88,50 @@ export default function Application() {
             }
         }
     }, [projectText]);
-    
+
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    
-    
-    function handleNodeChange(change){
+
+
+    function handleNodeChange(change) {
         onNodesChange(change);
         change = change[0];
-        if (change.type === "position"){
-            setKnownPositions(k => ({ ...k, [change.id]: change.position }));  
+        if (change.type === "position") {
+            setKnownPositions(k => ({ ...k, [change.id]: change.position }));
         }
     }
 
-    function handleChange(newContent){
+    function handleChange(newContent) {
         setText(newContent)
     }
-  return (
-    <div className='w-full flex'>
-        <div className='w-1/3'>
-            <TextArea onContentChange={handleChange} initialValue={projectText}>
-                {error && <div className='text-red-500 absolute justify-between'>{error}</div>}
-            </TextArea>
-            
+    return (
+        <div className='w-full flex'>
+            <div className='w-1/3'>
+                <TextArea onContentChange={handleChange} initialValue={projectText}>
+                    {error && (
+                        <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
+                            {error}
+                        </div>
+                    )}
+                </TextArea>
+
+            </div>
+            <div className='w-2/3'>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={handleNodeChange}
+                    fitView
+                    edgeTypes={edgeTypes}
+                    colorMode={darkMode ? "dark" : "light"}>
+                    <MiniMap />
+                    <Controls />
+                    <Background />
+
+                </ReactFlow>
+            </div>
         </div>
-        <div className='w-2/3'>
-            <ReactFlow 
-                nodes={nodes}
-                edges={edges} 
-                onNodesChange={handleNodeChange} 
-                fitView 
-                edgeTypes={edgeTypes}
-                colorMode={darkMode?"dark":"light"}>
-                <MiniMap />
-                <Controls />
-                <Background  />
-                
-            </ReactFlow>
-        </div>
-    </div>
-  )
+    )
 }
 
 
