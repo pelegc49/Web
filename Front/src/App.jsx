@@ -1,33 +1,21 @@
 import './index.css'
 import Header from "./components/Header.jsx"
 import { Outlet, useNavigate } from 'react-router-dom'
-import { createContext, useLayoutEffect, useEffect, useState } from 'react'
-import axios from 'axios'
-// import Login from './components/Login.jsx'
-// import SignUp from './components/SignUp.jsx'
+import { createContext, useEffect, useState } from 'react'
+import Login from "./components/Login.jsx"
+import SignUp from "./components/SignUp.jsx"
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
 
 function App() {
-    const [data, setData] = useState({});
-    useLayoutEffect(()=>{
-        let user = {
-            name: "John Doe",
-            email: "john@doe",
-            password: "123456",
-            dob: "2000-01-01",
-            signupDate: "2023-01-01",
-            userId: "1234567890"
-        }
-        user = JSON.stringify(user);
-        axios.post(`/api/users/${user}`).then(res=>{setData(res.data)})
-    },[]);
-
     const currentDarkMode = localStorage.getItem('darkMode') === 'true' ? true : false;
     const [isDark, setDark] = useState(currentDarkMode);
+    const [user, setUser] = useState(null);
+    
     const toggleDarkMode = () => {
         setDark(d=>!d);
     }
+    
     useEffect(() => {
         localStorage.setItem('darkMode', isDark);
     }, [isDark]);
@@ -36,33 +24,67 @@ function App() {
     const [showSignUp, setShowSignUp] = useState(false);
 
     const navigate = useNavigate()
+    
     useEffect(() => {
         navigate('/home');
     }, []);
 
+    // Simple handlers for showing/hiding modals
+    const handleShowLogin = () => {
+        setShowSignUp(false); // Close signup if open
+        setShowLogin(true);
+    };
+
+    const handleShowSignUp = () => {
+        setShowLogin(false); // Close login if open
+        setShowSignUp(true);
+    };
+
+    const handleCloseLogin = () => {
+        setShowLogin(false);
+    };
+
+    const handleCloseSignUp = () => {
+        setShowSignUp(false);
+    };
+
+    // Handle successful authentication
+    const handleAuthSuccess = (userData) => {
+        setUser(userData);
+        console.log('Authentication successful:', userData);
+        // You can add additional logic here like redirecting to a dashboard
+    };
+
     return (
         <darkModeContext.Provider value={{darkMode: isDark, toggleDarkMode}}>
             <div className="App">
-                {/* <p>{JSON.stringify(data.name)}</p> */}
-                <Header onLoginClick={() => setShowLogin(true)} />
+                <Header 
+                    onLoginClick={handleShowLogin} 
+                    user={user}
+                    onLogout={() => setUser(null)}
+                />
                 <div className={isDark?'bg-gray-900 text-white':'bg-gray-100 text-black'}>
                     <Outlet context={{
-                        onLoginClick: () => setShowLogin(true),
-                        onSignUpClick: () => setShowSignUp(true)
+                        onLoginClick: handleShowLogin,
+                        onSignUpClick: handleShowSignUp,
+                        user: user
                     }} />
                 </div>
-                {/* <Login
+                
+                {/* Login Modal */}
+                <Login 
                     open={showLogin}
-                    onClose={() => setShowLogin(false)}
-                    onSignUpClick={() => {
-                        setShowLogin(false);
-                        setShowSignUp(true);
-                    }}
+                    onClose={handleCloseLogin}
+                    onSignUpClick={handleShowSignUp}
+                    onSuccess={handleAuthSuccess}
                 />
-                <SignUp
+                
+                {/* SignUp Modal */}
+                <SignUp 
                     open={showSignUp}
-                    onClose={() => setShowSignUp(false)}
-                /> */}
+                    onClose={handleCloseSignUp}
+                    onSuccess={handleAuthSuccess}
+                />
             </div>
         </darkModeContext.Provider>
     )

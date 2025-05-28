@@ -17,7 +17,6 @@ export default function HomePage() {
         <p style={styles.paragraph}>
           Get started now — convert your diagram to text and use it directly in your project!
         </p>
-
         <div style={styles.buttonGroup}>
           <button style={styles.loginButton} onClick={onLoginClick}>
             Login
