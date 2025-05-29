@@ -3,10 +3,12 @@ import SyntaxHelp from "./SyntaxHelp.jsx"
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { toolbarContainer, toolbarNav, toolbarLink, toolbarDivider } from './Style.jsx';
 import {darkModeContext} from "../App.jsx"
+import { UserContext } from '../App.jsx';//check
 export default function Help() {
   const navigate = useNavigate();
   const location = useLocation();
   const { darkMode, toggleDarkMode } = useContext(darkModeContext);
+  const { user } = useContext(UserContext);//check
   // const isDark = useContext(darkModeContext);
 
   useEffect(() => {

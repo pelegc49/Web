@@ -6,6 +6,7 @@ import Login from "./components/Login.jsx"
 import SignUp from "./components/SignUp.jsx"
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
+export const UserContext = createContext({ user: null, setUser: () => {} });
 
 function App() {
     const currentDarkMode = localStorage.getItem('darkMode') === 'true' ? true : false;
@@ -57,35 +58,33 @@ function App() {
 
     return (
         <darkModeContext.Provider value={{darkMode: isDark, toggleDarkMode}}>
-            <div className="App">
-                <Header 
-                    onLoginClick={handleShowLogin} 
-                    user={user}
-                    onLogout={() => setUser(null)}
-                />
-                <div className={isDark?'bg-gray-900 text-white':'bg-gray-100 text-black'}>
-                    <Outlet context={{
-                        onLoginClick: handleShowLogin,
-                        onSignUpClick: handleShowSignUp,
-                        user: user
-                    }} />
+            <UserContext.Provider value={{ user, setUser }}>
+                <div className="App">
+                    <Header 
+                        onLoginClick={handleShowLogin} 
+                        user={user}
+                        onLogout={() => setUser(null)}
+                    />
+                    <div className={isDark?'bg-gray-900 text-white':'bg-gray-100 text-black'}>
+                        <Outlet context={{
+                            onLoginClick: handleShowLogin,
+                            onSignUpClick: handleShowSignUp,
+                            user: user
+                        }} />
+                    </div>
+                    <Login 
+                        open={showLogin}
+                        onClose={handleCloseLogin}
+                        onSignUpClick={handleShowSignUp}
+                        onSuccess={handleAuthSuccess}
+                    />
+                    <SignUp 
+                        open={showSignUp}
+                        onClose={handleCloseSignUp}
+                        onSuccess={handleAuthSuccess}
+                    />
                 </div>
-                
-                {/* Login Modal */}
-                <Login 
-                    open={showLogin}
-                    onClose={handleCloseLogin}
-                    onSignUpClick={handleShowSignUp}
-                    onSuccess={handleAuthSuccess}
-                />
-                
-                {/* SignUp Modal */}
-                <SignUp 
-                    open={showSignUp}
-                    onClose={handleCloseSignUp}
-                    onSuccess={handleAuthSuccess}
-                />
-            </div>
+            </UserContext.Provider>
         </darkModeContext.Provider>
     )
 }
