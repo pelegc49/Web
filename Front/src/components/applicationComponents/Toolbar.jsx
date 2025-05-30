@@ -7,7 +7,7 @@ import {
   defining_methods,
   defining_attributes,
   exclamation_mark,
-  components
+  comments
 } from '../../assets/svgs';
 import {
   verticalToolbarContainer,
@@ -21,13 +21,13 @@ export default function Toolbar() {
   const { darkMode } = useContext(darkModeContext);
 
   const tools = [
-    { icon: defining_classes, tooltip: "a <className> is a class." },
-    { icon: inheritance, tooltip: "a <className> is a <className>." },
-    { icon: defining_relationships, tooltip: "many <className> is related to one <className>." },
-    { icon: defining_methods, tooltip: "Add Method: <className> can <met3> with <atr1>, <atr2>." },
-    { icon: defining_attributes, tooltip: "Add Attributes: <className> has <atr1>, <atr2>." },
+    { icon: defining_classes, tooltip: "Add class: a <className> is a class." },
+    { icon: inheritance, tooltip: "Add inheritance: a <className> is a <className>." },
+    { icon: defining_relationships, tooltip: "Add relationships: many <className> is related to one <className>." },
+    { icon: defining_methods, tooltip: "Add method: <className> can <met3> with <atr1>, <atr2>." },
+    { icon: defining_attributes, tooltip: "Add attributes: <className> has <atr1>, <atr2>." },
     { icon: exclamation_mark, tooltip: "Don't forget to add a period at the end of a sentence!" },
-    { icon: components, tooltip: "Add Component: #" }
+    { icon: comments, tooltip: "Add comments: #" }
   ];
 
   return (
