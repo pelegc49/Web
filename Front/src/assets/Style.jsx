@@ -137,7 +137,7 @@ export const loginButton = dark => `px-6 py-3 text-base rounded-lg font-semibold
 
 export const signUpButton = dark => `px-6 py-3 text-base rounded-lg font-semibold bg-green-600 text-white border-none cursor-pointer hover:bg-green-700 transition`;
 
-export const aboutUsContainer = dark => `mt-10 bg-gray-100 p-6 rounded-lg shadow-md ${dark ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800'}`;
+export const aboutUsContainer = dark => `mt-10 p-6 rounded-lg shadow-md ${dark ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800'}`;
 
 export const aboutUsTitle = dark => `text-xl font-bold mb-3 ${dark ? 'text-gray-100' : 'text-gray-800'}`;
 
