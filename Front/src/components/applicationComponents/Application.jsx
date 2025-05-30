@@ -63,7 +63,6 @@ export default function Application() {
             setNodes(objectified.nodes.map((n) => ({
                 ...n,
                 position: knownPositions[n.id] || n.position,
-
             })));
             setEdges(objectified.edges);
         }, 1000);
