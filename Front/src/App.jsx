@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { createContext, useEffect, useState } from 'react'
 import Login from "./components/userComponents/Login.jsx"
 import SignUp from "./components/userComponents/SignUp.jsx"
+import Logout from "./components/userComponents/Logout.jsx"
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
 
@@ -21,6 +22,7 @@ function App() {
     }, [isDark]);
 
     const [showLogin, setShowLogin] = useState(false);
+    const [showLogout, setShowLogout] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
 
     const navigate = useNavigate()
@@ -34,12 +36,18 @@ function App() {
         setShowSignUp(false); // Close signup if open
         setShowLogin(true);
     };
+    const handleShowLogout = () => {
+        setShowLogout(true);
+    };
 
     const handleShowSignUp = () => {
         setShowLogin(false); // Close login if open
         setShowSignUp(true);
     };
 
+    const handleCloseLogout = () => {
+        setShowLogout(false);
+    };
     const handleCloseLogin = () => {
         setShowLogin(false);
     };
@@ -51,6 +59,7 @@ function App() {
     // Handle successful authentication
     const handleAuthSuccess = (userData) => {
         setUser(userData);
+        alert('login successful');
         console.log('Authentication successful:', userData);
         // You can add additional logic here like redirecting to a dashboard
     };
@@ -61,7 +70,7 @@ function App() {
                 <Header 
                     onLoginClick={handleShowLogin} 
                     user={user}
-                    onLogout={() => setUser(null)}
+                    onLogout={handleShowLogout}
                 />
                 <div className={isDark?'bg-gray-900 text-white':'bg-gray-100 text-black'}>
                     <Outlet context={{
@@ -71,6 +80,19 @@ function App() {
                     }} />
                 </div>
                 
+                <Logout
+                    user={user}
+                    onClose={handleCloseLogout}
+                    onLogoutClick={
+                        () => {
+                            setUser(null);
+                            alert('logout successful');
+                            console.log('User logged out');
+                            handleCloseLogout();
+                        }
+                    }
+                    open={showLogout}
+                />
                 {/* Login Modal */}
                 <Login 
                     open={showLogin}

@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { headerContainer, logo, icon } from "../assets/Style.jsx";
 import { darkModeContext } from "../App.jsx";
 
-export default function Header({ onLoginClick }) {
+export default function Header({ onLoginClick,onLogout, user }) {
     const location = useLocation();
     const { darkMode, toggleDarkMode } = useContext(darkModeContext);
 
@@ -31,11 +31,11 @@ export default function Header({ onLoginClick }) {
                     <Link className={icon} to={"/history"} >
                         <img width="30px" src={history} alt="history" />
                     </Link>
-                    {/* <img className={icon}
+                    <img className={icon}
                         width="30px" src={guest_user} alt="UserPic"
                         style={{ cursor: "pointer" }}
-                        onClick={onLoginClick}
-                    /> */}
+                        onClick={user? onLogout :onLoginClick}
+                    />
                 </div>
             </div>
         </header>
