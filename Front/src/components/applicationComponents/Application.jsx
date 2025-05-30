@@ -121,7 +121,7 @@ export default function Application() {
         setText(newContent)
     }
     return (
-        <div className='w-full flex'>
+        <div className="w-full h-screen flex flex-col-reverse md:flex-row">
             {/* Collapsible Toolbar */}
             <div
                 style={{
@@ -179,27 +179,31 @@ export default function Application() {
                 )}
             </div>
             {/* Main Content */}
-            <div className='w-1/3'>
-                <TextArea onContentChange={handleChange} initialValue={projectText}>
-                    {error && (
-                        <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
-                            {error}
-                        </div>
-                    )}
-                </TextArea>
-            </div>
-            <div className='w-2/3'>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={handleNodeChange}
-                    fitView
-                    edgeTypes={edgeTypes}
-                    colorMode={darkMode ? "dark" : "light"}>
-                    <MiniMap />
-                    <Controls />
-                    <Background />
-                </ReactFlow>
+            <div className="flex-1 flex flex-col md:flex-row w-full h-full min-h-0">
+                <div className="md:w-1/3 w-full order-2 md:order-1 min-h-[200px]">
+                    <TextArea onContentChange={handleChange} initialValue={projectText}>
+                        {error && (
+                            <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
+                                {error}
+                            </div>
+                        )}
+                    </TextArea>
+                </div>
+                <div className="md:w-2/3 w-full order-1 md:order-2 flex-1 min-h-[200px] min-w-0">
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={handleNodeChange}
+                        fitView
+                        edgeTypes={edgeTypes}
+                        colorMode={darkMode ? "dark" : "light"}
+                        style={{ width: '100%', height: '100%' }}
+                    >
+                        <MiniMap />
+                        <Controls />
+                        <Background />
+                    </ReactFlow>
+                </div>
             </div>
         </div>
     )
