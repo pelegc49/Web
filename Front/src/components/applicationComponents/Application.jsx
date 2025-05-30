@@ -10,16 +10,16 @@ import { darkModeContext } from '../../App.jsx';
 import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
 
-export default function Application() {
+export default function Application({loadEdges,loadNodes,loadKnownPositions,loadText}) {
     const { user } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
     const location = useLocation();
     const projectText = location.state?.projectText || '';
 
     const [inputTime, setInputTime] = useState(null);
-    const [text, setText] = useState(projectText);
+    const [text, setText] = useState(loadText?loadText:"");
     const [error, setError] = useState(null);
-    const [knownPositions, setKnownPositions] = useState({});
+    const [knownPositions, setKnownPositions] = useState(loadKnownPositions?loadKnownPositions:{});
 
     const edgeTypes = {
         labelled: LabelledEdge
@@ -89,8 +89,8 @@ export default function Application() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectText]);
 
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges] = useEdgesState([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState(loadNodes?loadNodes:[]);
+    const [edges, setEdges] = useEdgesState(loadEdges?loadEdges:[]);
 
 
     function handleNodeChange(change) {
