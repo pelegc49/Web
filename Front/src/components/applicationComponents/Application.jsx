@@ -29,9 +29,12 @@ export default function Application() {
             clearTimeout(inputTime);
         }
         const newTime = setTimeout(() => {
-            // setNodes([]);
-            // setEdges([]);
-            if (text.trim() === '') return;
+            if (text.trim() === '') {
+                setNodes([]);
+                setEdges([]);
+                setError(null);
+                return;
+            };
             const tokens = lexer(text);
             if (tokens.status === 'ERROR') {
                 setError(tokens.message);
@@ -58,7 +61,8 @@ export default function Application() {
             }
             setNodes(objectified.nodes.map((n) => ({
                 ...n,
-                position: knownPositions[n.id] || n.position
+                position: knownPositions[n.id] || n.position,
+
             })));
             // setNodes(objectified.nodes.map((n)=>{
             //     if (knownPositions[n.id]){

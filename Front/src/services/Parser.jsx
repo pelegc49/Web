@@ -58,7 +58,11 @@ export function parse(tokens) {
                 node = parseMET();
             } else {
                 status = 'ERROR';
-                message = `Invalid SENT at token: ${JSON.stringify(lookahead)}`;
+                if (tokens[pos + 1]){
+                message = `Unexpected word after ${lookahead?.value}: '${tokens[pos + 1]?.value}' expected 'has' or 'can'`;
+                }else{
+                message = `Expected 'has' or 'can' after ${lookahead?.value}`;
+            }
                 throw new Error(message);
             }
         } else if (lookahead?.type === "MULT") {
