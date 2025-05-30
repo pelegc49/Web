@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import TextArea from './TextArea.jsx'
 import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls } from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
-import { useLocation } from 'react-router-dom';
+import { useLocation, useOutletContext } from 'react-router-dom';
 import { objectify } from '../../services/Objectifier.jsx';
 import { parse } from '../../services/Parser.jsx';
 import { lexer } from '../../services/Tokenizer.jsx';
@@ -11,6 +11,7 @@ import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
 
 export default function Application() {
+    const { user } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
     const location = useLocation();
     const projectText = location.state?.projectText || '';
@@ -89,11 +90,12 @@ export default function Application() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectText]);
 
-    const [nodes, setNodes] = useNodesState([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
 
 
     function handleNodeChange(change) {
+        onNodesChange(change);
         // Only handle position changes
         change = change[0];
         if (change.type === "position") {
@@ -105,7 +107,8 @@ export default function Application() {
         setText(newContent)
     }
     return (
-        <div className='w-full flex'>
+        <>
+        <div className='w-full flex' hidden={!user}>
         <Toolbar />
             <div className='w-1/3'>
                 <TextArea onContentChange={handleChange} initialValue={projectText}>
@@ -132,6 +135,12 @@ export default function Application() {
                 </ReactFlow>
             </div>
         </div>
+        <div hidden={user} className='w-full h-full flex items-center justify-center'>
+            <div className='w-full h-full flex items-center justify-center'>
+                Please log in to create a diagram.
+            </div>
+        </div>
+        </>
     )
 }
 
