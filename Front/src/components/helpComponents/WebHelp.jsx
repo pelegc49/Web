@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import * as styles from "./Style";
-import { darkModeContext } from "../App.jsx";
+import * as styles from "../../assets/Style.jsx";
+import { darkModeContext } from "../../App.jsx";
 import { Link } from 'react-router-dom';
 
 export default function WebHelp() {

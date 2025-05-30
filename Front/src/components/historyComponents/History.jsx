@@ -12,7 +12,7 @@ import {
   historyAddIcon,
   tooltipContainer,
   tooltip
-} from './Style.jsx';
+} from '../assets/Style.jsx';
 
 export default function History() {
   const { darkMode } = useContext(darkModeContext);

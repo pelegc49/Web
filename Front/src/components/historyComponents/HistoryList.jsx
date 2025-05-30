@@ -1,6 +1,6 @@
 import {React, useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {darkModeContext} from "../App.jsx"
+import {darkModeContext} from "../../App.jsx"
 import {
   historyListContainer,
   historyItemContainer,
@@ -12,7 +12,7 @@ import {
   historyLoadingSpinner,
   historyEmptyContainer,
   historyCreateButton
-} from './Style.jsx';
+} from '../../assets/Style.jsx';
 
 export default function HistoryList() {
   const { darkMode } = useContext(darkModeContext);

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { sun, moon, guest_user, help, createNew, history } from "../assets/svgs.jsx";
 import "../index.css";
 import { Link, useLocation } from 'react-router-dom';
-import { headerContainer, logo, icon } from "./Style.jsx";
+import { headerContainer, logo, icon } from "../assets/Style.jsx";
 import { darkModeContext } from "../App.jsx";
 
 export default function Header({ onLoginClick }) {

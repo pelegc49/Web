@@ -2,8 +2,8 @@ import './index.css'
 import Header from "./components/Header.jsx"
 import { Outlet, useNavigate } from 'react-router-dom'
 import { createContext, useEffect, useState } from 'react'
-import Login from "./components/Login.jsx"
-import SignUp from "./components/SignUp.jsx"
+import Login from "./components/userComponents/Login.jsx"
+import SignUp from "./components/userComponents/SignUp.jsx"
 
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
 

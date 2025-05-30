@@ -1,5 +1,5 @@
 import React, {useState } from "react";
-import * as styles from "./Style";
+import * as styles from "../../assets/Style";
 
 export default function TextArea({ onContentChange, placeholder, initialValue = "" ,children}) {
   const [content, setContent] = useState(initialValue);

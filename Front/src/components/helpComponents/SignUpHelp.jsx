@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import * as styles from "./Style";
-import { darkModeContext } from "../App.jsx";
+import * as styles from "../../assets/Style.jsx";
+import { darkModeContext } from "../../App.jsx";
 
 export default function SignUpHelp(){
   const { darkMode } = useContext(darkModeContext);

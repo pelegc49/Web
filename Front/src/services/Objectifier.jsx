@@ -1,5 +1,5 @@
 import { MarkerType } from '@xyflow/react';
-import ClassNode from '../components/ClassNode.jsx';
+import ClassNode from '../components/diagramComponents/ClassNode.jsx';
 
 function levinshteinDistance(a, b) {
     if (a.length === 0) return b.length;

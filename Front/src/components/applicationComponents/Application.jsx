@@ -8,7 +8,7 @@ import { objectify } from '../services/Objectifier.jsx';
 import { parse } from '../services/Parser.jsx';
 import { lexer } from '../services/Tokenizer.jsx';
 import { darkModeContext } from '../App.jsx';
-import LabelledEdge from './LabelledEdge.jsx';
+import LabelledEdge from './diagramComponents/LabelledEdge.jsx';
 export default function Application() {
     const { darkMode, toggleDarkMode } = useContext(darkModeContext);
     const location = useLocation();
