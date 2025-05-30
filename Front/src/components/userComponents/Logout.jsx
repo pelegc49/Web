@@ -19,4 +19,4 @@ export default function Logout({ open, onClose, onLogoutClick, onSuccess , user 
             <button onClick={onClose}>close</button>
         </div>
     );
-}
+}///nofar
