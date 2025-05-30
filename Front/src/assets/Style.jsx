@@ -121,3 +121,24 @@ export const tooltip = (darkMode) =>
   `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-300 -left-14 top-10 ${
     darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-200"
   } text-xs rounded py-1 px-2 whitespace-nowrap z-10 shadow-md`;
+
+// HomePage component styles
+export const pageContainer = dark => `flex justify-center items-center min-h-screen p-5 ${dark ? 'bg-gray-900' : 'bg-gray-100'}`;
+
+export const contentContainer = dark => `max-w-xl w-full text-center bg-white p-10 rounded-xl shadow-lg ${dark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`;
+
+export const title = dark => `mb-5 text-3xl font-bold ${dark ? 'text-gray-100' : 'text-gray-900'}`;
+
+export const paragraph = dark => `mb-4 text-base ${dark ? 'text-gray-300' : 'text-gray-700'}`;
+
+export const buttonGroup = dark => `mt-6 flex justify-center gap-4 flex-wrap`;
+
+export const loginButton = dark => `px-6 py-3 text-base rounded-lg font-semibold bg-blue-600 text-white border-none cursor-pointer hover:bg-blue-700 transition`;
+
+export const signUpButton = dark => `px-6 py-3 text-base rounded-lg font-semibold bg-green-600 text-white border-none cursor-pointer hover:bg-green-700 transition`;
+
+export const aboutUsContainer = dark => `mt-10 bg-gray-100 p-6 rounded-lg shadow-md ${dark ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800'}`;
+
+export const aboutUsTitle = dark => `text-xl font-bold mb-3 ${dark ? 'text-gray-100' : 'text-gray-800'}`;
+
+export const aboutUsParagraph = dark => `text-base ${dark ? 'text-gray-300' : 'text-gray-700'}`;

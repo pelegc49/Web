@@ -8,7 +8,7 @@ import { objectify } from '../../services/Objectifier.jsx';
 import { parse } from '../../services/Parser.jsx';
 import { lexer } from '../../services/Tokenizer.jsx';
 import { darkModeContext } from '../../App.jsx';
-import LabelledEdge from '../diagramComponents/LabelledEdge.jsx';
+import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 export default function Application() {
     const { darkMode, toggleDarkMode } = useContext(darkModeContext);
     const location = useLocation();
@@ -19,10 +19,26 @@ export default function Application() {
     const [text, setText] = useState(projectText);
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
+    const [toolbarOpen, setToolbarOpen] = useState(false);
 
     const edgeTypes = {
         labelled: LabelledEdge
     };
+
+    const syntaxExamples = [
+        {
+            title: 'Simple Class',
+            code: 'class Person {\n  name: String\n  age: Int\n}'
+        },
+        {
+            title: 'Class with Relationship',
+            code: 'class Car {\n  model: String\n  owner: Person\n}\nclass Person {\n  name: String\n}'
+        },
+        {
+            title: 'Inheritance',
+            code: 'class Animal {\n  species: String\n}\nclass Dog extends Animal {\n  breed: String\n}'
+        }
+    ];
 
     useEffect(() => {
         if (inputTime) {
@@ -106,6 +122,63 @@ export default function Application() {
     }
     return (
         <div className='w-full flex'>
+            {/* Collapsible Toolbar */}
+            <div
+                style={{
+                    position: 'relative',
+                    width: toolbarOpen ? 260 : 32,
+                    transition: 'width 0.3s',
+                    background: '#f4f6fa',
+                    borderRight: '1px solid #e0e0e0',
+                    overflow: 'hidden',
+                    zIndex: 10,
+                    minHeight: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                }}
+                onMouseEnter={() => setToolbarOpen(true)}
+                onMouseLeave={() => setToolbarOpen(false)}
+            >
+                <div style={{
+                    width: 32,
+                    height: 48,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    background: '#e9ecef',
+                    borderBottomRightRadius: 8,
+                    borderTopRightRadius: 8,
+                }}>
+                    <span style={{
+                        display: 'inline-block',
+                        transform: toolbarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.3s',
+                        fontSize: 20,
+                        color: '#888',
+                    }}>&#x25B6;</span>
+                </div>
+                {toolbarOpen && (
+                    <div style={{ padding: '16px 12px', width: 228 }}>
+                        <h3 style={{ fontSize: 16, marginBottom: 12, color: '#333' }}>Syntax Examples</h3>
+                        {syntaxExamples.map((ex, idx) => (
+                            <div key={idx} style={{ marginBottom: 16 }}>
+                                <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{ex.title}</div>
+                                <pre style={{
+                                    background: '#222',
+                                    color: '#fff',
+                                    borderRadius: 6,
+                                    padding: '8px 10px',
+                                    fontSize: 13,
+                                    overflowX: 'auto',
+                                }}>{ex.code}</pre>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            {/* Main Content */}
             <div className='w-1/3'>
                 <TextArea onContentChange={handleChange} initialValue={projectText}>
                     {error && (
@@ -114,7 +187,6 @@ export default function Application() {
                         </div>
                     )}
                 </TextArea>
-
             </div>
             <div className='w-2/3'>
                 <ReactFlow
@@ -127,7 +199,6 @@ export default function Application() {
                     <MiniMap />
                     <Controls />
                     <Background />
-
                 </ReactFlow>
             </div>
         </div>
