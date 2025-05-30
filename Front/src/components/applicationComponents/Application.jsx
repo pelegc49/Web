@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import TextArea from './TextArea.jsx'
 import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls } from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
-import { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { objectify } from '../../services/Objectifier.jsx';
 import { parse } from '../../services/Parser.jsx';
 import { lexer } from '../../services/Tokenizer.jsx';
 import { darkModeContext } from '../../App.jsx';
-import LabelledEdge from '../diagramComponents/LabelledEdge.jsx';
+import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
+import Toolbar from './Toolbar.jsx'
+
 export default function Application() {
-    const { darkMode, toggleDarkMode } = useContext(darkModeContext);
+    const { darkMode } = useContext(darkModeContext);
     const location = useLocation();
     const projectText = location.state?.projectText || '';
 
     const [inputTime, setInputTime] = useState(null);
-    const [eventTime, setEventTime] = useState(null);
     const [text, setText] = useState(projectText);
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
@@ -29,9 +29,12 @@ export default function Application() {
             clearTimeout(inputTime);
         }
         const newTime = setTimeout(() => {
-            // setNodes([]);
-            // setEdges([]);
-            if (text.trim() === '') return;
+            if (text.trim() === '') {
+                setNodes([]);
+                setEdges([]);
+                setError(null);
+                return;
+            };
             const tokens = lexer(text);
             if (tokens.status === 'ERROR') {
                 setError(tokens.message);
@@ -58,18 +61,14 @@ export default function Application() {
             }
             setNodes(objectified.nodes.map((n) => ({
                 ...n,
-                position: knownPositions[n.id] || n.position
+                position: knownPositions[n.id] || n.position,
+
             })));
-            // setNodes(objectified.nodes.map((n)=>{
-            //     if (knownPositions[n.id]){
-            //         n.position = knownPositions[n.id];
-            //     } 
-            //     return n;
-            // }));
             setEdges(objectified.edges);
         }, 1000);
         setInputTime(newTime);
-    }, [text]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [text, knownPositions]);
 
     // Process initial project text when component loads
     useEffect(() => {
@@ -87,14 +86,15 @@ export default function Application() {
                 }
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [projectText]);
 
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [nodes, setNodes] = useNodesState([]);
+    const [edges, setEdges] = useEdgesState([]);
 
 
     function handleNodeChange(change) {
-        onNodesChange(change);
+        // Only handle position changes
         change = change[0];
         if (change.type === "position") {
             setKnownPositions(k => ({ ...k, [change.id]: change.position }));
@@ -106,6 +106,7 @@ export default function Application() {
     }
     return (
         <div className='w-full flex'>
+        <Toolbar />
             <div className='w-1/3'>
                 <TextArea onContentChange={handleChange} initialValue={projectText}>
                     {error && (

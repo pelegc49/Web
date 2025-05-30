@@ -46,15 +46,16 @@ export function objectify(data) {
             }
             definedClasses.set(className, index++);
             const data ={ className, attributes, methods }
+            const content = <ClassNode className={className} attributes={attributes} methods={methods} />;
             nodes.push({
                 id: className,
                 data:{
                     ...data,
-                    label: <ClassNode className={className} attributes={attributes} methods={methods} />
+                    label: content
                     },
                 position: { x: 0, y: 0 },
                 width: 300,
-                height: 400,
+                height: content.height,
             });
         } else if (sentence.type === 'INHER') {
             const attributes = [];
@@ -79,15 +80,17 @@ export function objectify(data) {
             }
             const data ={ childClass, attributes, methods }
             definedClasses.set(childClass, index++);
+            const content = <ClassNode className={childClass} attributes={attributes} methods={methods} />;
+            content.height
             nodes.push({
                 id: childClass,
                 data:{
                     ...data,
-                    label: <ClassNode className={childClass} attributes={attributes} methods={methods} />
+                    label: content
                     },
                 position: { x: 0, y: 0 },           
                 width: 300,
-                height: 400,
+                height: content.height,
             });
             edges.push({
                 id: `${childClass}-${parentClass}`,
