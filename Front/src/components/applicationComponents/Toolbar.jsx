@@ -1,4 +1,14 @@
 import React, { useState } from 'react'
+import {
+  toolbarSidePanel,
+  toolbarArrowContainer,
+  toolbarArrowIcon,
+  toolbarContent,
+  toolbarSyntaxTitle,
+  toolbarExampleContainer,
+  toolbarExampleTitle,
+  toolbarExampleCode
+} from '../../assets/Style';
 
 export default function Toolbar() {
   const [toolbarOpen, setToolbarOpen] = useState(false);
@@ -31,56 +41,22 @@ export default function Toolbar() {
 
   return (
     <div
-      style={{
-        position: 'relative',
-        width: toolbarOpen ? 260 : 32,
-        transition: 'width 0.3s',
-        background: '#f4f6fa',
-        borderRight: '1px solid #e0e0e0',
-        overflow: 'hidden',
-        zIndex: 10,
-        height: 'fit-content',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        color: '#222', // Ensure text is visible on light background
-      }}
+      className={toolbarSidePanel(toolbarOpen)}
       onMouseEnter={() => setToolbarOpen(true)}
       onMouseLeave={() => setToolbarOpen(false)}
     >
-      <div style={{
-        width: 32,
-        height: 48,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        background: '#e9ecef',
-        borderBottomRightRadius: 8,
-        borderTopRightRadius: 8,
-      }}>
-        <span style={{
-          display: 'inline-block',
-          transform: toolbarOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s',
-          fontSize: 20,
-          color: '#333', // Make arrow visible on light background
-        }}>&#x25B6;</span>
+      <div className={toolbarArrowContainer}>
+        <span
+          className={toolbarArrowIcon(toolbarOpen)}
+        >&#x25B6;</span>
       </div>
       {toolbarOpen && (
-        <div style={{ padding: '16px 12px', width: 228 }}>
-          <h3 style={{ fontSize: 16, marginBottom: 12, color: '#333' }}>Syntax Examples</h3>
+        <div className={toolbarContent}>
+          <h3 className={toolbarSyntaxTitle}>Syntax Examples</h3>
           {syntaxExamples.map((ex, idx) => (
-            <div key={idx} style={{ marginBottom: 16 }}>
-              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{ex.title}</div>
-              <pre style={{
-                background: '#222',
-                color: '#fff',
-                borderRadius: 6,
-                padding: '8px 10px',
-                fontSize: 13,
-                overflowX: 'auto',
-              }}>{ex.code}</pre>
+            <div key={idx} className={toolbarExampleContainer}>
+              <div className={toolbarExampleTitle}>{ex.title}</div>
+              <pre className={toolbarExampleCode}>{ex.code}</pre>
             </div>
           ))}
         </div>

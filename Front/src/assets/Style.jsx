@@ -142,3 +142,16 @@ export const aboutUsContainer = dark => `mt-10 p-6 rounded-lg shadow-md ${dark ?
 export const aboutUsTitle = dark => `text-xl font-bold mb-3 ${dark ? 'text-gray-100' : 'text-gray-800'}`;
 
 export const aboutUsParagraph = dark => `text-base ${dark ? 'text-gray-300' : 'text-gray-700'}`;
+
+// Toolbar (side panel) styles
+export const toolbarSidePanel = (toolbarOpen, dark) => 
+  `relative z-10 flex flex-col items-start transition-all duration-300 overflow-hidden border-r ${
+    dark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-[#f4f6fa]'
+  } ${toolbarOpen ? 'w-[260px]' : 'w-8'} h-[90vh]`;
+export const toolbarArrowContainer = 'w-8 h-12 flex items-center justify-center cursor-pointer bg-[#e9ecef] rounded-tr-lg rounded-br-lg';
+export const toolbarArrowIcon = (toolbarOpen) => `inline-block transition-transform duration-300 text-[20px] text-gray-800 ${toolbarOpen ? 'rotate-180' : ''}`;
+export const toolbarContent = 'px-3 py-4 w-[228px]';
+export const toolbarSyntaxTitle = 'text-base font-semibold mb-3 text-gray-800';
+export const toolbarExampleContainer = 'mb-4';
+export const toolbarExampleTitle = 'font-bold mb-1 text-gray-900';
+export const toolbarExampleCode = 'bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-mono overflow-x-auto';
