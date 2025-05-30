@@ -125,7 +125,7 @@ export const tooltip = (darkMode) =>
 // HomePage component styles
 export const pageContainer = dark => `flex justify-center items-center min-h-screen p-5 ${dark ? 'bg-gray-900' : 'bg-gray-100'}`;
 
-export const contentContainer = dark => `max-w-xl w-full text-center bg-white p-10 rounded-xl shadow-lg ${dark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`;
+export const contentContainer = dark => `max-w-xl w-full text-center p-10 rounded-xl shadow-lg ${dark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`;
 
 export const title = dark => `mb-5 text-3xl font-bold ${dark ? 'text-gray-100' : 'text-gray-900'}`;
 
