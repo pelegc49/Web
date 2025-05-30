@@ -7,15 +7,15 @@ export default function HomePage() {
   return (
     <div style={styles.pageContainer}>
       <div style={styles.contentContainer}>
-        <h1 style={styles.title}>Welcome to Class Diagram to Text!</h1>
+        <h1 style={styles.title}>Welcome to Text to Class Diagram!</h1>
         <p style={styles.paragraph}>
-          Our tool lets you easily and quickly convert your Class Diagrams into clear, structured text. Simply upload or input your diagram, and get a detailed description of the classes, attributes, and their relationships.
+          Our tool lets you easily and quickly convert your text descriptions into clear, structured Class Diagrams. Simply upload or input your text, and get a detailed diagram representing the classes, attributes, and their relationships.
         </p>
         <p style={styles.paragraph}>
           Perfect for developers and students who want to understand and document their data model in a simple and convenient way.
         </p>
         <p style={styles.paragraph}>
-          Get started now — convert your diagram to text and use it directly in your project!
+          Get started now — convert your text to Class Diagram and use it directly in your project!
         </p>
         <div style={styles.buttonGroup}>
           <button style={styles.loginButton} onClick={onLoginClick}>
