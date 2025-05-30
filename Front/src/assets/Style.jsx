@@ -6,7 +6,7 @@ export const toolbarLink = dark => "font-medium transform transition-all duratio
 export const toolbarDivider = dark => dark ? "text-gray-600" : "text-gray-300";
 
 export const classNodeContainer = dark => `rounded-lg shadow-md border p-4 m-2 hover:shadow-lg transition-shadow ${dark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"}`;
-export const classNodeTitle = dark => `font-bold text-lg border-b pb-2 mb-2 text-center ${dark ? "text-gray-100 border-gray-600" : "text-blue-700 border-gray-200"}`;
+export const classNodeTitle = dark => `font-bold text-lg pb-2 mb-2 text-center ${dark ? "text-gray-100" : "text-blue-700"}`;
 export const attributeItem = dark => `py-1 px-2 rounded ${dark ? "hover:bg-gray-600" : "hover:bg-gray-100"}`;
 export const attributeText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`;
 export const methodsContainer = dark => `mt-2 pt-2 border-t ${dark ? "border-gray-600" : "border-gray-200"}`;
@@ -118,7 +118,7 @@ export const tooltipContainer = () =>
   "relative group";
 
 export const tooltip = (darkMode) => 
-  `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-300 -left-14 top-10 ${
+  `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-300 left-14 top-0 ${
     darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-200"
   } text-xs rounded py-1 px-2 whitespace-nowrap z-10 shadow-md`;
 
@@ -144,14 +144,22 @@ export const aboutUsTitle = dark => `text-xl font-bold mb-3 ${dark ? 'text-gray-
 export const aboutUsParagraph = dark => `text-base ${dark ? 'text-gray-300' : 'text-gray-700'}`;
 
 // Toolbar (side panel) styles
-export const toolbarSidePanel = (toolbarOpen, dark) => 
-  `relative z-10 flex flex-col items-start transition-all duration-300 overflow-hidden border-r ${
-    dark ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-[#f4f6fa]'
-  } ${toolbarOpen ? 'w-[260px]' : 'w-8'} h-[90vh]`;
-export const toolbarArrowContainer = 'w-8 h-12 flex items-center justify-center cursor-pointer bg-[#e9ecef] rounded-tr-lg rounded-br-lg';
-export const toolbarArrowIcon = (toolbarOpen) => `inline-block transition-transform duration-300 text-[20px] text-gray-800 ${toolbarOpen ? 'rotate-180' : ''}`;
-export const toolbarContent = 'px-3 py-4 w-[228px]';
-export const toolbarSyntaxTitle = 'text-base font-semibold mb-3 text-gray-800';
-export const toolbarExampleContainer = 'mb-4';
-export const toolbarExampleTitle = 'font-bold mb-1 text-gray-900';
-export const toolbarExampleCode = 'bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-mono overflow-x-auto';
+export const verticalToolbarContainer = dark => 
+  `w-14 h-[90vh] border-r transition-all duration-300 flex flex-col items-center py-4 space-y-4 ${
+    dark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200"
+  }`;
+
+export const toolbarIconButton = dark => 
+  `w-8 h-8 rounded-lg p-1.5 cursor-pointer transition-all duration-200 hover:scale-110 ${
+    dark ? "bg-gray-700 hover:bg-gray-600" : "bg-white hover:bg-gray-50"
+  }`;
+
+export const toolbarIcon = dark => 
+  `w-full h-full ${dark ? "filter invert" : ""}`;
+
+export const toolbarTooltip = dark => 
+  `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 
+   transition-opacity duration-300 left-14 top-1/2 -translate-y-1/2 
+   py-1 px-3 rounded-md shadow-lg text-sm whitespace-nowrap z-50 ${
+    dark ? "bg-gray-700 text-gray-100" : "bg-white text-gray-800 border border-gray-200"
+  }`;

@@ -13,11 +13,10 @@ import Toolbar from './Toolbar.jsx'
 export default function Application() {
     const { user } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
+    const [ project, setProject ] = useState({ loadEdges: [], loadNodes: [], loadKnownPositions: {}, loadText: "" })
     const location = useLocation();
-    const projectText = location.state?.projectText || '';
-
     const [inputTime, setInputTime] = useState(null);
-    const [text, setText] = useState(projectText);
+    const [text, setText] = useState("");
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
 
@@ -63,7 +62,6 @@ export default function Application() {
             setNodes(objectified.nodes.map((n) => ({
                 ...n,
                 position: knownPositions[n.id] || n.position,
-
             })));
             setEdges(objectified.edges);
         }, 1000);
@@ -72,33 +70,58 @@ export default function Application() {
     }, [text, knownPositions]);
 
     // Process initial project text when component loads
-    useEffect(() => {
-        if (projectText) {
-            // Trigger the text processing immediately for the initial text
-            const tokens = lexer(projectText);
-            if (!tokens.status || tokens.status !== 'ERROR') {
-                const parsed = parse(tokens.data);
-                if (!parsed.status || parsed.status !== 'ERROR') {
-                    const objectified = objectify(parsed.data);
-                    if (!objectified.status || objectified.status !== 'ERROR') {
-                        setNodes(objectified.nodes);
-                        setEdges(objectified.edges);
-                    }
-                }
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [projectText]);
+    // useEffect(() => {
+    //     if (projectText) {
+    //         // Trigger the text processing immediately for the initial text
+    //         const tokens = lexer(projectText);
+    //         if (!tokens.status || tokens.status !== 'ERROR') {
+    //             const parsed = parse(tokens.data);
+    //             if (!parsed.status || parsed.status !== 'ERROR') {
+    //                 const objectified = objectify(parsed.data);
+    //                 if (!objectified.status || objectified.status !== 'ERROR') {
+    //                     setNodes(objectified.nodes);
+    //                     setEdges(objectified.edges);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [projectText]);
 
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
 
+    useEffect(() => {
+        if(location.state?.loadText)
+            setText(location.state.loadText)
+        if(location.state?.loadNodes)
+            setNodes(location.state.loadNodes)
+        if(location.state?.loadEdges)
+            setEdges(location.state.loadEdges)
+        if(location.state?.loadKnownPositions)
+            setKnownPositions(location.state.loadKnownPositions)
+
+        // if (location.state?.project) {
+        //     // console.log("123:", ...location.state.project)
+        //     setProject(e=>({loadText: location.state.project.loadText,
+        //         loadNodes: location.state.project.loadNodes,
+        //         loadEdges: location.state.project.loadEdges,
+        //         loadKnownPositions: location.state.project.loadKnownPositions}));
+        //     console.log("project:", project);
+        //     setText(location.state.project.loadText)
+        //     // setNodes(location.state.project.loadNodes)
+        //     setEdges(location.state.project.loadEdges)
+        //     setKnownPositions(location.state.project.loadKnownPositions)
+        //     console.log({text,nodes,edges,knownPositions})
+        // }
+    }, [location.state])
 
     function handleNodeChange(change) {
         onNodesChange(change);
         // Only handle position changes
         change = change[0];
         if (change.type === "position") {
+            console.log(JSON.stringify({ edges, nodes, knownPositions, text }))
             setKnownPositions(k => ({ ...k, [change.id]: change.position }));
         }
     }
@@ -108,38 +131,38 @@ export default function Application() {
     }
     return (
         <>
-        <div className='w-full flex' hidden={!user}>
-        <Toolbar />
-            <div className='w-1/3'>
-                <TextArea onContentChange={handleChange} initialValue={projectText}>
-                    {error && (
-                        <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
-                            {error}
-                        </div>
-                    )}
-                </TextArea>
+            <div className='w-full flex' hidden={!user}>
+                <Toolbar />
+                <div className='w-1/3'>
+                    <TextArea onContentChange={handleChange} initialValue={text}>
+                        {error && (
+                            <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
+                                {error}
+                            </div>
+                        )}
+                    </TextArea>
 
-            </div>
-            <div className='w-2/3'>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={handleNodeChange}
-                    fitView
-                    edgeTypes={edgeTypes}
-                    colorMode={darkMode ? "dark" : "light"}>
-                    <MiniMap />
-                    <Controls />
-                    <Background />
+                </div>
+                <div className='w-2/3'>
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={handleNodeChange}
+                        fitView
+                        edgeTypes={edgeTypes}
+                        colorMode={darkMode ? "dark" : "light"}>
+                        <MiniMap />
+                        <Controls />
+                        <Background />
 
-                </ReactFlow>
+                    </ReactFlow>
+                </div>
             </div>
-        </div>
-        <div hidden={user} className='w-full h-full flex items-center justify-center'>
-            <div className='w-full h-full flex items-center justify-center'>
-                Please log in to create a diagram.
+            <div hidden={user} className='w-full h-full flex items-center justify-center'>
+                <div className='w-full h-full flex items-center justify-center'>
+                    Please log in to create a diagram.
+                </div>
             </div>
-        </div>
         </>
     )
 }
