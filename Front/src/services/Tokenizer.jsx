@@ -39,7 +39,7 @@ export function lexer(input) {
 
         if (!match){
             status = 'ERROR';
-            message = `Unexpected token at line ${line}: "${input.slice(pos).split(/\s/)[0]}"`;
+            message = `Illegal word at line ${line}: "${input.slice(pos).split(/\s/)[0]}"`;
             return {status, message, pos, data: tokens};
         } 
         if (matchedType) {

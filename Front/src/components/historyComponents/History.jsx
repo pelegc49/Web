@@ -1,8 +1,8 @@
 import {React,useContext,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {darkModeContext} from "../App.jsx"
+import {darkModeContext} from "../../App.jsx"
 import HistoryList from './HistoryList.jsx';
-import {plus} from '../assets/svgs.jsx';
+import {plus} from '../../assets/svgs.jsx';
 import { 
   historyContainer, 
   historyContent, 
@@ -12,7 +12,7 @@ import {
   historyAddIcon,
   tooltipContainer,
   tooltip
-} from '../assets/Style.jsx';
+} from '../../assets/Style.jsx';
 
 export default function History() {
   const { darkMode } = useContext(darkModeContext);
