@@ -91,7 +91,6 @@ export default function HistoryList() {
         
       },
       position: { x: -37.31, y: 464.32 },
-      width: 300,
       measured: { width: 300, height: 328 }
     },
     {
@@ -105,7 +104,6 @@ export default function HistoryList() {
         
       },
       position: { x: 221.11, y: 181.03 },
-      width: 300,
       measured: { width: 300, height: 216 }
     },
     {
@@ -117,10 +115,7 @@ export default function HistoryList() {
         
       },
       position: { x: -284.67, y: 225.25 },
-      width: 300,
       measured: { width: 300, height: 152 },
-      selected: true,
-      dragging: true
     },
     {
       id: "Course",
@@ -128,10 +123,8 @@ export default function HistoryList() {
         className: "Course",
         attributes: [],
         methods: [],
-        
       },
       position: { x: -84.30, y: -64.95 },
-      width: 300,
       measured: { width: 300, height: 124 }
     },
     {
@@ -142,7 +135,6 @@ export default function HistoryList() {
         methods: [],
       },
       position: { x: 345.48, y: -187.94 },
-      width: 300,
       measured: { width: 300, height: 188 }
     }
   ],

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext} from 'react'
 import TextArea from './TextArea.jsx'
-import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls } from '@xyflow/react'
+import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls, Panel } from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { objectify } from '../../services/Objectifier.jsx';
@@ -9,6 +9,8 @@ import { lexer } from '../../services/Tokenizer.jsx';
 import { darkModeContext } from '../../App.jsx';
 import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
+import domtoimage from 'dom-to-image';
+import { signUpButton } from '../../assets/Style.jsx';
 
 export default function Application() {
     const { user } = useOutletContext();
@@ -19,10 +21,14 @@ export default function Application() {
     const [text, setText] = useState("");
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
-
+    const [imageData, setImageData] = useState("");
     const edgeTypes = {
         labelled: LabelledEdge
     };
+
+    useEffect(()=>{
+        console.log("image data: ",imageData);
+    },[imageData]);
 
     useEffect(() => {
         if (inputTime) {
@@ -91,6 +97,52 @@ export default function Application() {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges] = useEdgesState([]);
 
+    function exportProject() {
+        return {
+            loadEdges:edges,
+            loadNodes:nodes.map(e=>({
+                id:e.id,
+                data:e.data,
+                position:e.position,
+                measured:e.measured,
+            })),
+            loadKnownPositions:knownPositions,
+            loadText:text,
+        }
+    }
+
+    function getPhoto() {
+        const Canvas = document.getElementById("reactFlowCanvas");
+        // get rid of minimap, controls
+        
+        
+
+        
+        document.querySelectorAll('.react-flow__panel').forEach(e=>{
+            console.log(e);
+            e.style.display = 'none';
+        })
+        domtoimage.toPng(Canvas).then(data=>{
+            setImageData(data);
+            const a = document.createElement('a');
+            a.download = 'my-image-name.png'
+            a.href = data;
+            a.click();
+            return data;
+        }).catch(error=>{
+            setError("image generation failed");
+            console.log(error);
+        }).finally(()=>{
+            document.querySelectorAll('.react-flow__panel').forEach(e=>{
+              e.style.display = 'block';
+           })
+        })
+        
+
+        // return minimap, controls
+    }
+    
+    
     useEffect(() => {
         if(location.state?.loadText)
             setText(location.state.loadText)
@@ -132,7 +184,7 @@ export default function Application() {
     return (
         <>
             <div className='w-full flex' hidden={!user}>
-                <Toolbar />
+                <Toolbar/>
                 <div className='w-1/3'>
                     <TextArea onContentChange={handleChange} initialValue={text}>
                         {error && (
@@ -145,16 +197,19 @@ export default function Application() {
                 </div>
                 <div className='w-2/3'>
                     <ReactFlow
+                        id='reactFlowCanvas'
                         nodes={nodes}
                         edges={edges}
                         onNodesChange={handleNodeChange}
                         fitView
                         edgeTypes={edgeTypes}
                         colorMode={darkMode ? "dark" : "light"}>
-                        <MiniMap />
-                        <Controls />
+                        <MiniMap className='toHide'/>
+                        <Controls className='toHide'/>
                         <Background />
-
+                        <Panel position='top-right' className='toHide'>
+                            <button className={signUpButton} onClick={getPhoto}>download</button>
+                        </Panel>
                     </ReactFlow>
                 </div>
             </div>
