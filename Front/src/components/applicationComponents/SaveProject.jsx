@@ -1,17 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { darkModeContext } from "../../App.jsx";
 import * as styles from '../../assets/Style.jsx';
 
-export default function SaveProject({ open, onClose }) {
+export default function SaveProject({ open, onClose, onSave}) {
     const { darkMode } = useContext(darkModeContext);
-    
+    const [text,setText] = useState("");
     if (!open) return null;
 
     const handleSave = () => {
         // Just logging for now as requested
-        console.log("Text");
+        onSave && onSave(text)
         onClose();
     };
+
 
     return (
         <div className={styles.saveProjectModal}>
@@ -23,6 +24,8 @@ export default function SaveProject({ open, onClose }) {
                         type="text" 
                         className={styles.saveProjectInput(darkMode)}
                         placeholder="Enter project name"
+                        value={text}
+                        onChange={e => setText(e.target.value)}
                     />
                 </div>
                 <div className={styles.saveProjectButtonGroup}>

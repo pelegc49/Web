@@ -13,11 +13,11 @@ import domtoimage from 'dom-to-image';
 import SaveProject from './SaveProject.jsx'
 import { save } from '../../assets/svgs.jsx'
 import * as styles from '../../assets/Style.jsx'
+import axios from 'axios';
 
 export default function Application() {
     const { user } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
-    const [ project, setProject ] = useState({ loadEdges: [], loadNodes: [], loadKnownPositions: {}, loadText: "" })
     const location = useLocation();
     const [inputTime, setInputTime] = useState(null);
     const [text, setText] = useState("");
@@ -114,14 +114,19 @@ export default function Application() {
             loadText:text,
         }
     }
+    function saveProject(text){
+        const project = exportProject();
+        axios.post('/api/projects',{
+            user,
+            project:{
+                name:text,
+                ...project
+            }
+        }).then()
+    }
 
     function getPhoto() {
         const Canvas = document.getElementById("reactFlowCanvas");
-        // get rid of minimap, controls
-        
-        
-
-        
         document.querySelectorAll('.react-flow__panel').forEach(e=>{
             console.log(e);
             e.style.display = 'none';
@@ -141,9 +146,7 @@ export default function Application() {
               e.style.display = 'block';
            })
         })
-        
 
-        // return minimap, controls
     }
     
     
@@ -156,20 +159,6 @@ export default function Application() {
             setEdges(location.state.loadEdges)
         if(location.state?.loadKnownPositions)
             setKnownPositions(location.state.loadKnownPositions)
-
-        // if (location.state?.project) {
-        //     // console.log("123:", ...location.state.project)
-        //     setProject(e=>({loadText: location.state.project.loadText,
-        //         loadNodes: location.state.project.loadNodes,
-        //         loadEdges: location.state.project.loadEdges,
-        //         loadKnownPositions: location.state.project.loadKnownPositions}));
-        //     console.log("project:", project);
-        //     setText(location.state.project.loadText)
-        //     // setNodes(location.state.project.loadNodes)
-        //     setEdges(location.state.project.loadEdges)
-        //     setKnownPositions(location.state.project.loadKnownPositions)
-        //     console.log({text,nodes,edges,knownPositions})
-        // }
     }, [location.state])
 
     function handleNodeChange(change) {
@@ -188,6 +177,7 @@ export default function Application() {
     return (
         <>
             <div className={styles.applicationContainer(darkMode)} hidden={!user}>
+                {console.log(user)}
                 <Toolbar />
                 <div className={styles.textAreaSection}>
                     <div className={styles.textAreaWrapper}>
@@ -228,14 +218,13 @@ export default function Application() {
                         <Panel position='top-right' className='toHide'>
                             <button className={styles.signUpButton} onClick={getPhoto}>download</button>
                         </Panel>
-                        <Panel position='top-right' className='toHide'>
-                            <SaveProject 
-                                open={showSaveModal} 
-                                onClose={() => setShowSaveModal(false)}
-                            />
-                        </Panel>
                     </ReactFlow>
                 </div>
+                <SaveProject 
+                    open={showSaveModal} 
+                    onClose={() => setShowSaveModal(false)}
+                    onSave={saveProject}
+                />
             </div>
             <div hidden={user} className={styles.loginMessage}>
                 <div className={styles.loginMessage}>
