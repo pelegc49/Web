@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     open: true,
     proxy:{
-        '/api': 'https://web-kappa-beryl.vercel.app/'
+        '/api': 'http://localhost:5000'
     }
   },
   plugins: [react(),tailwindcss()],
