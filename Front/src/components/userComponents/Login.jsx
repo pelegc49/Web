@@ -71,227 +71,110 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
     if (!open) return null;
 
     return (
-        <div style={{
-            position: "fixed",
-            top: "60px",
-            right: "30px",
-            background: "rgba(0,0,0,0.0)",
-            zIndex: 1000,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end"
-        }}>
-            {!showForgot ? (
-                <form style={{
-                    background: "#fff",
-                    padding: "1.5rem",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                    minWidth: "260px",
-                    color: "#222"
-                }} onSubmit={handleLogin}>
-                    <h2 style={{ color: "#222", marginBottom: "1rem" }}>Login</h2>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{
-                            display: "block",
-                            marginBottom: "0.3rem",
-                            color: "#222",
-                            fontWeight: 500
-                        }}>
-                            Email:
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "0.5rem",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px",
-                                background: "#f9f9f9",
-                                color: "#222"
-                            }}
-                            required
-                            disabled={isLoading}
-                        />
-                    </div>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{
-                            display: "block",
-                            marginBottom: "0.3rem",
-                            color: "#222",
-                            fontWeight: 500
-                        }}>
-                            Password:
-                        </label>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "0.5rem",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px",
-                                background: "#f9f9f9",
-                                color: "#222"
-                            }}
-                            required
-                            disabled={isLoading}
-                        />
-                    </div>
-                    {error && (
-                        <div style={{
-                            color: 'red',
-                            marginBottom: '1rem',
-                            fontSize: '0.9rem'
-                        }}>
-                            {error}
+        <div className="fixed top-16 right-6 z-50 flex flex-col items-end">
+            <form
+                onSubmit={showForgot ? handleForgotPassword : handleLogin}
+                className="bg-white p-6 rounded-xl shadow-xl w-72 text-gray-800 space-y-4"
+            >
+                <h2 className="text-xl font-semibold">
+                    {showForgot ? "Reset Password" : "Login"}
+                </h2>
+
+                {!showForgot && (
+                    <>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Email</label>
+                            <input
+                                type="email"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                                disabled={isLoading}
+                            />
                         </div>
-                    )}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: isLoading ? '#ccc' : '#007bff',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: isLoading ? 'not-allowed' : 'pointer'
-                            }}
-                        >
-                            {isLoading ? 'Logging in...' : 'Login'}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleClose}
-                            disabled={isLoading}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: '#6c757d',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: isLoading ? 'not-allowed' : 'pointer'
-                            }}
-                        >
-                            Cancel
-                        </button>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Password</label>
+                            <input
+                                type="password"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </>
+                )}
+
+                {showForgot && (
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Enter your email</label>
+                        <input
+                            type="email"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={forgotEmail}
+                            onChange={e => setForgotEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
+
+                {(error || forgotMsg) && (
+                    <div className={`text-sm ${error || (forgotMsg && forgotMsg.toLowerCase().includes("fail")) ? "text-red-600" : "text-green-600"}`}>
+                        {error || forgotMsg}
+                    </div>
+                )}
+
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        type="submit"
+                        className={`flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+                        disabled={isLoading}
+                    >
+                        {showForgot ? "Send reset email" : isLoading ? "Logging in..." : "Login"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleClose}
+                        className="flex-1 py-2 px-4 rounded-md bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium"
+                        disabled={isLoading}
+                    >
+                        Cancel
+                    </button>
+                </div>
+
+                {!showForgot && (
+                    <>
                         <button
                             type="button"
                             onClick={handleSignUpClick}
+                            className="text-blue-600 hover:underline text-sm"
                             disabled={isLoading}
-                            style={{
-                                background: "transparent",
-                                color: "#007bff",
-                                border: "none",
-                                textDecoration: "underline",
-                                cursor: isLoading ? 'not-allowed' : 'pointer',
-                                padding: '0.5rem'
-                            }}
                         >
                             Sign Up
                         </button>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => setShowForgot(true)}
-                        style={{
-                            marginTop: "1rem",
-                            background: "none",
-                            border: "none",
-                            color: "#007bff",
-                            textDecoration: "underline",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Forgot password?
-                    </button>
-                </form>
-            ) : (
-                <form style={{
-                    background: "#fff",
-                    padding: "1.5rem",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                    minWidth: "260px",
-                    color: "#222"
-                }} onSubmit={handleForgotPassword}>
-                    <h2 style={{ color: "#222", marginBottom: "1rem" }}>Reset Password</h2>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{
-                            display: "block",
-                            marginBottom: "0.3rem",
-                            color: "#222",
-                            fontWeight: 500
-                        }}>
-                            Enter your email:
-                        </label>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={forgotEmail}
-                            onChange={e => setForgotEmail(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "0.5rem",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px",
-                                background: "#f9f9f9",
-                                color: "#222"
-                            }}
-                            required
-                        />
-                    </div>
-                    {forgotMsg && (
-                        <div style={{
-                            color: forgotMsg.toLowerCase().includes("sent") ? "green" : "red",
-                            marginBottom: '1rem',
-                            fontSize: '0.9rem'
-                        }}>
-                            {forgotMsg}
-                        </div>
-                    )}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <button
-                            type="submit"
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: '#007bff',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Send reset email
-                        </button>
                         <button
                             type="button"
-                            onClick={() => {
-                                setShowForgot(false);
-                                setForgotEmail('');
-                                setForgotMsg('');
-                            }}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                backgroundColor: '#6c757d',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}
+                            onClick={() => setShowForgot(true)}
+                            className="text-blue-600 hover:underline text-sm"
                         >
-                            Back to login
+                            Forgot password?
                         </button>
-                    </div>
-                </form>
-            )}
+                    </>
+                )}
+
+                {showForgot && (
+                    <button
+                        type="button"
+                        onClick={() => setShowForgot(false)}
+                        className="text-blue-600 hover:underline text-sm"
+                    >
+                        Back to login
+                    </button>
+                )}
+            </form>
         </div>
     );
 }

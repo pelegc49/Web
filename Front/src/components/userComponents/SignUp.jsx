@@ -116,90 +116,80 @@ export default function SignUp({ open, onClose, onSuccess }) {
     };
 
     if (!open) return null;
-
     return (
-        <div className="fixed top-[60px] right-0 h-[calc(100vh-60px)] z-50 bg-white shadow-xl w-full sm:w-80 md:w-80 p-4 overflow-y-auto transition-all duration-300 border-l border-gray-200">
-    <h2 className="text-xl font-semibold text-gray-800 mb-4">Sign Up</h2>
-    <form onSubmit={handleSignUp} className="space-y-3 text-sm">
-        <div>
-            <label className="block font-medium text-gray-700">Username</label>
-            <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                required
-                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-        <div>
-            <label className="block font-medium text-gray-700">Email</label>
-            <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-        <div>
-            <label className="block font-medium text-gray-700">Password</label>
-            <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-        <div>
-            <label className="block font-medium text-gray-700">Confirm Password</label>
-            <input
-                type="password"
-                value={confirm}
-                onChange={e => setConfirm(e.target.value)}
-                required
-                className="mt-1 w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-        <div>
-            <label className="block font-medium text-gray-700">Captcha</label>
-            <canvas
-                ref={canvasRef}
-                width={100}
-                height={36}
-                className="border border-gray-300 rounded cursor-pointer my-1"
-                onClick={refreshCaptcha}
-            />
-            <input
-                type="text"
-                value={captchaInput}
-                onChange={e => setCaptchaInput(e.target.value)}
-                required
-                placeholder="Enter captcha"
-                className="w-full rounded border border-gray-300 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-        {error && <div className="text-red-500">{error}</div>}
-        {success && <div className="text-green-600">{success}</div>}
+        <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
+            <form onSubmit={handleSignUp} className="bg-white text-gray-800 rounded-lg shadow-lg p-6 w-72">
+                <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
 
-        <div className="flex justify-between mt-2 space-x-2">
-            <button
-                type="submit"
-                disabled={isLoading}
-                className="flex-1 bg-blue-600 text-white rounded py-1.5 font-medium hover:bg-blue-700 transition disabled:opacity-50"
-            >
-                {isLoading ? 'Signing up...' : 'Sign Up'}
-            </button>
-            <button
-                type="button"
-                onClick={handleClose}
-                className="flex-1 bg-gray-200 text-gray-800 rounded py-1.5 font-medium hover:bg-gray-300 transition"
-            >
-                Cancel
-            </button>
-        </div>
-    </form>
-</div>
+                <label className="block mb-1 font-medium">Username:</label>
+                <input
+                    type="text"
+                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
 
+                <label className="block mb-1 font-medium">Email:</label>
+                <input
+                    type="email"
+                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+
+                <label className="block mb-1 font-medium">Password:</label>
+                <input
+                    type="password"
+                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+
+                <label className="block mb-1 font-medium">Confirm Password:</label>
+                <input
+                    type="password"
+                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    required
+                />
+
+                <label className="block mb-1 font-medium">Captcha:</label>
+                <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded"></canvas>
+                <input
+                    type="text"
+                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    placeholder="Enter CAPTCHA"
+                    value={captchaInput}
+                    onChange={(e) => setCaptchaInput(e.target.value)}
+                    required
+                />
+
+                {error && <div className="text-red-600 text-sm mb-3">{error}</div>}
+                {success && <div className="text-green-600 text-sm mb-3">{success}</div>}
+
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className={`px-4 py-2 text-white rounded ${
+                            isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                        }`}
+                    >
+                        {isLoading ? 'Signing up...' : 'Sign Up'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 }
