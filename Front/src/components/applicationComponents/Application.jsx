@@ -10,7 +10,9 @@ import { darkModeContext } from '../../App.jsx';
 import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
 import domtoimage from 'dom-to-image';
-import { signUpButton } from '../../assets/Style.jsx';
+import SaveProject from './SaveProject.jsx'
+import { save } from '../../assets/svgs.jsx'
+import * as styles from '../../assets/Style.jsx'
 
 export default function Application() {
     const { user } = useOutletContext();
@@ -22,6 +24,8 @@ export default function Application() {
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
     const [imageData, setImageData] = useState("");
+    const [showSaveModal, setShowSaveModal] = useState(false);
+
     const edgeTypes = {
         labelled: LabelledEdge
     };
@@ -183,19 +187,33 @@ export default function Application() {
     }
     return (
         <>
-            <div className='w-full flex' hidden={!user}>
-                <Toolbar/>
-                <div className='w-1/3'>
-                    <TextArea onContentChange={handleChange} initialValue={text}>
-                        {error && (
-                            <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
-                                {error}
+            <div className={styles.applicationContainer(darkMode)} hidden={!user}>
+                <Toolbar />
+                <div className={styles.textAreaSection}>
+                    <div className={styles.textAreaWrapper}>
+                        <TextArea onContentChange={handleChange} initialValue={text}>
+                            {error && (
+                                <div className={styles.errorMessage}>
+                                    {error}
+                                </div>
+                            )}
+                        </TextArea>
+                        <div className={styles.saveButtonWrapper}>
+                            <div className={styles.tooltipContainer()}>
+                                <button 
+                                    onClick={() => setShowSaveModal(true)}
+                                    className={styles.saveButton(darkMode)}
+                                >
+                                    <img src={save} alt="Save" className={styles.saveButtonIcon} />
+                                </button>
+                                <div className={styles.saveButtonTooltip(darkMode)}>
+                                    Save project
+                                </div>
                             </div>
-                        )}
-                    </TextArea>
-
+                        </div>
+                    </div>
                 </div>
-                <div className='w-2/3'>
+                <div className={styles.diagramSection}>
                     <ReactFlow
                         id='reactFlowCanvas'
                         nodes={nodes}
@@ -208,17 +226,23 @@ export default function Application() {
                         <Controls className='toHide'/>
                         <Background />
                         <Panel position='top-right' className='toHide'>
-                            <button className={signUpButton} onClick={getPhoto}>download</button>
+                            <button className={styles.signUpButton} onClick={getPhoto}>download</button>
+                        </Panel>
+                        <Panel position='top-right' className='toHide'>
+                            <SaveProject 
+                                open={showSaveModal} 
+                                onClose={() => setShowSaveModal(false)}
+                            />
                         </Panel>
                     </ReactFlow>
                 </div>
             </div>
-            <div hidden={user} className='w-full h-full flex items-center justify-center'>
-                <div className='w-full h-full flex items-center justify-center'>
+            <div hidden={user} className={styles.loginMessage}>
+                <div className={styles.loginMessage}>
                     Please log in to create a diagram.
                 </div>
             </div>
-        </>
+       </>
     )
 }
 
