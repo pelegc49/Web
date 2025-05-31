@@ -21,7 +21,7 @@ app.listen(PORT,()=>{
 });
 
 app.get('/',(req,res)=>{
-    res.send('Server is responding');
+    res.send('Server responds');
 });
 
 app.use('/api',apiRouter)
