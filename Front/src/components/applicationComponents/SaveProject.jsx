@@ -9,7 +9,7 @@ export default function SaveProject({ open, onClose }) {
 
     const handleSave = () => {
         // Just logging for now as requested
-        console.log("Save function activated");
+        console.log("Text");
         onClose();
     };
 
