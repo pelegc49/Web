@@ -9,7 +9,11 @@ import { Router as apiRouter } from './routes/api.js';
 const app = express();
 const PORT = 5000;
 
-app.use(cors())
+app.use(cors({
+  origin: 'https://web-w9fv.vercel.app/', // Replace with your actual frontend domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}))
 app.use(bodyParser.json())
 
 app.listen(PORT,()=>{
