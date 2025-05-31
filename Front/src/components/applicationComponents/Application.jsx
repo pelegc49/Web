@@ -24,11 +24,15 @@ export default function Application() {
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
     const [imageData, setImageData] = useState("");
+    const [message, setMessage] = useState(null);
     const [showSaveModal, setShowSaveModal] = useState(false);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges] = useEdgesState([]);
 
     const edgeTypes = {
         labelled: LabelledEdge
     };
+
 
     useEffect(()=>{
         console.log("image data: ",imageData);
@@ -79,27 +83,10 @@ export default function Application() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text, knownPositions]);
 
-    // Process initial project text when component loads
-    // useEffect(() => {
-    //     if (projectText) {
-    //         // Trigger the text processing immediately for the initial text
-    //         const tokens = lexer(projectText);
-    //         if (!tokens.status || tokens.status !== 'ERROR') {
-    //             const parsed = parse(tokens.data);
-    //             if (!parsed.status || parsed.status !== 'ERROR') {
-    //                 const objectified = objectify(parsed.data);
-    //                 if (!objectified.status || objectified.status !== 'ERROR') {
-    //                     setNodes(objectified.nodes);
-    //                     setEdges(objectified.edges);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [projectText]);
-
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges] = useEdgesState([]);
+    function closeSaveWindow(){
+        setShowSaveModal(false)
+        setMessage(null)
+    }
 
     function exportProject() {
         return {
@@ -114,15 +101,40 @@ export default function Application() {
             loadText:text,
         }
     }
-    function saveProject(text){
+    function saveProject(projName){
+        if(!projName.trim()){
+            setMessage({
+                color:"red-500",
+                text:"Please enter a valid project name"
+            })
+            return;
+        }
+        if(!text.trim()){
+            setMessage({
+                color:"red-500",
+                text:"Your project is blank"
+            })
+            return;
+        }
         const project = exportProject();
         axios.post('/api/projects',{
             user,
             project:{
-                name:text,
+                name:projName,
                 ...project
             }
-        }).then()
+        }).then(()=>{
+            setMessage({
+                color:"green-400",
+                text:"Successfuly saved"
+            })
+            setTimeout(closeSaveWindow,1000)
+        }).catch((e)=>{
+            setMessage({
+                color:"red-500",
+                text:e
+            })
+        })
     }
 
     function getPhoto() {
@@ -222,8 +234,9 @@ export default function Application() {
                 </div>
                 <SaveProject 
                     open={showSaveModal} 
-                    onClose={() => setShowSaveModal(false)}
+                    onClose={closeSaveWindow}
                     onSave={saveProject}
+                    msg={message}
                 />
             </div>
             <div hidden={user} className={styles.loginMessage}>

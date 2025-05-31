@@ -21,6 +21,7 @@ export default function HistoryList() {
     // Project data with name and text
     const fakeProjects = [
       {
+        name:'getting started',
   loadEdges: [
     {
       id: "Student-Person",

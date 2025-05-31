@@ -9,11 +9,17 @@ Router.post("/",(req,res)=>{
     const data = doc(db,"projects",req.body.user.uid);
     getDoc(data).then(d=>{
         if(d.exists()){
-
+            setDoc(data,{
+                ...d.data(),
+                [req.body.project.name]:req.body.project
+            }) 
         }else{
-           setDoc(data,{[req.body.project.name]:[req.body.project]}) 
+           setDoc(data,{[req.body.project.name]:req.body.project}) 
         }
-    }).catch(e=>{console.log("error: ",e)})
+        res.status(201).send("Saved!")
+    }).catch(e=>{
+       res.status(500).send("Error: "+e)
+    })
     
 });
 

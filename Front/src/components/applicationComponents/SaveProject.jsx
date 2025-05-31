@@ -2,15 +2,13 @@ import React, { useContext, useState } from 'react';
 import { darkModeContext } from "../../App.jsx";
 import * as styles from '../../assets/Style.jsx';
 
-export default function SaveProject({ open, onClose, onSave}) {
+export default function SaveProject({ open, onClose, onSave, msg}) {
     const { darkMode } = useContext(darkModeContext);
     const [text,setText] = useState("");
     if (!open) return null;
-
     const handleSave = () => {
         // Just logging for now as requested
         onSave && onSave(text)
-        onClose();
     };
 
 
@@ -42,6 +40,9 @@ export default function SaveProject({ open, onClose, onSave}) {
                         Save
                     </button>
                 </div>
+                {msg &&
+                    <span className={`text-xl font-bold text-${msg.color}`}>{msg.text}</span>
+                }
             </div>
         </div>
     );
