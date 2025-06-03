@@ -158,7 +158,7 @@ export default function SignUp({ open, onClose, onSuccess }) {
                 />
 
                 <label className="block mb-1 font-medium">Captcha:</label>
-                <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded"></canvas>
+                <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded blur-[3px]"></canvas>
                 <input
                     type="text"
                     className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"

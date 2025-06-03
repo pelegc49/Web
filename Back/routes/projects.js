@@ -5,8 +5,26 @@ import {db} from '../services/firebase.js'; // Import Firebase auth functions
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 export const Router = express.Router()
 
+Router.get("/:uid",(req,res)=>{
+    const {uid} = req.params;
+    const data = doc(db,"projects",uid);
+    getDoc(data).then(d=>{
+        if(d.exists()){
+            res.status(200).json(d.data())
+        }else{
+            res.status(204).json({})
+        }
+    }).catch(e=>{
+        res.status(500).send("Error: "+e)
+     }
+    )
+})
+
+
 Router.post("/",(req,res)=>{
     const data = doc(db,"projects",req.body.user.uid);
+    console.log(JSON.stringify(req.body.project,1,1));
+    
     getDoc(data).then(d=>{
         if(d.exists()){
             setDoc(data,{

@@ -11,7 +11,7 @@ import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
 import domtoimage from 'dom-to-image';
 import SaveProject from './SaveProject.jsx'
-import { save } from '../../assets/svgs.jsx'
+import { save , download} from '../../assets/svgs.jsx'
 import * as styles from '../../assets/Style.jsx'
 import axios from 'axios';
 
@@ -32,11 +32,6 @@ export default function Application() {
     const edgeTypes = {
         labelled: LabelledEdge
     };
-
-
-    useEffect(()=>{
-        console.log("image data: ",imageData);
-    },[imageData]);
 
     useEffect(() => {
         if (inputTime) {
@@ -89,14 +84,12 @@ export default function Application() {
     }
 
     function exportProject() {
+        nodes.map(e=>{
+            delete e.data.label;
+        })
         return {
             loadEdges:edges,
-            loadNodes:nodes.map(e=>({
-                id:e.id,
-                data:e.data,
-                position:e.position,
-                measured:e.measured,
-            })),
+            loadNodes:nodes,
             loadKnownPositions:knownPositions,
             loadText:text,
         }
@@ -140,7 +133,6 @@ export default function Application() {
     function getPhoto() {
         const Canvas = document.getElementById("reactFlowCanvas");
         document.querySelectorAll('.react-flow__panel').forEach(e=>{
-            console.log(e);
             e.style.display = 'none';
         })
         domtoimage.toPng(Canvas).then(data=>{
@@ -178,7 +170,6 @@ export default function Application() {
         // Only handle position changes
         change = change[0];
         if (change.type === "position") {
-            console.log(JSON.stringify({ edges, nodes, knownPositions, text }))
             setKnownPositions(k => ({ ...k, [change.id]: change.position }));
         }
     }
@@ -189,7 +180,6 @@ export default function Application() {
     return (
         <>
             <div className={styles.applicationContainer(darkMode)} hidden={!user}>
-                {console.log(user)}
                 <Toolbar />
                 <div className={styles.textAreaSection}>
                     <div className={styles.textAreaWrapper}>
@@ -228,7 +218,9 @@ export default function Application() {
                         <Controls className='toHide'/>
                         <Background />
                         <Panel position='top-right' className='toHide'>
-                            <button className={styles.signUpButton} onClick={getPhoto}>download</button>
+                            <button onClick={getPhoto}>
+                                <img src={download} width={'40px'} alt="download as image" />
+                            </button>
                         </Panel>
                     </ReactFlow>
                 </div>
