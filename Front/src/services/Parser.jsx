@@ -23,7 +23,54 @@ export function parse(tokens) {
             return tokens[pos++];
         }
         status = 'ERROR';
-        message = `Expected ${expectedType}, got ${peek()?.type || 'EOF'}`;
+        if (!peek()) {
+            message = `Your sentence is incomplete. Please finish writing it and end with a dot.`;
+        } else {
+            const expected = expectedType.toLowerCase();
+            const got = peek().type.toLowerCase();
+            const value = peek().value;
+            
+            switch (expectedType) {
+                case 'DOT':
+                    message = `Missing dot at the end of the sentence. Each sentence must end with a dot.`;
+                    break;
+                case 'ID':
+                    message = `Expected a name or identifier, but found '${value}' instead.`;
+                    break;
+                case 'IS':
+                    message = `Expected the word 'is', but found '${value}' instead.`;
+                    break;
+                case 'HAS':
+                    message = `Expected the word 'has', but found '${value}' instead.`;
+                    break;
+                case 'CAN':
+                    message = `Expected the word 'can', but found '${value}' instead.`;
+                    break;
+                case 'CLASS':
+                    message = `Expected the word 'class', but found '${value}' instead.`;
+                    break;
+                case 'WITH':
+                    message = `Expected the word 'with' after the method name, but found '${value}' instead.`;
+                    break;
+                case 'RELATED':
+                    message = `Expected the word 'related' in relationship definition, but found '${value}' instead.`;
+                    break;
+                case 'TO':
+                    message = `Expected the word 'to' in relationship definition, but found '${value}' instead.`;
+                    break;
+                case 'MULT':
+                    message = `Expected a multiplicity indicator (one/many), but found '${value}' instead.`;
+                    break;
+                case 'A':
+                    message = `Expected the word 'a', but found '${value}' instead.`;
+                    break;
+                case 'COMMA':
+                    message = `Expected a comma between items in the list, but found '${value}' instead.`;
+                    break;
+                default:
+                    message = `Expected ${expected}, but found '${value}' instead.`;
+            }
+        }
         throw new Error(message);
     }
 
@@ -59,7 +106,7 @@ export function parse(tokens) {
             } else {
                 status = 'ERROR';
                 if (tokens[pos + 1]){
-                message = `Unexpected word after ${lookahead?.value}: '${tokens[pos + 1]?.value}' expected 'has' or 'can'`;
+                message = `Unexpected word after ${lookahead?.value}: found '${tokens[pos + 1]?.value}' expected 'has' or 'can'`;
                 }else{
                 message = `Expected 'has' or 'can' after ${lookahead?.value}`;
             }
@@ -69,7 +116,11 @@ export function parse(tokens) {
             node = parseREL();
         } else {
             status = 'ERROR';
-            message = `Invalid SENT at token: ${JSON.stringify(lookahead)}`;
+            if (!lookahead) {
+                message = `Empty sentence found. Each sentence should start with either 'a' for definitions/inheritance, a name followed by 'has'/'can', or 'one'/'many' for relationships.`;
+            } else {
+                message = `Invalid sentence start: '${lookahead.value}'. A sentence should start with either 'a' for definitions/inheritance, a name followed by 'has'/'can', or 'one'/'many' for relationships.`;
+            }
             throw new Error(message);
         }
         node.children.push(match("DOT"));
