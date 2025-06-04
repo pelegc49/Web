@@ -170,6 +170,7 @@ export const textAreaSection = "w-1/3";
 export const textAreaWrapper = "relative";
 export const errorMessage = "absolute bottom-2 left-2 right-2 text-red-500 text-lg";
 export const saveButtonWrapper = "absolute top-2 right-2";
+export const downloadButtonWrapper = "absolute top-14 right-2"
 export const saveButton = dark => `p-2 rounded-full transition-colors ${
     dark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
 }`;

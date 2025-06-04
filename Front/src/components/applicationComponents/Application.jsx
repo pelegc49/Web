@@ -203,6 +203,19 @@ export default function Application() {
                                 </div>
                             </div>
                         </div>
+                        <div className={styles.downloadButtonWrapper}>
+                            <div className={styles.tooltipContainer()}>
+                                <button 
+                                    onClick={getPhoto}
+                                    className={styles.saveButton(darkMode)}
+                                >
+                                    <img src={download} alt="download" className={styles.saveButtonIcon} />
+                                </button>
+                                <div className={styles.saveButtonTooltip(darkMode)}>
+                                    Download project
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.diagramSection}>
@@ -217,11 +230,6 @@ export default function Application() {
                         <MiniMap className='toHide'/>
                         <Controls className='toHide'/>
                         <Background />
-                        <Panel position='top-right' className='toHide'>
-                            <button onClick={getPhoto}>
-                                <img src={download} width={'40px'} alt="download as image" />
-                            </button>
-                        </Panel>
                     </ReactFlow>
                 </div>
                 <SaveProject 
