@@ -163,3 +163,43 @@ export const toolbarTooltip = dark =>
    py-1 px-3 rounded-md shadow-lg text-sm whitespace-nowrap z-50 ${
     dark ? "bg-gray-700 text-gray-100" : "bg-white text-gray-800 border border-gray-200"
   }`;
+
+// Application component styles
+export const applicationContainer = dark => `w-full flex ${dark ? 'bg-gray-900' : 'bg-gray-100'}`;
+export const textAreaSection = "w-1/3";
+export const textAreaWrapper = "relative";
+export const errorMessage = "absolute bottom-2 left-2 right-2 text-red-500 text-lg";
+export const saveButtonWrapper = "absolute top-2 right-2";
+export const downloadButtonWrapper = "absolute top-14 right-2"
+export const saveButton = dark => `p-2 rounded-full transition-colors ${
+    dark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
+}`;
+export const saveButtonIcon = "w-6 h-6";
+export const saveButtonTooltip = dark => `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 
+  transition-opacity duration-200 right-full mr-2 top-1/2 -translate-y-1/2 
+  py-1 px-2 rounded text-sm whitespace-nowrap z-50 ${
+    dark ? "bg-gray-700 text-gray-100" : "bg-white text-gray-800 border border-gray-200"
+} shadow-md`;
+export const diagramSection = "w-2/3";
+export const loginMessage = "w-full h-full flex items-center justify-center";
+
+// SaveProject component styles
+export const saveProjectModal = "fixed inset-0 backdrop-filter backdrop-blur-sm bg-black/30 flex justify-center items-center transition-all duration-300";
+export const saveProjectContent = dark => `p-8 rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 ${
+    dark ? 'bg-gray-800/95 text-white' : 'bg-white/95 text-gray-800'
+}`;
+export const saveProjectTitle = "text-2xl font-bold mb-6 text-center";
+export const saveProjectInputGroup = "mb-6";
+export const saveProjectLabel = "block text-sm font-medium mb-2 tracking-wide";
+export const saveProjectInput = dark => `w-full p-3 rounded-lg border transition-all duration-200 focus:ring-2 focus:ring-offset-2 ${
+    dark 
+        ? 'bg-gray-700/50 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500' 
+        : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:border-blue-600 focus:ring-blue-600'
+}`;
+export const saveProjectButtonGroup = "flex justify-end gap-4";
+export const saveProjectCancelButton = dark => `px-5 py-2.5 rounded-lg font-medium transition-all duration-200 ${
+    dark 
+        ? 'bg-gray-700 hover:bg-gray-600 text-gray-200 hover:text-white' 
+        : 'bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900'
+}`;
+export const saveProjectSaveButton = "px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 transform hover:scale-105";
