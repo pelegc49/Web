@@ -239,7 +239,9 @@ export default function HistoryList() {
 
                     <div className={historyButtonsContainer}>
                         {project.image && (
-                            <img src={project.image} width={'100px'} alt={`${project.name} thumbnail`} />
+                            <img src={project.image} width={'100px'} 
+                            alt={`${project.name} thumbnail`}
+                        className="rounded-lg" />
                         )}
                         <span className={historyItemText(darkMode)}>
                             {project.name}
