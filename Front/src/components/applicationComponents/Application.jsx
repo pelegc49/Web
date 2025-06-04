@@ -147,7 +147,7 @@ export default function Application() {
         })
         try {
             console.log(2);
-            const data = await domtoimage.toPng(Canvas);
+            const data = await domtoimage.toPng(Canvas,{bgcolor:"#000000"});
             console.log(3);
             setImageData(e => data);
             if (download) {

@@ -99,7 +99,7 @@ export const historyItemContainer = dark => `p-3 rounded-lg border ${dark ? "bg-
 
 export const historyItemText = dark => dark ? "text-gray-200" : "text-gray-700";
 
-export const historyButtonsContainer = "flex space-x-2";
+export const historyButtonsContainer = "flex space-x-2 items-center";
 
 export const historyOpenButton = dark => `px-2 py-1 text-xs rounded-md ${dark ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800"}`;
 
