@@ -17,10 +17,10 @@ const router = createBrowserRouter([{
   path: '/',
   element: <App />,
   children: [
-      { path: '/home', element: <HomePage /> },
-      { path: '/user', element: <UserProfile /> },
-      { path: '/app', element: <Application /> },
-      { path: '/help', element: <Help />, children: [
+      { path: 'home', element: <HomePage /> },
+      { path: 'user', element: <UserProfile /> },
+      { path: 'app', element: <Application /> },
+      { path: 'help', element: <Help />, children: [
         {
           path: 'sign-up',
           element: <SignUpHelp />,
@@ -35,9 +35,29 @@ const router = createBrowserRouter([{
         }
         ]
       },
-      {path: '/history', element: <History />}
+      {path: 'history', element: <History />},
+      {path: '*', element: <App />}
   ],
-},])
+},]);
+
+const getAllPaths = (routes, parentPath = '') => {
+  let paths = [];
+  
+  routes.forEach(route => {
+    const routePath = route.path?.startsWith('/') ? route.path.slice(1) : route.path || '';
+    const fullPath = parentPath ? `${parentPath}/${routePath}` : `/${routePath}`;
+    paths.push(fullPath.replace(/\/+/g, '/'));
+    
+    if (route.children) {
+      paths = [...paths, ...getAllPaths(route.children, fullPath)];
+    }
+  });
+  
+  return paths;
+};
+
+export const allPaths = getAllPaths(router.routes);
+
 
 createRoot(document.getElementById('root')).render(
   <>

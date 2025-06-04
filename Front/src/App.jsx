@@ -1,18 +1,18 @@
 import './index.css'
 import Header from "./components/Header.jsx"
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate,useLocation } from 'react-router-dom'
 import { createContext, useEffect, useState } from 'react'
 import Login from "./components/userComponents/Login.jsx"
 import SignUp from "./components/userComponents/SignUp.jsx"
 import Logout from "./components/userComponents/Logout.jsx"
-
+import {allPaths} from './main.jsx'
 export const darkModeContext = createContext({darkMode: true, toggleDarkMode: () => {}});
 
 function App() {
     const currentDarkMode = localStorage.getItem('darkMode') === 'true' ? true : false;
     const [isDark, setDark] = useState(currentDarkMode);
     const [user, setUser] = useState(null);
-    
+    const location = useLocation()
     const toggleDarkMode = () => {
         setDark(d=>!d);
     }
@@ -28,7 +28,8 @@ function App() {
     const navigate = useNavigate()
     
     useEffect(() => {
-        navigate('/home');
+        if(location.pathname ==="/" || allPaths.indexOf(location.pathname) === -1)
+            navigate('/home');
     }, []);
 
     // Simple handlers for showing/hiding modals
