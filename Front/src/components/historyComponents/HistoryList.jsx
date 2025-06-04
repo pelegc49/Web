@@ -235,13 +235,16 @@ export default function HistoryList() {
     return (
         <div className={historyListContainer}>
             {projects.map((project, index) => (
-                <div
-                    key={index}
-                    className={historyItemContainer(darkMode)}
-                >
-                    <span className={historyItemText(darkMode)}>
-                        {project.name}
-                    </span>
+                <div key={index} className={historyItemContainer(darkMode)}>
+
+                    <div className={historyButtonsContainer}>
+                        {project.image && (
+                            <img src={project.image} width={'100px'} alt={`${project.name} thumbnail`} />
+                        )}
+                        <span className={historyItemText(darkMode)}>
+                            {project.name}
+                        </span>
+                    </div>
                     <div className={historyButtonsContainer}>
                         <Link to="/app" state={{ ...project }}>
                             <button className={historyOpenButton(darkMode)}>
@@ -252,7 +255,6 @@ export default function HistoryList() {
                             className={historyDeleteButton(darkMode)}
                             onClick={() => {
                                 axios.delete(`api/projects/${user.uid}/${project.name}`).then(res => setProjects(Object.values(res.data))).catch(e => { console.log(e); })
-                                // setProjects(projects.filter(p => p !== project))
                             }
                             }
                         >

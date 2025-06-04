@@ -26,11 +26,11 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                 }
                 onClose();
             } else {
-                setError(res.data.message || 'Login failed');
+                setError('Login failed');
             }
         } catch (err) {
             setError(
-                err.response?.data?.message || "Login failed."
+                "Login failed."
             );
         } finally {
             setIsLoading(false);
