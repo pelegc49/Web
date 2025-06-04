@@ -177,4 +177,5 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
             </form>
         </div>
     );
+
 }

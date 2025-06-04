@@ -163,3 +163,38 @@ export const toolbarTooltip = dark =>
    py-1 px-3 rounded-md shadow-lg text-sm whitespace-nowrap z-50 ${
     dark ? "bg-gray-700 text-gray-100" : "bg-white text-gray-800 border border-gray-200"
   }`;
+export const sideModalContainer = () =>
+  "fixed top-[60px] right-[30px] z-50 flex flex-col items-end";
+
+export const formWrapper = dark =>
+  `${dark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-800'} ` +
+  "rounded-xl shadow-xl p-6 w-72 space-y-4";
+
+export const formTitle = () =>
+  "text-xl font-semibold";
+
+export const formLabel = () =>
+  "block text-sm font-medium mb-1";
+
+export const formInput = dark =>
+  `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ` +
+  (dark
+    
+    ? 'border-gray-600 bg-gray-700 text-gray-100'
+    : 'border-gray-300 bg-gray-50 text-gray-800');
+
+export const primaryButton = (dark, loading) =>
+  `flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ` +
+  (loading
+    ? 'bg-gray-400 cursor-not-allowed'
+    : 'bg-blue-600 hover:bg-blue-700');
+
+export const cancelButton = dark =>
+  `flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ` +
+  (dark ? 'bg-gray-600 hover:bg-gray-700' : 'bg-gray-500 hover:bg-gray-600');
+
+export const textLink = () =>
+  "text-blue-500 hover:underline text-sm";
+
+export const messageText = isError =>
+  `text-sm ${isError ? 'text-red-600' : 'text-green-600'}`;
