@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext} from 'react'
 import TextArea from './TextArea.jsx'
-import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls } from '@xyflow/react'
+import { ReactFlow, Background, useEdgesState, useNodesState, MiniMap, Controls, Panel } from '@xyflow/react'
 import "@xyflow/react/dist/style.css"
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { objectify } from '../../services/Objectifier.jsx';
@@ -9,16 +9,25 @@ import { lexer } from '../../services/Tokenizer.jsx';
 import { darkModeContext } from '../../App.jsx';
 import LabelledEdge from './../diagramComponents/LabelledEdge.jsx';
 import Toolbar from './Toolbar.jsx'
+import domtoimage from 'dom-to-image';
+import SaveProject from './SaveProject.jsx'
+import { save , download} from '../../assets/svgs.jsx'
+import * as styles from '../../assets/Style.jsx'
+import axios from 'axios';
 
 export default function Application() {
     const { user } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
-    const [ project, setProject ] = useState({ loadEdges: [], loadNodes: [], loadKnownPositions: {}, loadText: "" })
     const location = useLocation();
     const [inputTime, setInputTime] = useState(null);
     const [text, setText] = useState("");
     const [error, setError] = useState(null);
     const [knownPositions, setKnownPositions] = useState({});
+    const [imageData, setImageData] = useState("");
+    const [message, setMessage] = useState(null);
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges] = useEdgesState([]);
 
     const edgeTypes = {
         labelled: LabelledEdge
@@ -69,28 +78,82 @@ export default function Application() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text, knownPositions]);
 
-    // Process initial project text when component loads
-    // useEffect(() => {
-    //     if (projectText) {
-    //         // Trigger the text processing immediately for the initial text
-    //         const tokens = lexer(projectText);
-    //         if (!tokens.status || tokens.status !== 'ERROR') {
-    //             const parsed = parse(tokens.data);
-    //             if (!parsed.status || parsed.status !== 'ERROR') {
-    //                 const objectified = objectify(parsed.data);
-    //                 if (!objectified.status || objectified.status !== 'ERROR') {
-    //                     setNodes(objectified.nodes);
-    //                     setEdges(objectified.edges);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [projectText]);
+    function closeSaveWindow(){
+        setShowSaveModal(false)
+        setMessage(null)
+    }
 
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges] = useEdgesState([]);
+    function exportProject() {
+        nodes.map(e=>{
+            delete e.data.label;
+        })
+        return {
+            loadEdges:edges,
+            loadNodes:nodes,
+            loadKnownPositions:knownPositions,
+            loadText:text,
+        }
+    }
+    function saveProject(projName){
+        if(!projName.trim()){
+            setMessage({
+                color:"red-500",
+                text:"Please enter a valid project name"
+            })
+            return;
+        }
+        if(!text.trim()){
+            setMessage({
+                color:"red-500",
+                text:"Your project is blank"
+            })
+            return;
+        }
+        const project = exportProject();
+        axios.post('/api/projects',{
+            user,
+            project:{
+                name:projName,
+                ...project
+            }
+        }).then(()=>{
+            setMessage({
+                color:"green-400",
+                text:"Successfuly saved"
+            })
+            setTimeout(closeSaveWindow,1000)
+        }).catch((e)=>{
+            setMessage({
+                color:"red-500",
+                text:e
+            })
+        })
+    }
 
+    function getPhoto() {
+        const Canvas = document.getElementById("reactFlowCanvas");
+        document.querySelectorAll('.react-flow__panel').forEach(e=>{
+            e.style.display = 'none';
+        })
+        domtoimage.toPng(Canvas).then(data=>{
+            setImageData(data);
+            const a = document.createElement('a');
+            a.download = 'my-image-name.png'
+            a.href = data;
+            a.click();
+            return data;
+        }).catch(error=>{
+            setError("image generation failed");
+            console.log(error);
+        }).finally(()=>{
+            document.querySelectorAll('.react-flow__panel').forEach(e=>{
+              e.style.display = 'block';
+           })
+        })
+
+    }
+    
+    
     useEffect(() => {
         if(location.state?.loadText)
             setText(location.state.loadText)
@@ -100,20 +163,6 @@ export default function Application() {
             setEdges(location.state.loadEdges)
         if(location.state?.loadKnownPositions)
             setKnownPositions(location.state.loadKnownPositions)
-
-        // if (location.state?.project) {
-        //     // console.log("123:", ...location.state.project)
-        //     setProject(e=>({loadText: location.state.project.loadText,
-        //         loadNodes: location.state.project.loadNodes,
-        //         loadEdges: location.state.project.loadEdges,
-        //         loadKnownPositions: location.state.project.loadKnownPositions}));
-        //     console.log("project:", project);
-        //     setText(location.state.project.loadText)
-        //     // setNodes(location.state.project.loadNodes)
-        //     setEdges(location.state.project.loadEdges)
-        //     setKnownPositions(location.state.project.loadKnownPositions)
-        //     console.log({text,nodes,edges,knownPositions})
-        // }
     }, [location.state])
 
     function handleNodeChange(change) {
@@ -121,7 +170,6 @@ export default function Application() {
         // Only handle position changes
         change = change[0];
         if (change.type === "position") {
-            console.log(JSON.stringify({ edges, nodes, knownPositions, text }))
             setKnownPositions(k => ({ ...k, [change.id]: change.position }));
         }
     }
@@ -131,39 +179,72 @@ export default function Application() {
     }
     return (
         <>
-            <div className='w-full flex' hidden={!user}>
+            <div className={styles.applicationContainer(darkMode)} hidden={!user}>
                 <Toolbar />
-                <div className='w-1/3'>
-                    <TextArea onContentChange={handleChange} initialValue={text}>
-                        {error && (
-                            <div className="absolute bottom-2 left-2 right-2 text-red-500 text-lg">
-                                {error}
+                <div className={styles.textAreaSection}>
+                    <div className={styles.textAreaWrapper}>
+                        <TextArea onContentChange={handleChange} initialValue={text}>
+                            {error && (
+                                <div className={styles.errorMessage}>
+                                    {error}
+                                </div>
+                            )}
+                        </TextArea>
+                        <div className={styles.saveButtonWrapper}>
+                            <div className={styles.tooltipContainer()}>
+                                <button 
+                                    onClick={() => setShowSaveModal(true)}
+                                    className={styles.saveButton(darkMode)}
+                                >
+                                    <img src={save} alt="Save" className={styles.saveButtonIcon} />
+                                </button>
+                                <div className={styles.saveButtonTooltip(darkMode)}>
+                                    Save project
+                                </div>
                             </div>
-                        )}
-                    </TextArea>
-
+                        </div>
+                        <div className={styles.downloadButtonWrapper}>
+                            <div className={styles.tooltipContainer()}>
+                                <button 
+                                    onClick={getPhoto}
+                                    className={styles.saveButton(darkMode)}
+                                >
+                                    <img src={download} alt="download" className={styles.saveButtonIcon} />
+                                </button>
+                                <div className={styles.saveButtonTooltip(darkMode)}>
+                                    Download project
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className='w-2/3'>
+                <div className={styles.diagramSection}>
                     <ReactFlow
+                        id='reactFlowCanvas'
                         nodes={nodes}
                         edges={edges}
                         onNodesChange={handleNodeChange}
                         fitView
                         edgeTypes={edgeTypes}
                         colorMode={darkMode ? "dark" : "light"}>
-                        <MiniMap />
-                        <Controls />
+                        <MiniMap className='toHide'/>
+                        <Controls className='toHide'/>
                         <Background />
-
                     </ReactFlow>
                 </div>
+                <SaveProject 
+                    open={showSaveModal} 
+                    onClose={closeSaveWindow}
+                    onSave={saveProject}
+                    msg={message}
+                />
             </div>
-            <div hidden={user} className='w-full h-full flex items-center justify-center'>
-                <div className='w-full h-full flex items-center justify-center'>
+            <div hidden={user} className={styles.loginMessage}>
+                <div className={styles.loginMessage}>
                     Please log in to create a diagram.
                 </div>
             </div>
-        </>
+       </>
     )
 }
 
