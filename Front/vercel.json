@@ -2,6 +2,6 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://web-kappa-beryl.vercel.app/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html/$1" }
+    { "source": "/(.*)", "destination": "src/main.jsx/$1" }
   ]
 }
