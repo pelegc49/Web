@@ -9,7 +9,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState('');
     const [forgotMsg, setForgotMsg] = useState('');
-    //check
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
