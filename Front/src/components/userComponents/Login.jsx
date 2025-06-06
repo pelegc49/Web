@@ -44,7 +44,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
             const res = await axios.post('/api/users/forgot-password', { email: forgotEmail });
             setForgotMsg(res.data.message);
         } catch (err) {
-            setForgotMsg(err.response?.data?.message || "Failed to send reset email.");
+            setForgotMsg("Failed to send reset email.");
         }
     };
 

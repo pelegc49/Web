@@ -6,7 +6,6 @@ export default function TextArea({ onContentChange, placeholder, initialValue = 
   useEffect(()=>{
     setContent(initialValue)
   },[initialValue])
-  console.log(content);
   const handleChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);

@@ -29,7 +29,12 @@ export default function ChangePasswordModal({ onClose, user }) {
       });
       setMsg(res.data.message);
     } catch (err) {
-      setMsg(err.response?.data?.message || "Failed to change password.");
+      console.log(err);
+      if(err.response?.data?.message?.includes('auth/invalid-credential')){
+        setMsg("Old password is incorrect.");
+      }else{
+        setMsg("Failed to change password.");
+    }
     }
     setLoading(false);
   };

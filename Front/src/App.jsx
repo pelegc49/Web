@@ -62,7 +62,7 @@ function App() {
         setUser(userData);
         alert('login successful');
         console.log('Authentication successful:', userData);
-        // You can add additional logic here like redirecting to a dashboard
+        
     };
 
     return (
