@@ -54,7 +54,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         setError('');
         setShowForgot(false);
         setForgotEmail('');
-        setForgotMsg('');
+        setForgotMsg(''); // <-- Clear the forgot password message here
         onClose();
     };
 
@@ -168,7 +168,10 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                 {showForgot && (
                     <button
                         type="button"
-                        onClick={() => setShowForgot(false)}
+                        onClick={() => {
+                            setShowForgot(false);
+                            setForgotMsg(''); // <-- Clear the message here as well
+                        }}
                         className="text-blue-600 hover:underline text-sm"
                     >
                         Back to login
