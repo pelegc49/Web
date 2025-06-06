@@ -98,7 +98,7 @@ export default function SignUp({ open, onClose, onSuccess }) {
                 onClose();
             }, 1500);
         } catch (err) {
-            setError(err.response?.data?.message || "Signup failed.");
+            setError("Signup failed.");
         } finally {
             setIsLoading(false);
         }

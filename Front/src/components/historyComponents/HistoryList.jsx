@@ -239,7 +239,7 @@ export default function HistoryList() {
 
                     <div className={historyButtonsContainer}>
                         {project.image && (
-                            <img src={project.image} width={'100px'} 
+                            <img src={project.image} width={'200px'} 
                             alt={`${project.name} thumbnail`}
                         className="rounded-lg" />
                         )}

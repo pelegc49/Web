@@ -8,16 +8,12 @@ export const Router = express.Router()
 Router.delete("/:uid/:projName",(req,res)=>{
     
     const {uid,projName} = req.params;
-    console.log(uid,projName);
-    
     const data = doc(db,"projects",uid);
     getDoc(data).then(d=>{
         if(d.exists()){
             const projects = d.data();
-            console.log(projects?.[projName])
             if(projects?.[projName]){
                 delete projects?.[projName];
-                console.log(projects);
                 setDoc(data,projects)
                 res.status(201).json(projects)
             }else{
@@ -49,7 +45,6 @@ Router.get("/:uid",(req,res)=>{
 
 Router.post("/",(req,res)=>{
     const data = doc(db,"projects",req.body.user.uid);
-    console.log(JSON.stringify(req.body.project,1,1));
     
     getDoc(data).then(d=>{
         if(d.exists()){

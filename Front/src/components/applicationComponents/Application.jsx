@@ -110,10 +110,8 @@ export default function Application() {
             return;
         }
         const project = exportProject();
-        console.log(1);
 
         const img = await getPhoto(false);
-        console.log(img);
 
         axios.post('/api/projects', {
             user,
@@ -123,7 +121,6 @@ export default function Application() {
                 ...project
             }
         }).then(() => {
-            console.log(6);
             setMessage({
                 color: "green-400",
                 text: "Successfuly saved"
@@ -146,9 +143,7 @@ export default function Application() {
             e.style.display = 'none';
         })
         try {
-            console.log(2);
             const data = await domtoimage.toPng(Canvas,{bgcolor:"#000000"});
-            console.log(3);
             setImageData(e => data);
             if (download) {
                 const a = document.createElement('a');
@@ -156,7 +151,6 @@ export default function Application() {
                 a.href = data;
                 a.click();
             }
-            console.log(4);
 
             return data;
         } catch (error) {
