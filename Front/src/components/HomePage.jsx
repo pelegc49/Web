@@ -1,41 +1,32 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import * as styles from "../assets/Style.jsx";
 import { darkModeContext } from "../App.jsx";
 import { createNew } from '../assets/svgs.jsx';
-import ChangePassword from './userComponents/ChangePassword.jsx'; // Adjust path if needed
 
 export default function HomePage() {
   const { darkMode } = useContext(darkModeContext);
   const { onLoginClick, onSignUpClick, user } = useOutletContext();
-  const [showChangePassword, setShowChangePassword] = useState(false);
 
-  // If user is logged in, show welcome screen
-  if (user) {
-    return (
-      <div className={styles.pageContainer(darkMode)}>
-        <div className={styles.contentContainer(darkMode)}>
-          <h1 className={styles.title(darkMode)}>
-            Welcome, <span className="text-blue-500">{user.email}</span>
-          </h1>
+  return (
+    <div className={styles.pageContainer(darkMode)}>
+      <div className={styles.contentContainer(darkMode)}>
+        <h1 className={styles.title(darkMode)}>
+          {user
+            ? <>Welcome, <span className="text-blue-500">{user.email}</span></>
+            : "Welcome to Text to Class Diagram!"
+          }
+        </h1>
+        {user && (
           <div className={styles.buttonGroup(darkMode)}>
             <Link className={styles.icon} to="/app" title="Create new diagram">
               <img width="30px" src={createNew} alt="Create new diagram" />
             </Link>
+            <div className="mt-2 text-sm text-gray-600 dark:text-gray-300 text-center w-full">
+              Create a new diagram!
+            </div>
           </div>
-          <div className={styles.paragraph(darkMode)}>
-            Click the + to create a new diagram.
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  // If not logged in, show the original landing page
-  return (
-    <div className={styles.pageContainer(darkMode)}>
-      <div className={styles.contentContainer(darkMode)}>
-        <h1 className={styles.title(darkMode)}>Welcome to Text to Class Diagram!</h1>
+        )}
         <p className={styles.paragraph(darkMode)}>
           Our tool lets you easily and quickly convert your text descriptions into clear, structured Class Diagrams. Simply upload or input your text, and get a detailed diagram representing the classes, attributes, and their relationships.
         </p>
@@ -45,14 +36,16 @@ export default function HomePage() {
         <p className={styles.paragraph(darkMode)}>
           Get started now — convert your text to Class Diagram and use it directly in your project!
         </p>
-        <div className={styles.buttonGroup(darkMode)}>
-          <button className={styles.loginButton(darkMode)} onClick={onLoginClick}>
-            Login
-          </button>
-          <button className={styles.signUpButton(darkMode)} onClick={onSignUpClick}>
-            Sign Up
-          </button>
-        </div>
+        {!user && (
+          <div className={styles.buttonGroup(darkMode)}>
+            <button className={styles.loginButton(darkMode)} onClick={onLoginClick}>
+              Login
+            </button>
+            <button className={styles.signUpButton(darkMode)} onClick={onSignUpClick}>
+              Sign Up
+            </button>
+          </div>
+        )}
         <div className={styles.aboutUsContainer(darkMode)}>
           <h2 className={styles.aboutUsTitle(darkMode)}>About Us</h2>
           <p className={styles.aboutUsParagraph(darkMode)}>
