@@ -236,3 +236,18 @@ export const welcomeScreenSignUpText = dark =>
 
 export const welcomeScreenSignUpLink = 
   "text-blue-500 hover:underline";
+
+export const modalContainer = dark =>
+  `bg-white ${dark ? "dark:bg-gray-800" : ""} text-gray-800 ${dark ? "dark:text-gray-100" : ""} rounded-xl shadow-xl p-6 w-80`;
+
+export const input = dark =>
+  `w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400" : ""}`;
+
+export const label = dark =>
+  `block text-sm font-medium mb-1 ${dark ? "text-gray-200" : "text-gray-700"}`;
+
+export const buttonPrimary = dark =>
+  `flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ${dark ? "bg-blue-700 hover:bg-blue-800" : "bg-blue-600 hover:bg-blue-700"}`;
+
+export const buttonSecondary = dark =>
+  `flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ${dark ? "bg-gray-600 hover:bg-gray-700" : "bg-gray-500 hover:bg-gray-600"}`;

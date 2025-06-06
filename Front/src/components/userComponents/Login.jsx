@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { darkModeContext } from '../../App.jsx';
 
 export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
+    const { darkMode } = useContext(darkModeContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -29,9 +31,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                 setError('Login failed');
             }
         } catch (err) {
-            setError(
-                "Login failed."
-            );
+            setError("Login failed.");
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +54,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         setError('');
         setShowForgot(false);
         setForgotEmail('');
-        setForgotMsg(''); // <-- Clear the forgot password message here
+        setForgotMsg('');
         onClose();
     };
 
@@ -71,48 +71,62 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
     if (!open) return null;
 
     return (
-        <div className="fixed top-16 right-6 z-50 flex flex-col items-end">
+        <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
             <form
                 onSubmit={showForgot ? handleForgotPassword : handleLogin}
-                className="bg-white p-6 rounded-xl shadow-xl w-72 text-gray-800 space-y-4"
+                className={`
+                    w-96 rounded-xl shadow-xl p-8
+                    ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"}
+                `}
             >
-                <h2 className="text-xl font-semibold">
+                <h2 className="text-2xl font-bold mb-4">
                     {showForgot ? "Reset Password" : "Login"}
                 </h2>
 
                 {!showForgot && (
                     <>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Email</label>
-                            <input
-                                type="email"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                required
-                                disabled={isLoading}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Password</label>
-                            <input
-                                type="password"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                required
-                                disabled={isLoading}
-                            />
-                        </div>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            className={`
+                                w-full mb-3 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                ${darkMode
+                                    ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                                    : "bg-gray-50 border-gray-300 text-gray-800"}
+                            `}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className={`
+                                w-full mb-3 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                ${darkMode
+                                    ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                                    : "bg-gray-50 border-gray-300 text-gray-800"}
+                            `}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        />
                     </>
                 )}
 
                 {showForgot && (
                     <div>
-                        <label className="block text-sm font-medium mb-1">Enter your email</label>
+                        <label className={`block text-sm font-medium mb-1 ${darkMode ? "text-gray-200" : "text-gray-700"}`}>Enter your email</label>
                         <input
                             type="email"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`
+                                w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                                ${darkMode
+                                    ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                                    : "bg-gray-50 border-gray-300 text-gray-800"}
+                            `}
                             value={forgotEmail}
                             onChange={e => setForgotEmail(e.target.value)}
                             required
@@ -126,19 +140,24 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                     </div>
                 )}
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2 mt-4">
                     <button
                         type="submit"
-                        className={`flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+                        className={`
+                            flex-1 py-2 px-4 rounded-md text-white text-sm font-medium
+                            ${darkMode ? "bg-blue-700 hover:bg-blue-800" : "bg-blue-600 hover:bg-blue-700"}
+                        `}
                         disabled={isLoading}
                     >
                         {showForgot ? "Send reset email" : isLoading ? "Logging in..." : "Login"}
                     </button>
-
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="flex-1 py-2 px-4 rounded-md bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium"
+                        className={`
+                            flex-1 py-2 px-4 rounded-md text-white text-sm font-medium
+                            ${darkMode ? "bg-gray-600 hover:bg-gray-700" : "bg-gray-500 hover:bg-gray-600"}
+                        `}
                         disabled={isLoading}
                     >
                         Cancel
@@ -150,7 +169,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                         <button
                             type="button"
                             onClick={handleSignUpClick}
-                            className="text-blue-600 hover:underline text-sm"
+                            className="text-blue-500 hover:underline text-sm"
                             disabled={isLoading}
                         >
                             Sign Up
@@ -158,7 +177,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                         <button
                             type="button"
                             onClick={() => setShowForgot(true)}
-                            className="text-blue-600 hover:underline text-sm"
+                            className="text-blue-500 hover:underline text-sm"
                         >
                             Forgot password?
                         </button>
@@ -170,9 +189,9 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                         type="button"
                         onClick={() => {
                             setShowForgot(false);
-                            setForgotMsg(''); // <-- Clear the message here as well
+                            setForgotMsg('');
                         }}
-                        className="text-blue-600 hover:underline text-sm"
+                        className="text-blue-500 hover:underline text-sm"
                     >
                         Back to login
                     </button>
@@ -180,5 +199,4 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
             </form>
         </div>
     );
-
 }
