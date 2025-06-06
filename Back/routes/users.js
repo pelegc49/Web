@@ -6,6 +6,7 @@ import {auth} from '../services/firebase.js'; // Import Firebase auth functions
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { sendPasswordResetEmail } from 'firebase/auth';
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 export const Router = express.Router()
 
 // Dummy in-memory users
@@ -70,6 +71,33 @@ Router.post('/forgot-password', async (req, res) => {
     try {
         await sendPasswordResetEmail(auth, email);
         res.json({ success: true, message: "Password reset email sent." });
+    } catch (error) {
+        if (error.code === "auth/user-not-found") {
+            res.status(400).json({ success: false, message: "This email is not registered." });
+        } else {
+            res.status(400).json({ success: false, message: error.message });
+        }
+    }
+});
+
+Router.post('/change-password', async (req, res) => {
+    const { uid, oldPassword, newPassword } = req.body;
+    try {
+        // Find user by uid
+        const user = auth.currentUser;
+        if (!user || user.uid !== uid) {
+            return res.status(401).json({ success: false, message: "Unauthorized." });
+        }
+        // Re-authenticate
+        const credential = EmailAuthProvider.credential(user.email, oldPassword);
+        await reauthenticateWithCredential(user, credential);
+
+        if (oldPassword === newPassword) {
+            return res.status(400).json({ success: false, message: "New password must be different from the old password." });
+        }
+
+        await updatePassword(user, newPassword);
+        res.json({ success: true, message: "Password changed successfully." });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }

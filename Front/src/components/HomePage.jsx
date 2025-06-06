@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import * as styles from "../assets/Style.jsx";
 import { darkModeContext } from "../App.jsx";
 import { createNew } from '../assets/svgs.jsx';
+import ChangePassword from './userComponents/ChangePassword.jsx'; // Adjust path if needed
 
 export default function HomePage() {
   const { darkMode } = useContext(darkModeContext);
   const { onLoginClick, onSignUpClick, user } = useOutletContext();
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   // If user is logged in, show welcome screen
   if (user) {
@@ -28,7 +30,7 @@ export default function HomePage() {
       </div>
     );
   }
-
+  
   // If not logged in, show the original landing page
   return (
     <div className={styles.pageContainer(darkMode)}>
