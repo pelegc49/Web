@@ -16,7 +16,7 @@ import * as styles from '../../assets/Style.jsx'
 import axios from 'axios';
 
 export default function Application() {
-    const { user } = useOutletContext();
+    const { user, onLoginClick, onSignUpClick } = useOutletContext();
     const { darkMode } = useContext(darkModeContext);
     const location = useLocation();
     const [inputTime, setInputTime] = useState(null);
@@ -256,9 +256,29 @@ export default function Application() {
                     msg={message}
                 />
             </div>
-            <div hidden={user} className={styles.loginMessage}>
-                <div className={styles.loginMessage}>
-                    Please log in to create a diagram.
+            <div hidden={user} className={styles.welcomeScreenContainer(darkMode)}>
+                <div className={styles.welcomeScreenContent(darkMode)}>
+                    <h1 className={styles.welcomeScreenTitle}>Welcome to Text to Class Diagram</h1>
+                    <div className={styles.welcomeScreenDescription}>
+                        <p className={styles.welcomeScreenParagraph}>
+                            Transform your ideas into visual representations with our powerful UML diagramming tool.
+                        </p>
+                        <p className={styles.welcomeScreenSecondaryText}>
+                            Join us and bring your design concepts to life.
+                        </p>
+                    </div>
+                    
+                    <div className={styles.welcomeScreenButtonContainer}>
+                        <button 
+                            onClick={onLoginClick}
+                            className={styles.welcomeScreenSignInButton}
+                        >
+                            Sign In to Get Started
+                        </button>
+                        <p className={styles.welcomeScreenSignUpText(darkMode)}>
+                            New user? <button onClick={onSignUpClick} className={styles.welcomeScreenSignUpLink}>Create an account</button>
+                        </p>
+                    </div>
                 </div>
             </div>
         </>

@@ -203,3 +203,36 @@ export const saveProjectCancelButton = dark => `px-5 py-2.5 rounded-lg font-medi
         : 'bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900'
 }`;
 export const saveProjectSaveButton = "px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 transform hover:scale-105";
+
+// Welcome Screen styles
+export const welcomeScreenContainer = dark => 
+  "min-h-screen flex flex-col items-center justify-center p-8 text-center";
+
+export const welcomeScreenContent = dark => 
+  `max-w-2xl w-full p-8 rounded-xl shadow-2xl transform transition-all duration-300 ${
+    dark ? 'bg-gray-800/90 text-white' : 'bg-white/90 text-gray-800'
+  }`;
+
+export const welcomeScreenTitle = 
+  "text-3xl font-bold mb-6";
+
+export const welcomeScreenDescription = 
+  "mb-12";
+
+export const welcomeScreenParagraph = 
+  "text-lg mb-4 opacity-90";
+
+export const welcomeScreenSecondaryText = 
+  "text-md opacity-80";
+
+export const welcomeScreenButtonContainer = 
+  "flex flex-col items-center gap-4";
+
+export const welcomeScreenSignInButton = 
+  "px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 w-full max-w-md transform hover:scale-105";
+
+export const welcomeScreenSignUpText = dark => 
+  `text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`;
+
+export const welcomeScreenSignUpLink = 
+  "text-blue-500 hover:underline";
