@@ -165,7 +165,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                 </div>
 
                 {!showForgot && (
-                    <>
+                    <div className="flex gap-4 mt-4">
                         <button
                             type="button"
                             onClick={handleSignUpClick}
@@ -181,7 +181,7 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
                         >
                             Forgot password?
                         </button>
-                    </>
+                    </div>
                 )}
 
                 {showForgot && (
