@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
+import { darkModeContext } from '../../App.jsx';
 
 export default function SignUp({ open, onClose, onSuccess }) {
+    const { darkMode } = useContext(darkModeContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
@@ -118,13 +120,24 @@ export default function SignUp({ open, onClose, onSuccess }) {
     if (!open) return null;
     return (
         <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
-            <form onSubmit={handleSignUp} className="bg-white text-gray-800 rounded-lg shadow-lg p-6 w-72">
+            <form
+                onSubmit={handleSignUp}
+                className={`
+                    rounded-lg shadow-lg p-6 w-72
+                    ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"}
+                `}
+            >
                 <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
 
                 <label className="block mb-1 font-medium">Username:</label>
                 <input
                     type="text"
-                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    className={`
+                        w-full p-2 mb-3 border rounded
+                        ${darkMode
+                            ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                            : "bg-gray-50 border-gray-300 text-gray-800"}
+                    `}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -133,7 +146,12 @@ export default function SignUp({ open, onClose, onSuccess }) {
                 <label className="block mb-1 font-medium">Email:</label>
                 <input
                     type="email"
-                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    className={`
+                        w-full p-2 mb-3 border rounded
+                        ${darkMode
+                            ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                            : "bg-gray-50 border-gray-300 text-gray-800"}
+                    `}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -142,7 +160,12 @@ export default function SignUp({ open, onClose, onSuccess }) {
                 <label className="block mb-1 font-medium">Password:</label>
                 <input
                     type="password"
-                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    className={`
+                        w-full p-2 mb-3 border rounded
+                        ${darkMode
+                            ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                            : "bg-gray-50 border-gray-300 text-gray-800"}
+                    `}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -151,17 +174,28 @@ export default function SignUp({ open, onClose, onSuccess }) {
                 <label className="block mb-1 font-medium">Confirm Password:</label>
                 <input
                     type="password"
-                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    className={`
+                        w-full p-2 mb-3 border rounded
+                        ${darkMode
+                            ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                            : "bg-gray-50 border-gray-300 text-gray-800"}
+                    `}
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
                     required
                 />
 
                 <label className="block mb-1 font-medium">Captcha:</label>
+                {/* DO NOT CHANGE THE CANVAS OR ITS CLASSES */}
                 <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded blur-[3px]"></canvas>
                 <input
                     type="text"
-                    className="w-full p-2 mb-3 border border-gray-300 rounded bg-gray-50"
+                    className={`
+                        w-full p-2 mb-3 border rounded
+                        ${darkMode
+                            ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                            : "bg-gray-50 border-gray-300 text-gray-800"}
+                    `}
                     placeholder="Enter CAPTCHA"
                     value={captchaInput}
                     onChange={(e) => setCaptchaInput(e.target.value)}
