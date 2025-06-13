@@ -1,3 +1,7 @@
+// HistoryList.jsx
+// This component displays a list of the user's saved projects (history), allowing them to open or delete each project.
+// It fetches the projects from the backend using the user's UID, and handles loading, empty, and error states.
+
 import { React, useContext, useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { darkModeContext } from "../../App.jsx"
@@ -16,13 +20,20 @@ import {
 } from '../../assets/Style.jsx';
 
 export default function HistoryList() {
+    // Get dark mode state from context for styling
     const { darkMode } = useContext(darkModeContext);
+    // Get the current user object from the parent route context
     const { user } = useOutletContext();
+    // State to hold the list of projects
     const [projects, setProjects] = useState([]);
+    // State to track loading status
     const [loading, setLoading] = useState(true);
+
+    // Fetch the user's projects from the backend when the user changes
     useEffect(() => {
         if (user) {
             axios.get(`/api/projects/${user.uid}`).then((res) => {
+                // Convert the returned object to an array of projects
                 setProjects(Object.values(res.data))
                 setLoading(false)
                 console.log(res);
@@ -211,7 +222,7 @@ export default function HistoryList() {
         );
     }
 
-
+    // Show loading spinner while fetching projects
     if (loading) {
         return (
             <div className={historyLoadingContainer}>
@@ -220,6 +231,7 @@ export default function HistoryList() {
         );
     }
 
+    // If no projects found, show empty state and button to create a new project
     if (projects.length === 0) {
         return (
             <div className={historyEmptyContainer(darkMode)}>
@@ -232,11 +244,13 @@ export default function HistoryList() {
             </div>
         );
     }
+
+    // Render the list of projects
     return (
         <div className={historyListContainer}>
             {projects.map((project, index) => (
                 <div key={index} className={historyItemContainer(darkMode)}>
-
+                    {/* Project image and name */}
                     <div className={historyButtonsContainer}>
                         {project.image && (
                             <img src={project.image} width={'200px'} 
@@ -247,12 +261,15 @@ export default function HistoryList() {
                             {project.name}
                         </span>
                     </div>
+                    {/* Open and Delete buttons */}
                     <div className={historyButtonsContainer}>
+                        {/* Open button navigates to /app with project data in state */}
                         <Link to="/app" state={{ ...project }}>
                             <button className={historyOpenButton(darkMode)}>
                                 Open
                             </button>
                         </Link>
+                        {/* Delete button removes the project from backend and updates state */}
                         <button
                             className={historyDeleteButton(darkMode)}
                             onClick={() => {

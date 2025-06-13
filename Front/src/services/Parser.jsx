@@ -1,23 +1,32 @@
-// Grammar rules
+// Parser.jsx
+// This file implements a hand-written recursive descent parser for the custom class diagram language.
+// It takes a list of tokens and produces a parse tree (AST) representing class definitions, attributes, methods, inheritance, and relationships.
+// The parser also provides detailed error messages for invalid or incomplete input.
+
+// Grammar rules for the supported language constructs.
 const prodRules = {
-    'START': ['SENT START','SENT'],
-    'SENT': ['DEF DOT','ATR DOT','MET DOT','INHER DOT','REL DOT'],
-    'DEF':['A ID IS A CLASS'],
-    'LIST': ['ID COMMA LIST','ID'],
-    'ATR': ['ID HAS LIST'],
-    'MET': ['ID CAN ID WITH LIST','ID CAN ID'],
-    'INHER':['A ID IS A ID'],
-    'REL':['MULT ID IS RELATED TO MULT ID'],
+    'START': ['SENT START','SENT'], // A program is a sequence of sentences
+    'SENT': ['DEF DOT','ATR DOT','MET DOT','INHER DOT','REL DOT'], // Each sentence ends with a dot
+    'DEF':['A ID IS A CLASS'], // Class definition
+    'LIST': ['ID COMMA LIST','ID'], // List of identifiers (attributes, params)
+    'ATR': ['ID HAS LIST'], // Attribute definition
+    'MET': ['ID CAN ID WITH LIST','ID CAN ID'], // Method definition (with/without params)
+    'INHER':['A ID IS A ID'], // Inheritance
+    'REL':['MULT ID IS RELATED TO MULT ID'], // Relationship
 }
 
+// Main parse function: entry point for parsing a list of tokens into an AST
 export function parse(tokens) {
-    let pos = 0;
-    let status = 'SUCCESS';
-    let message = '';
+    let pos = 0; // Current position in the token list
+    let status = 'SUCCESS'; // Parsing status
+    let message = ''; // Error message if parsing fails
+
+    // Look at the next token without consuming it
     function peek() {
         return tokens[pos];
     }
 
+    // Match and consume a token of the expected type, or throw an error with a helpful message
     function match(expectedType) {
         if (peek() && peek().type === expectedType) {
             return tokens[pos++];
@@ -74,6 +83,7 @@ export function parse(tokens) {
         throw new Error(message);
     }
 
+    // Try to match and consume a token of the expected type, or return null if not found
     function tryMatch(expectedType) {
         if (peek() && peek().type === expectedType) {
             return tokens[pos++];
@@ -81,6 +91,7 @@ export function parse(tokens) {
         return null;
     }
 
+    // Parse the root of the program: a sequence of sentences
     function parseSTART() {
         const children = [];
         while (pos < tokens.length) {
@@ -89,16 +100,19 @@ export function parse(tokens) {
         return { type: "START", children };
     }
 
+    // Parse a single sentence, dispatching to the correct rule based on the lookahead token
     function parseSENT() {
         const lookahead = peek();
         let node;
         if (lookahead?.type === "A") {
+            // Could be a class definition or inheritance
             if (tokens[pos + 4]?.type === "CLASS") {
                 node = parseDEF();
             } else {
                 node = parseINHER();
             }
         } else if (lookahead?.type === "ID") {
+            // Could be attribute or method definition
             if (tokens[pos + 1]?.type === "HAS") {
                 node = parseATR();
             } else if (tokens[pos + 1]?.type === "CAN") {
@@ -113,6 +127,7 @@ export function parse(tokens) {
                 throw new Error(message);
             }
         } else if (lookahead?.type === "MULT") {
+            // Relationship sentence
             node = parseREL();
         } else {
             status = 'ERROR';
@@ -123,10 +138,11 @@ export function parse(tokens) {
             }
             throw new Error(message);
         }
-        node.children.push(match("DOT"));
+        node.children.push(match("DOT")); // Every sentence must end with a dot
         return node;
     }
 
+    // Parse a class definition sentence
     function parseDEF() {
         return {
             type: "DEF",
@@ -140,6 +156,7 @@ export function parse(tokens) {
         };
     }
 
+    // Parse an attribute definition sentence
     function parseATR() {
         return {
             type: "ATR",
@@ -151,6 +168,7 @@ export function parse(tokens) {
         };
     }
 
+    // Parse a method definition sentence (with or without parameters)
     function parseMET() {
         const children = [
             match("ID"),
@@ -165,6 +183,7 @@ export function parse(tokens) {
         return { type: "MET", children };
     }
 
+    // Parse an inheritance sentence
     function parseINHER() {
         return {
             type: "INHER",
@@ -178,6 +197,7 @@ export function parse(tokens) {
         };
     }
 
+    // Parse a relationship sentence
     function parseREL() {
         return {
             type: "REL",
@@ -193,6 +213,7 @@ export function parse(tokens) {
         };
     }
 
+    // Parse a comma-separated list of identifiers
     function parseLIST() {
         const children = [match("ID")];
         while (tryMatch("COMMA")) {
@@ -200,6 +221,8 @@ export function parse(tokens) {
         }
         return { type: "LIST", children };
     }
+
+    // Try to parse the input and return the AST, or return error info if parsing fails
     try{
         return {status,message,data:parseSTART()};
     } catch(e){

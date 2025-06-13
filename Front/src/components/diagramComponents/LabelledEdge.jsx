@@ -1,6 +1,8 @@
+// LabelledEdge.jsx: Custom edge component for ReactFlow with labels at start and end
 import React from 'react';
 import { getSmoothStepPath, EdgeLabelRenderer, BaseEdge, getBezierPath} from '@xyflow/react';
 
+// EdgeLabel: Renders a label at a given transform position
 function EdgeLabel({ transform, label }){
     return (
     <div
@@ -12,6 +14,7 @@ function EdgeLabel({ transform, label }){
   );
 }
 
+// LabelledEdge: Draws a smooth edge with optional start and end labels
 export default function LabelledEdge({ id,
         sourceX,
         sourceY,
@@ -20,6 +23,7 @@ export default function LabelledEdge({ id,
         sourcePosition,
         targetPosition,
         data}) {
+        // Calculate the edge path using smooth step
         const [edgePath] = getSmoothStepPath({
         sourceX,
         sourceY,
@@ -29,7 +33,9 @@ export default function LabelledEdge({ id,
         targetPosition});   
         return (
             <>
+                {/* Draw the main edge */}
                 <BaseEdge id={id} path={edgePath} />
+                {/* Render labels at the start and end of the edge, if present */}
                 <EdgeLabelRenderer>
                 {
                     data.startLabel &&(

@@ -1,17 +1,22 @@
+// users.js
+// This file defines Express routes for user authentication and client management using Firebase Auth and Firestore.
+// It handles login, signup, password reset, password change, and adding clients.
+
 import express from 'express' 
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import { addClient } from '../services/firebase.js'; // Import your Firestore function
-import {auth} from '../services/firebase.js'; // Import Firebase auth functions
+import { addClient } from '../services/firebase.js'; // Firestore function to add a client
+import {auth} from '../services/firebase.js'; // Firebase Auth instance
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 export const Router = express.Router()
 
-// Dummy in-memory users
+// Dummy in-memory users (not used in production)
 const users = []
 
+// Example of a local signup route (commented out, replaced by Firebase Auth)
 // Router.post('/signup', (req, res) => {
 //     const { username, password } = req.body
 //     if (users.find(u => u.username === username)) {
@@ -20,7 +25,8 @@ const users = []
 //     users.push({ username, password })
 //     res.json({ success: true, user: { username } })
 // })
-//nw
+
+// Login route: authenticates user with Firebase Auth
 Router.post('/login', (req, res) => {
     const { email, password } = req.body
     signInWithEmailAndPassword(auth, email, password)
@@ -33,6 +39,7 @@ Router.post('/login', (req, res) => {
         });
 })
 
+// Add client route: adds a client to Firestore
 Router.post('/clients', async (req, res) => {
     const { name, email } = req.body;
     try {
@@ -48,6 +55,7 @@ Router.post('/clients', async (req, res) => {
 });
 
 
+// Signup route: creates a new user in Firebase Auth
 Router.post('/signup', async (req, res) => {
     const { email,password } = req.body;
     createUserWithEmailAndPassword(auth, email, password).then(
@@ -65,7 +73,7 @@ Router.post('/signup', async (req, res) => {
 });
 
 
-
+// Forgot password route: sends a password reset email using Firebase Auth
 Router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
     try {
@@ -80,6 +88,7 @@ Router.post('/forgot-password', async (req, res) => {
     }
 });
 
+// Change password route: re-authenticates and updates the user's password
 Router.post('/change-password', async (req, res) => {
     const { uid, oldPassword, newPassword } = req.body;
     try {
