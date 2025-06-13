@@ -1,9 +1,16 @@
+// WebHelp.jsx provides a getting started guide for new users
+// This component outlines the basic steps for using the application
+// It includes account creation, project creation, and class diagram design guidance
+
 import React, { useContext } from "react";
 import * as styles from "../../assets/Style.jsx";
 import { darkModeContext } from "../../App.jsx";
 import { Link } from 'react-router-dom';
 
+// WebHelp component presents a step-by-step guide for new users
+// It includes information about account setup, project creation, and accessing syntax help
 export default function WebHelp() {
+  // Get dark mode context for theming
   const { darkMode } = useContext(darkModeContext);
 
   return (

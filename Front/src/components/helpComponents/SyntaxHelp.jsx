@@ -1,8 +1,15 @@
+// SyntaxHelp.jsx provides comprehensive documentation for the UML diagram syntax
+// This component explains all available commands and syntax for creating class diagrams
+// It includes examples and detailed explanations for each diagram element type
+
 import React, { useContext } from "react";
 import * as styles from "../../assets/Style.jsx";
 import { darkModeContext } from "../../App.jsx";
 
+// SyntaxHelp component displays detailed syntax guide with examples
+// It covers class definitions, attributes, methods, relationships, and inheritance
 export default function SyntaxHelp() {
+    // Get dark mode context for theming
     const { darkMode } = useContext(darkModeContext);
     
     return (

@@ -1,8 +1,15 @@
+// SignUpHelp.jsx provides detailed instructions and guidance for the user registration process
+// This component explains account creation steps, password requirements, and verification process
+// It supports dark mode theming and provides clear, structured information sections
+
 import React, { useContext } from 'react';
 import * as styles from "../../assets/Style.jsx";
 import { darkModeContext } from "../../App.jsx";
 
+// SignUpHelp component displays comprehensive registration guidance
+// It includes sections for account creation, password requirements, and CAPTCHA verification
 export default function SignUpHelp(){
+  // Get dark mode context for theming
   const { darkMode } = useContext(darkModeContext);
 
   return (

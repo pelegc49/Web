@@ -1,3 +1,6 @@
+// This file contains the Toolbar component which displays a vertical toolbar with various UML modeling tools
+// Each tool is represented by an icon and has a tooltip that explains its usage syntax
+
 import React, { useContext } from 'react';
 import { darkModeContext } from '../../App';
 import {
@@ -17,9 +20,14 @@ import {
   tooltipContainer
 } from '../../assets/Style';
 
+// Toolbar component provides a vertical set of modeling tools with tooltips
+// It supports dark mode through context and displays icons for different UML operations
 export default function Toolbar() {
+  // Get dark mode state from context
   const { darkMode } = useContext(darkModeContext);
 
+  // Define the tools array with icons and their corresponding tooltip messages
+  // Each tool represents a different UML modeling operation
   const tools = [
     { icon: defining_classes, tooltip: "Add class: a <className> is a class." },
     { icon: inheritance, tooltip: "Add inheritance: a <className> is a <className>." },
