@@ -11,39 +11,39 @@ import { darkModeContext } from "../App.jsx";
 
 export default function Header({ onLoginClick, onLogout, user }) {
     const location = useLocation();
-    // Get dark mode state and toggle function from context
     const { darkMode, toggleDarkMode } = useContext(darkModeContext);
 
     return (
         <header className={headerContainer(darkMode)}>
-            {/* Logo links to home page */}
+            {/* Logo section: centered on mobile, left on desktop */}
             <Link to="/home">
                 <div className={logo}>
                     Tx2Class
                 </div>
             </Link>
-            <div>
-                <div className="flex items-center">
+            {/* Navigation icons: stack vertically on mobile, horizontally on desktop */}
+            <div className="flex flex-col md:flex-row items-center w-full md:w-auto gap-2 md:gap-0">
+                <div className="flex flex-row justify-center items-center w-full md:w-auto">
                     {/* Help icon: disables link if already on /help */}
                     <Link className={icon} to={location.pathname.startsWith("/help") ? "#" : "/help"} >
-                        <img width="30px" src={help} alt="help" />
+                        <img width="30px" height="30px" src={help} alt="help" />
                     </Link>
                     {/* Dark mode toggle icon: switches between sun/moon */}
                     <img onClick={_ => toggleDarkMode(d => !d)}
                         className={icon}
-                        width="30px" src={darkMode ? moon : sun}
+                        width="30px" height="30px" src={darkMode ? moon : sun}
                         alt={darkMode ? "Dark" : "Light"} />
                     {/* Create new project/app icon */}
                     <Link className={icon} to={"/app"} >
-                        <img width="30px" src={createNew} alt="app" />
+                        <img width="30px" height="30px" src={createNew} alt="app" />
                     </Link>
                     {/* History icon: navigates to project history */}
                     <Link className={icon} to={"/history"} >
-                        <img width="30px" src={history} alt="history" />
+                        <img width="30px" height="30px" src={history} alt="history" />
                     </Link>
                     {/* User icon: triggers login or logout depending on user state */}
                     <img className={icon}
-                        width="30px" src={guest_user} alt="UserPic"
+                        width="30px" height="30px" src={guest_user} alt="UserPic"
                         style={{ cursor: "pointer" }}
                         onClick={user ? onLogout : onLoginClick}
                     />

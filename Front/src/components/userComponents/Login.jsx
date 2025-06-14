@@ -71,11 +71,14 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
     if (!open) return null;
 
     return (
-        <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
+        // Responsive: full screen overlay and centered content on mobile, floating bubble on desktop
+        <div
+            className="fixed z-50 inset-0 flex items-center justify-center w-screen h-screen bg-black/30 sm:bg-transparent sm:top-[60px] sm:right-[30px] sm:left-auto sm:bottom-auto sm:w-auto sm:h-auto sm:items-end sm:justify-end"
+        >
             <form
                 onSubmit={showForgot ? handleForgotPassword : handleLogin}
                 className={`
-                    w-96 rounded-xl shadow-xl p-8
+                    w-full max-w-sm sm:w-96 rounded-xl shadow-xl p-6 sm:p-8
                     ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"}
                 `}
             >

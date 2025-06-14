@@ -16,9 +16,18 @@ export const methodText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray
 export const textAreaContainer = "w-full h-full flex relative justify-center";
 
 export const textArea = "flex-col w-full p-3 rounded-lg border border-gray-300 text-base font-sans h-[93vh] resize-none focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400 max-w-[95vw] mx-auto";
-export const headerContainer = dark => "p-4 h-[4rem] flex justify-between text-white duration-200 ease-in-out " + (dark ? "bg-gray-500" : "bg-gray-300");
-export const logo = "cursor-pointer text-black font-bold text-2xl duration-300 ease-in-out hover:opacity-30";
-export const icon = "cursor-pointer mx-1 duration-300 ease-in-out hover:opacity-30";
+export const headerContainer = dark =>
+  // Responsive: flex-col on mobile, flex-row on desktop, with padding and spacing
+  `p-4 h-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0 text-white duration-200 ease-in-out ` +
+  (dark ? "bg-gray-500" : "bg-gray-300");
+
+export const logo =
+  // Responsive: center on mobile, left on desktop
+  "cursor-pointer text-black font-bold text-2xl duration-300 ease-in-out hover:opacity-30 text-center md:text-left w-full md:w-auto";
+
+export const icon =
+  // Responsive: increase spacing and size on mobile
+  "cursor-pointer mx-2 md:mx-1 duration-300 ease-in-out hover:opacity-30 w-8 h-8 md:w-[30px] md:h-[30px]";
 
 // SyntaxHelp component styles
 export const helpTextContainer = dark => `w-full max-w-4xl mx-auto p-6 rounded-lg shadow-md ${dark ? "bg-gray-800" : "bg-white"}`;
@@ -80,9 +89,9 @@ export const signUpHelpNote = dark => `text-sm italic mt-3 p-3 rounded ${dark ? 
 export const signUpHelpFooter = dark => `mt-10 p-4 rounded-lg border ${dark ? "bg-gray-700 border-gray-600 text-blue-400" : "bg-blue-50 border-blue-100 text-blue-700"}`;
 
 // History component styles
-export const historyContainer = dark => `p-8 ${dark ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} min-h-screen`;
+export const historyContainer = dark => `min-h-screen w-full max-w-full overflow-x-hidden p-4 sm:p-8 box-border ${dark ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'} flex flex-col`;
 
-export const historyContent = dark => `mx-auto max-w-2xl p-6 rounded-lg shadow-md ${dark ? 'bg-gray-800' : 'bg-white'}`;
+export const historyContent = dark => `mx-auto max-w-2xl w-full p-6 rounded-lg shadow-md ${dark ? 'bg-gray-800' : 'bg-white'}`;
 
 export const historyHeader = "flex justify-between items-center mb-6 pb-2 border-b border-gray-200 dark:border-gray-600";
 
