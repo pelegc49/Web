@@ -4,6 +4,7 @@
 // The parser also provides detailed error messages for invalid or incomplete input.
 
 // Grammar rules for the supported language constructs.
+// unused but kept for reference
 const prodRules = {
     'START': ['SENT START','SENT'], // A program is a sequence of sentences
     'SENT': ['DEF DOT','ATR DOT','MET DOT','INHER DOT','REL DOT'], // Each sentence ends with a dot
@@ -39,6 +40,7 @@ export function parse(tokens) {
             const got = peek().type.toLowerCase();
             const value = peek().value;
             
+            // generate a specific error message based on the expected type
             switch (expectedType) {
                 case 'DOT':
                     message = `Missing dot at the end of the sentence. Each sentence must end with a dot.`;

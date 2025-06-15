@@ -29,9 +29,55 @@ export default function SignUp({ open, onClose, onSuccess }) {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // set font and fill style for the captcha text
         ctx.font = 'bold 24px Arial';
         ctx.fillStyle = '#333';
-        ctx.fillText(text, 10, 30);
+        let x,y,dx,dy;
+        x = 10;
+        // draw each letter of the captcha text with random rotation and position
+        for (let letter of text){
+            let alpha = Math.random()*Math.PI/2 - Math.PI/4;
+            let y = Math.random()*20+20;
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(alpha);
+            ctx.fillText(letter, 0, 0, 24);
+            ctx.restore();
+            x += 20;
+        }
+        // draw random lines for added complexity
+        x = 0;
+        y = 0;
+        dx = 0;
+        dy = 0;
+        for (let i = 0; i < 20; i++) {
+            // generate random coordinates for the line endpoints with a minimum distance
+            while ((x-dx)**2 + (y-dy)**2 < 1000) {
+                x = Math.random() * canvas.width;
+                y = Math.random() * canvas.height;
+                dx = Math.random() * canvas.width;
+                dy = Math.random() * canvas.height;
+            }
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(dx, dy);
+            ctx.strokeStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()*0.5+0.2})`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            x = 0;
+            y = 0;
+            dx = 0;
+            dy = 0;
+        }
+        // draw random characters for added complexity
+        ctx.font = 'bold 10px Arial';
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        for (let i = 0; i < 20; i++){
+            let x = Math.random() * canvas.width
+            let y = Math.random() * canvas.height;
+            // ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
+            ctx.fillText(chars.charAt(Math.floor(Math.random() * chars.length)),x,y)
+        }
     };
 
     const refreshCaptcha = () => {
@@ -188,7 +234,7 @@ export default function SignUp({ open, onClose, onSuccess }) {
 
                 <label className="block mb-1 font-medium">Captcha:</label>
                 {/* DO NOT CHANGE THE CANVAS OR ITS CLASSES */}
-                <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded blur-[3px]"></canvas>
+                <canvas ref={canvasRef} width="120" height="40" className="mb-2 bg-gray-100 border rounded" onClick={refreshCaptcha}></canvas>
                 <input
                     type="text"
                     className={`

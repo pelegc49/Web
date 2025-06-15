@@ -27,6 +27,7 @@ function App() {
 
     const navigate = useNavigate()
     
+    // if the path is not a defined route, navigate to the haome page
     useEffect(() => {
         if(location.pathname ==="/" || allPaths.indexOf(location.pathname) === -1)
             navigate('/home');

@@ -13,6 +13,7 @@ import WebHelp from './components/helpComponents/WebHelp.jsx'
 import Application from './components/applicationComponents/Application.jsx'
 import History from './components/historyComponents/History.jsx'
 
+// define the router with all routes
 const router = createBrowserRouter([{
   path: '/',
   element: <App />,
@@ -40,6 +41,7 @@ const router = createBrowserRouter([{
   ],
 },]);
 
+// Function to recursively get all paths from the router configuration
 const getAllPaths = (routes, parentPath = '') => {
   let paths = [];
   
@@ -58,7 +60,7 @@ const getAllPaths = (routes, parentPath = '') => {
 
 export const allPaths = getAllPaths(router.routes);
 
-
+// render the application with the router
 createRoot(document.getElementById('root')).render(
   <>
     <RouterProvider router={router} />
