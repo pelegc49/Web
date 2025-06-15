@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import HomePage from './components/HomePage.jsx'
-import UserProfile from './components/userComponents/UserProfile.jsx'
 import Help from './components/helpComponents/Help.jsx'
 import SignUpHelp from './components/helpComponents/SignUpHelp.jsx'
 import SyntaxHelp from './components/helpComponents/SyntaxHelp.jsx'
@@ -19,7 +18,6 @@ const router = createBrowserRouter([{
   element: <App />,
   children: [
       { path: 'home', element: <HomePage /> },
-      { path: 'user', element: <UserProfile /> },
       { path: 'app', element: <Application /> },
       { path: 'help', element: <Help />, children: [
         {
