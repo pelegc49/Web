@@ -29,7 +29,7 @@ export default function Help() {
 
   // Render the help navigation bar and content area
   return (
-    <div>
+    <div className='min-h-screen'>
       <nav className={toolbarContainer(darkMode)}>
         <div className={toolbarNav}>
           <Link to="web-help" className={toolbarLink(darkMode)}>Web Help</Link>
