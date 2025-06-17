@@ -5,6 +5,7 @@
 import React, { useContext } from "react";
 import * as styles from "../../assets/Style.jsx";
 import { darkModeContext } from "../../App.jsx";
+import {sushi } from "../../assets/svgs.jsx"; // Importing sushi SVG for special class representation
 
 // ClassNode component displays a single class node in the UML diagram
 // Props:
@@ -25,6 +26,9 @@ export default function ClassNode({ className, attributes, methods }) {
     <div className={styles.classNodeContainer(darkMode)}>
       <h2 className={`${styles.classNodeTitle(darkMode)} ${hasContent ? `border-b ${darkMode ? "border-gray-600" : "border-gray-200"}` : ""}`}>
         {className}
+      { className.toLowerCase() === "sushi" && (
+        <img src={sushi} alt="Sushi" className={styles.sushiImage(darkMode)} />
+      )}
       </h2>
       {hasAttributes && (
         <div className={`${hasMethods ? "mb-2" : ""}`}>
