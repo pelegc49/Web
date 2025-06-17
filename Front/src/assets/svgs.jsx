@@ -14,4 +14,4 @@ export const defining_methods = "https://www.svgrepo.com/show/510782/add-row.svg
 export const defining_attributes = "https://www.svgrepo.com/show/437077/minus-rectangle.svg"
 export const exclamation_mark = "https://www.svgrepo.com/show/479047/exclamation-mark.svg"
 export const comments = "https://www.svgrepo.com/show/532176/hashtag.svg"
-export const sushi = "sushi.svg" // Path to the sushi SVG file to serolve CORS issue while using the dom-to-image library
+export const sushi = "sushi.svg" // Path to the sushi SVG file to resolve CORS issue while using the dom-to-image library
