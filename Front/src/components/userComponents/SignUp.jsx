@@ -2,8 +2,15 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { darkModeContext } from '../../App.jsx';
 
+/**
+ * SignUp modal for user registration.
+ * Handles username, email, password, password confirmation, and captcha.
+ * Supports dark mode styling.
+ */
 export default function SignUp({ open, onClose, onSuccess }) {
     const { darkMode } = useContext(darkModeContext);
+
+    // State for form fields and UI
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
@@ -14,8 +21,13 @@ export default function SignUp({ open, onClose, onSuccess }) {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
 
+    // Ref for captcha canvas
     const canvasRef = useRef(null);
 
+    /**
+     * Generates a random captcha string.
+     * @returns {string} - The captcha text.
+     */
     const generateCaptchaText = () => {
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         let text = '';
@@ -25,6 +37,10 @@ export default function SignUp({ open, onClose, onSuccess }) {
         return text;
     };
 
+    /**
+     * Draws the captcha text on the canvas.
+     * @param {string} text - The captcha text to draw.
+     */
     const drawCaptcha = (text) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -32,12 +48,12 @@ export default function SignUp({ open, onClose, onSuccess }) {
         // set font and fill style for the captcha text
         ctx.font = 'bold 24px Arial';
         ctx.fillStyle = '#333';
-        let x,y,dx,dy;
+        let x, y, dx, dy;
         x = 10;
         // draw each letter of the captcha text with random rotation and position
-        for (let letter of text){
-            let alpha = Math.random()*Math.PI/2 - Math.PI/4;
-            let y = Math.random()*20+20;
+        for (let letter of text) {
+            let alpha = Math.random() * Math.PI / 2 - Math.PI / 4;
+            let y = Math.random() * 20 + 20;
             ctx.save();
             ctx.translate(x, y);
             ctx.rotate(alpha);
@@ -52,7 +68,7 @@ export default function SignUp({ open, onClose, onSuccess }) {
         dy = 0;
         for (let i = 0; i < 20; i++) {
             // generate random coordinates for the line endpoints with a minimum distance
-            while ((x-dx)**2 + (y-dy)**2 < 1000) {
+            while ((x - dx) ** 2 + (y - dy) ** 2 < 1000) {
                 x = Math.random() * canvas.width;
                 y = Math.random() * canvas.height;
                 dx = Math.random() * canvas.width;
@@ -61,7 +77,7 @@ export default function SignUp({ open, onClose, onSuccess }) {
             ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(dx, dy);
-            ctx.strokeStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()*0.5+0.2})`;
+            ctx.strokeStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 0.5 + 0.2})`;
             ctx.lineWidth = 2;
             ctx.stroke();
             x = 0;
@@ -72,26 +88,40 @@ export default function SignUp({ open, onClose, onSuccess }) {
         // draw random characters for added complexity
         ctx.font = 'bold 10px Arial';
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        for (let i = 0; i < 20; i++){
+        for (let i = 0; i < 20; i++) {
             let x = Math.random() * canvas.width
             let y = Math.random() * canvas.height;
             // ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
-            ctx.fillText(chars.charAt(Math.floor(Math.random() * chars.length)),x,y)
+            ctx.fillText(chars.charAt(Math.floor(Math.random() * chars.length)), x, y)
         }
     };
 
+    /**
+     * Refreshes the captcha with a new random string.
+     */
     const refreshCaptcha = () => {
         const newCaptcha = generateCaptchaText();
         setCaptchaText(newCaptcha);
-        drawCaptcha(newCaptcha);
     };
 
+    // Generate new captcha when modal opens
     useEffect(() => {
         if (open) {
             refreshCaptcha();
         }
     }, [open]);
 
+    // Draw captcha when text changes
+    useEffect(() => {
+        if (open && canvasRef.current && captchaText) {
+            drawCaptcha(captchaText);
+        }
+    }, [open, captchaText]);
+
+    /**
+     * Handles user registration.
+     * Validates passwords and captcha, sends data to backend.
+     */
     const handleSignUp = async (e) => {
         e.preventDefault();
         setError('');
@@ -101,52 +131,25 @@ export default function SignUp({ open, onClose, onSuccess }) {
             setError("Passwords do not match");
             return;
         }
-
-        if (captchaInput.trim().toUpperCase() !== captchaText.toUpperCase()) {
-            setError("Invalid captcha");
+        if (captchaInput !== captchaText) {
+            setError("Captcha is incorrect");
             refreshCaptcha();
+            setCaptchaInput('');
             return;
         }
-
-        if (username.length < 3) {
-            setError("Username must be at least 3 characters long");
-            return;
-        }
-
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters long");
-            return;
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setError("Please enter a valid email address");
-            return;
-        }
-
         setIsLoading(true);
         try {
-            const response = await axios.post("/api/users/signup", {
-                email,
-                password,
-            });
-
-            setSuccess("Signup successful!");
-            setUsername('');
-            setPassword('');
-            setConfirm('');
-            setCaptchaInput('');
-            setEmail('');
-            setError('');
-            refreshCaptcha();
-
-            if (onSuccess) onSuccess(response.data.user);
-
-            setTimeout(() => {
+            const res = await axios.post('/api/users/signup', { email, password, username });
+            if (res.data && res.data.success) {
+                setSuccess("Sign up successful!");
+                setError('');
+                if (onSuccess) onSuccess(res.data.user);
                 onClose();
-            }, 1500);
+            } else {
+                setError(res.data.message || "Sign up failed");
+            }
         } catch (err) {
-            setError("Signup failed.");
+            setError("Sign up failed.");
         } finally {
             setIsLoading(false);
         }

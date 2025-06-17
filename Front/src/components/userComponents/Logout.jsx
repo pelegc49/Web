@@ -2,13 +2,19 @@ import React, { useState, useContext } from 'react';
 import { darkModeContext } from '../../App.jsx';
 import ChangePassword from './ChangePassword.jsx';
 
+/**
+ * Logout modal for user actions.
+ * Allows logout, closing modal, and changing password.
+ * Supports dark mode styling.
+ */
 export default function Logout({ open, onClose, onLogoutClick, user }) {
-  const { darkMode } = useContext(darkModeContext);
-  const [showChangePassword, setShowChangePassword] = useState(false);
+    const { darkMode } = useContext(darkModeContext);
+    const [showChangePassword, setShowChangePassword] = useState(false);
 
-  if (!open) return null;
-  return (
-    <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
+    if (!open) return null;
+
+    return (
+        <div className="fixed top-[60px] right-[30px] z-50 flex flex-col items-end">
       <div className={`
         w-80 rounded-xl shadow-xl p-6
         ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"}
@@ -53,5 +59,5 @@ export default function Logout({ open, onClose, onLogoutClick, user }) {
         />
       )}
     </div>
-  );
+    );
 }

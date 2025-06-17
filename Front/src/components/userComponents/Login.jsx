@@ -2,16 +2,28 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { darkModeContext } from '../../App.jsx';
 
+/**
+ * Login modal for user authentication.
+ * Handles login, forgot password, and dark mode styling.
+ */
 export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
     const { darkMode } = useContext(darkModeContext);
+
+    // State for login form fields and UI
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    // State for forgot password flow
     const [showForgot, setShowForgot] = useState(false);
     const [forgotEmail, setForgotEmail] = useState('');
     const [forgotMsg, setForgotMsg] = useState('');
 
+    /**
+     * Handles user login.
+     * Sends email and password to backend, handles errors and success.
+     */
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
@@ -37,6 +49,10 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         }
     };
 
+    /**
+     * Handles forgot password request.
+     * Sends email to backend to trigger password reset email.
+     */
     const handleForgotPassword = async (e) => {
         e.preventDefault();
         setForgotMsg('');
@@ -48,6 +64,9 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         }
     };
 
+    /**
+     * Resets all form fields and closes the modal.
+     */
     const handleClose = () => {
         setEmail('');
         setPassword('');
@@ -58,6 +77,9 @@ export default function Login({ open, onClose, onSignUpClick, onSuccess }) {
         onClose();
     };
 
+    /**
+     * Switches to the sign up modal and resets form fields.
+     */
     const handleSignUpClick = () => {
         setEmail('');
         setPassword('');
