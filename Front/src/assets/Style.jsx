@@ -6,7 +6,7 @@ export const toolbarLink = dark => "font-medium transform transition-all duratio
 export const toolbarDivider = dark => dark ? "text-gray-600" : "text-gray-300";
 
 export const classNodeContainer = dark => `rounded-lg shadow-md border p-4 m-2 hover:shadow-lg transition-shadow ${dark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"}`;
-export const classNodeTitle = dark => `font-bold text-lg pb-2 mb-2 text-center ${dark ? "text-gray-100" : "text-blue-700"}`;
+export const classNodeTitle = dark => `font-bold text-lg pb-2 mb-2 text-center flex flex-row gap-4 items-center justify-center ${dark ? "text-gray-100" : "text-blue-700"}`;
 export const attributeItem = dark => `py-1 px-2 rounded ${dark ? "hover:bg-gray-600" : "hover:bg-gray-100"}`;
 export const attributeText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`;
 export const methodsContainer = dark => `mt-2 pt-2 border-t ${dark ? "border-gray-600" : "border-gray-200"}`;
@@ -260,3 +260,4 @@ export const buttonPrimary = dark =>
 
 export const buttonSecondary = dark =>
   `flex-1 py-2 px-4 rounded-md text-white text-sm font-medium ${dark ? "bg-gray-600 hover:bg-gray-700" : "bg-gray-500 hover:bg-gray-600"}`;
+export const sushiImage = dark => `w-8 h-8 center ${dark ? "filter" : ""}`;

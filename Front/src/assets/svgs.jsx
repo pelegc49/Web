@@ -14,3 +14,4 @@ export const defining_methods = "https://www.svgrepo.com/show/510782/add-row.svg
 export const defining_attributes = "https://www.svgrepo.com/show/437077/minus-rectangle.svg"
 export const exclamation_mark = "https://www.svgrepo.com/show/479047/exclamation-mark.svg"
 export const comments = "https://www.svgrepo.com/show/532176/hashtag.svg"
+export const sushi = "https://www.svgrepo.com/show/407562/sushi.svg"
