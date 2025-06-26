@@ -13,9 +13,9 @@ export const methodsContainer = dark => `mt-2 pt-2 border-t ${dark ? "border-gra
 export const methodItem = dark => `py-1 px-2 rounded ${dark ? "hover:bg-gray-600" : "hover:bg-gray-100"}`;
 export const methodText = dark => `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`;
 // TextArea component styles
-export const textAreaContainer = "w-full h-full flex relative justify-center";
+export const textAreaContainer = "h-[calc(50vh-4rem)] md:h-[calc(100vh-4rem)] w-full flex relative";
+export const textArea = "w-full p-3 rounded-lg border border-gray-300 text-base font-sans h-full resize-none focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400";
 
-export const textArea = "flex-col w-full p-3 rounded-lg border border-gray-300 text-base font-sans h-[93vh] resize-none focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder:text-gray-400 max-w-[95vw] mx-auto";
 export const headerContainer = dark =>
   // Responsive: flex-col on mobile, flex-row on desktop, with padding and spacing
   `p-4 h-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0 text-white duration-200 ease-in-out ` +
@@ -154,9 +154,9 @@ export const aboutUsParagraph = dark => `text-base ${dark ? 'text-gray-300' : 't
 
 // Toolbar (side panel) styles
 export const verticalToolbarContainer = dark => 
-  `w-14 h-[90vh] border-r transition-all duration-300 flex flex-col items-center py-4 space-y-4 ${
-    dark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200"
-  }`;
+  `fixed md:static bottom-0 left-0 right-0 md:w-14 md:h-[calc(100vh-4rem)] border-t md:border-t-0 md:border-r z-20
+   flex flex-row md:flex-col items-center justify-evenly md:justify-start py-2 md:py-4 md:space-y-4 space-x-4 md:space-x-0
+   ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200"}`;
 
 export const toolbarIconButton = dark => 
   `w-8 h-8 rounded-lg p-1.5 cursor-pointer transition-all duration-200 hover:scale-110 ${
@@ -174,26 +174,26 @@ export const toolbarTooltip = dark =>
   }`;
 
 // Application component styles
-export const applicationContainer = dark => `w-full flex ${dark ? 'bg-gray-900' : 'bg-gray-100'}`;
-export const textAreaSection = "w-1/3";
-export const textAreaWrapper = "relative";
+export const applicationContainer = dark => `w-full h-[calc(100vh-4rem)] flex flex-col md:flex-row ${dark ? 'bg-gray-900' : 'bg-gray-100'}`;
+export const textAreaSection = "w-full md:w-1/3 h-[50vh] md:h-full";
+export const textAreaWrapper = "relative h-full";
+export const diagramSection = "w-full md:w-2/3 h-[50vh] md:h-full relative";
+
 export const errorMessage = "absolute bottom-2 left-2 right-2 text-red-500 text-lg";
-export const saveButtonWrapper = "absolute top-2 right-2";
-export const downloadButtonWrapper = "absolute top-14 right-2"
+export const saveButtonWrapper = "fixed md:absolute top-auto bottom-20 md:bottom-auto md:top-2 right-2 z-[40]";
+export const downloadButtonWrapper = "fixed md:absolute top-auto bottom-20 md:bottom-auto md:top-14 right-12 md:right-2 z-[40]";
 export const saveButton = dark => `p-2 rounded-full transition-colors ${
     dark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
 }`;
 export const saveButtonIcon = "w-6 h-6";
 export const saveButtonTooltip = dark => `absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 
   transition-opacity duration-200 right-full mr-2 top-1/2 -translate-y-1/2 
-  py-1 px-2 rounded text-sm whitespace-nowrap z-50 ${
+  py-1 px-2 rounded text-sm whitespace-nowrap z-[40] ${
     dark ? "bg-gray-700 text-gray-100" : "bg-white text-gray-800 border border-gray-200"
 } shadow-md`;
-export const diagramSection = "w-2/3";
-export const loginMessage = "w-full h-full flex items-center justify-center";
 
 // SaveProject component styles
-export const saveProjectModal = "fixed inset-0 backdrop-filter backdrop-blur-sm bg-black/30 flex justify-center items-center transition-all duration-300";
+export const saveProjectModal = "fixed inset-0 backdrop-filter backdrop-blur-sm bg-black/30 flex justify-center items-center transition-all duration-300 z-50";
 export const saveProjectContent = dark => `p-8 rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 ${
     dark ? 'bg-gray-800/95 text-white' : 'bg-white/95 text-gray-800'
 }`;
