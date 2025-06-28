@@ -234,24 +234,7 @@ a Person is a class.
 Person has name, age, height, weight.
 a Student is a Person.
 
-*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 input:
 {
 "type": "START",
