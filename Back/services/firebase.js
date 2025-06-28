@@ -22,15 +22,3 @@ const auth = getAuth(app); // <-- ADD THIS LINE
 export { auth }; // <-- ADD THIS LINE
 export { db }; // <-- Add this line
 
-export async function addClient(name, email) {
-  try {
-    const docRef = await addDoc(collection(db, "clients"), {
-      name,
-      email,
-      createdAt: new Date(),
-    });
-    console.log("Client added with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding client: ", e);
-  }
-}

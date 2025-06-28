@@ -16,16 +16,6 @@ export const Router = express.Router()
 // Dummy in-memory users (not used in production)
 const users = []
 
-// Example of a local signup route (commented out, replaced by Firebase Auth)
-// Router.post('/signup', (req, res) => {
-//     const { username, password } = req.body
-//     if (users.find(u => u.username === username)) {
-//         return res.json({ success: false, message: 'User already exists' })
-//     }
-//     users.push({ username, password })
-//     res.json({ success: true, user: { username } })
-// })
-
 // Login route: authenticates user with Firebase Auth
 Router.post('/login', (req, res) => {
     const { email, password } = req.body
@@ -38,21 +28,6 @@ Router.post('/login', (req, res) => {
             res.status(400).json({ success: false, message: error.message });
         });
 })
-
-// Add client route: adds a client to Firestore
-Router.post('/clients', async (req, res) => {
-    const { name, email } = req.body;
-    try {
-        await addClient(name, email); // Actually add to Firestore
-        res.status(201).json({ 
-            message: "Client created successfully", 
-            client: { name, email }
-        });
-    } catch (e) {
-        console.error('Error adding client:', e);
-        res.status(500).json({ message: "Failed to create client" });
-    }
-});
 
 
 // Signup route: creates a new user in Firebase Auth
